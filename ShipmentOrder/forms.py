@@ -60,6 +60,57 @@ class OrderCreationOneForm(forms.ModelForm):
         order_form.receiver_contact = self.cleaned_data["receiver_contact"]
         order_form.mode = self.cleaned_data["mode"]
         order_form.comments = self.cleaned_data["comments"]
+        if commit:
+            order_form.save()
+        return order_form
+
+
+class OrderCreationTwoForm(forms.ModelForm):
+    goods_name = forms.CharField(required=True,
+                                 label="货物名称",
+                                 widget=forms.TextInput(attrs={'placeholder': '输入货物名称'}),
+                                 error_messages={'required': '此为必填项目'})
+    amount = forms.FloatField(required=True,
+                              label="数量",
+                              widget=forms.NumberInput(attrs={'placeholder': '输入货物数量'}),
+                              error_messages={'required': '此为必填项目'})
+    volume = forms.FloatField(required=True,
+                              label="体积",
+                              widget=forms.NumberInput(attrs={'placeholder': '输入货物体积'}),
+                              error_messages={'required': '此为必填项目'})
+    weight = forms.FloatField(required=True,
+                              label="重量",
+                              widget=forms.NumberInput(attrs={'placeholder': '输入货物重量'}),
+                              error_messages={'required': '此为必填项目'})
+    freight = forms.FloatField(required=True,
+                              label="运费",
+                              widget=forms.NumberInput(attrs={'placeholder': '输入运费'}),
+                              error_messages={'required': '此为必填项目'})
+    claim_value = forms.FloatField(required=True,
+                                   label="声明价值",
+                                   widget=forms.NumberInput(attrs={'placeholder': '输入货物声明价值'}),
+                                   error_messages={'required': '此为必填项目'})
+    insurance_rate = forms.FloatField(required=True,
+                                      label="保价费率",
+                                      widget=forms.NumberInput(attrs={'placeholder': '输入保价费用费率'}),
+                                      error_messages={'required': '此为必填项目'})
+
+    class Meta:
+        model = Goods
+        fields = ("goods_name", "amount", "volume", "weight", "freight", "claim_value", "insurance_rate")
+
+    def save(self, commit=True):
+        goods_form = super(OrderCreationTwoForm, self).save(commit=False)
+        goods_form.goods_name = self.cleaned_data["goods_name"]
+        goods_form.amount = self.cleaned_data["amount"]
+        goods_form.volume = self.cleaned_data["volume"]
+        goods_form.weight = self.cleaned_data["weight"]
+        goods_form.freight = self.cleaned_data["freight"]
+        goods_form.claim_value = self.cleaned_data["claim_value"]
+        goods_form.insurance_rate = self.claim_value["insurance_rate"]
+        if commit:
+            goods_form.save()
+        return goods_form
 
 
 class OrderCreationThreeForm(forms.ModelForm):

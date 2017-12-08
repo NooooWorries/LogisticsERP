@@ -46,7 +46,7 @@ class ShipmentOrder(models.Model):
     storeFee = models.FloatField(default=0, verbose_name='保管费')
     insuranceFee = models.FloatField(default=0, verbose_name='保价费')
     packingFee = models.FloatField(default=0, verbose_name='包装费')
-    totalPrice = models.FloatField(verbose_name='总价')
+    totalPrice = models.FloatField(default=0, verbose_name='总价')
 
     #其他
     mode = models.CharField(null=False, verbose_name='运输方式', max_length=256)
@@ -56,7 +56,6 @@ class ShipmentOrder(models.Model):
 class Goods(models.Model):
     shipment_order_id = models.ForeignKey(ShipmentOrder)
     goods_name = models.CharField(null=False, verbose_name='货物名称', max_length=256)
-    unit_price = models.FloatField(null=False, verbose_name='单价')
     amount = models.FloatField(null=False, default=1, verbose_name='数量')
     volume = models.FloatField(null=False, verbose_name='体积')
     weight = models.FloatField(null=False, verbose_name='重量')

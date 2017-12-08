@@ -26,4 +26,5 @@ urlpatterns = [
 
     # add order page
     url(r'^order/add/1', order_view.add_order_stage_one, name="add_order_stage_one"),
+    url(r'^order/add/goods', order_view.ajax_add_goods, name="add_goods"),
 ]
