@@ -84,11 +84,11 @@ class OrderCreationTwoForm(forms.ModelForm):
                               error_messages={'required': '此为必填项目'})
     freight = forms.FloatField(required=True,
                               label="运费",
-                              widget=forms.NumberInput(attrs={'placeholder': '输入运费'}),
+                              widget=forms.NumberInput(attrs={'placeholder': '输入运费（总和）'}),
                               error_messages={'required': '此为必填项目'})
     claim_value = forms.FloatField(required=True,
                                    label="声明价值",
-                                   widget=forms.NumberInput(attrs={'placeholder': '输入货物声明价值'}),
+                                   widget=forms.NumberInput(attrs={'placeholder': '输入货物声明价值（总和）'}),
                                    error_messages={'required': '此为必填项目'})
     insurance_rate = forms.FloatField(required=True,
                                       label="保价费率",
@@ -115,13 +115,34 @@ class OrderCreationTwoForm(forms.ModelForm):
 
 class OrderCreationThreeForm(forms.ModelForm):
     # 费用
-    collectFee = forms.FloatField()
-    sendFee = forms.FloatField()
-    transitFee = forms.FloatField()
-    installFee = forms.FloatField()
-    storeFee = forms.FloatField()
-    packingFee = forms.FloatField()
-    paymentOnAccountFreight = forms.FloatField()
+    collectFee = forms.FloatField(required=True,
+                                  label="接货费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入接货费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    sendFee = forms.FloatField(required=True,
+                               label="送货费",
+                               widget=forms.NumberInput(attrs={'placeholder': '输入送货费用'}),
+                               error_messages={'required': '此为必填项目'})
+    transitFee = forms.FloatField(required=True,
+                                  label="中转费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入中转费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    installFee = forms.FloatField(required=True,
+                                  label="装卸费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入装卸费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    storeFee = forms.FloatField(required=True,
+                                label="保管费",
+                                widget=forms.NumberInput(attrs={'placeholder': '输入保管费用'}),
+                                error_messages={'required': '此为必填项目'})
+    packingFee = forms.FloatField(required=True,
+                                  label="包装费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入包装费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    paymentOnAccountFreight = forms.FloatField(required=True,
+                                               label="垫货运费",
+                                               widget=forms.NumberInput(attrs={'placeholder': '输入已垫付费用'}),
+                                               error_messages={'required': '此为必填项目'})
 
     class Meta:
         model = ShipmentOrder

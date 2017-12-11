@@ -22,9 +22,14 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # inedx page
-    url(r'^index/', index_view.index, name="load_index"),
+    url(r'^index/$', index_view.index, name="load_index"),
 
-    # add order page
-    url(r'^order/add/1', order_view.add_order_stage_one, name="add_order_stage_one"),
-    url(r'^order/add/goods', order_view.ajax_add_goods, name="add_goods"),
+    # add order pages
+    url(r'^order/add/1/$', order_view.add_order_stage_one, name="add_order_stage_one"),
+    url(r'^order/add/3/$', order_view.add_order_stage_three_redirect, name="add_order_stage_three_redirect"),
+    url(r'^order/add/summary/$', order_view.add_order_summary, name="add_order_summary"),
+    url(r'^order/add/submit/$', order_view.add_order_audit, name="add_order_audit"),
+    url(r'^order/add/goods/$', order_view.ajax_add_goods, name="add_goods"),
+    url(r'^order/delete/goods/(?P<good_id>[0-9]+)/$', order_view.ajax_delete_goods, name="delete_goods"),
+
 ]

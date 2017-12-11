@@ -30,13 +30,6 @@
                                 <p><span class="label label-danger">提示:</span> 在订单提交完成前，您可以随时在草稿箱中修改您的订单信息
                                 </p>
                         </div>
-
-                        {% csrf_token %}
-                        <form class="am-form am-form-horizontal" method="post" id="id_formGood">
-                            <div class="am-u-sm-12 am-u-md-9">
-                            <div class="tpl-content-scope">
-
-                            </div>
                             <div id="id_tableGoods">
                                 <table class="am-table am-table-striped am-table-hover table-main" >
                                     <thead>
@@ -54,6 +47,10 @@
                                     </thead>
                                 </table>
                             </div>
+
+                        {% csrf_token %}
+                        <form class="am-form am-form-horizontal" method="post" id="id_formGood">
+                            <div class="am-u-sm-12 am-u-md-9">
                                 {% for item in form %}
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">{{ item.label }}</label>
@@ -70,13 +67,14 @@
                                     </div>
                                 </div>
 
-                                <div class="am-form-group">
-                                    <div class="am-u-sm-9 am-u-sm-push-3">
-                                        <button type="submit" class="am-btn am-btn-primary">下一步</button>
-                                    </div>
-                                </div>
+
                             </div>
                         </form>
+                        <div class="am-form-group ">
+                            <div class="am-u-sm-12 am-u-md-9">
+                                <button class="am-btn am-btn-primary" onclick="location.href='{% url 'add_order_stage_three_redirect' %}'">下一步</button>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -84,16 +82,8 @@
         </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-    $('#id_addGoods').click(function () {
-    $.ajax({
-        cache: false,
-        type: "POST",
-        dataType: "json",
-        url: "{% url 'add_goods' %}",
-        data: $('#id_formGood').serialize(),
-        async: true,
-        success: function(data) {
-            var json = jQuery.parseJSON(data);
+    function refresh(data){
+        var json = jQuery.parseJSON(data);
             var content = "<table class=\"am-table am-table-striped am-table-hover table-main\" >\n" +
                 "                                    <thead>\n" +
                 "                                        <tr>\n" +
@@ -120,12 +110,40 @@
                         "<td>" + json[i].fields.claim_value + "</td>\n" +
                         "<td>" + json[i].fields.insurance_rate + "</td>\n" +
                         "<td>" + json[i].fields.insurance_fee + "</td>\n" +
-                        "<td>" + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only\"><span class=\"am-icon-trash-o\"></span> 删除</button>" + "</td>";
+                        "<td>"
+                        + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
+                        + "</td>";
             }
 
             content +="</tbody></table>";
             $('#id_tableGoods').html(content);
+    }
+    $('#id_addGoods').click(function () {
+    $.ajax({
+        cache: false,
+        type: "POST",
+        dataType: "json",
+        url: "{% url 'add_goods' %}",
+        data: $('#id_formGood').serialize(),
+        async: true,
+        success: function(data) {
+            refresh(data);
         }
+        });
+        return false;
+    });
+
+   $(document).on('click', '.btn_delete', function () {
+        var url_mask = "{% url 'delete_goods' good_id=12345 %}".replace(/12345/, this.id.toString());
+        $.ajax({
+            cache: false,
+            type: "GET",
+            dataType: "json",
+            url: url_mask,
+            async: true,
+            success: function(data) {
+                refresh(data);
+            }
         });
         return false;
     });

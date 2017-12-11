@@ -45,12 +45,14 @@ class ShipmentOrder(models.Model):
     installFee = models.FloatField(default=0, verbose_name='装卸费')
     storeFee = models.FloatField(default=0, verbose_name='保管费')
     insuranceFee = models.FloatField(default=0, verbose_name='保价费')
+    freight = models.FloatField(default=0, verbose_name='运费')
     packingFee = models.FloatField(default=0, verbose_name='包装费')
     totalPrice = models.FloatField(default=0, verbose_name='总价')
 
     #其他
     mode = models.CharField(null=False, verbose_name='运输方式', max_length=256)
     comments = models.CharField(verbose_name='备注', max_length=256)
+    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:草稿， 1:待审核， 2:审核通过， 3:审核不通过
 
 
 class Goods(models.Model):
