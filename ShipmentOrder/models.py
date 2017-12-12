@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from time import gmtime, strftime
 
 
 class UserProfile(models.Model):
@@ -27,17 +28,17 @@ class Customer(models.Model):
 
 
 class ShipmentOrder(models.Model):
-    #发货人信息
+    # 发货人信息
     sender = models.CharField(null=False, verbose_name='发货人', max_length=256)
     from_address = models.CharField(null=False, verbose_name='发出地地址', max_length=256)
     sender_contact = models.CharField(null=False, verbose_name='发货人联系电话', max_length=256)
 
-    #收货人信息
+    # 收货人信息
     receiver = models.CharField(null=False, verbose_name='收货人', max_length=256)
     to_address = models.CharField(null=False, verbose_name='到达地地址', max_length=256)
     receiver_contact = models.CharField(null=False, verbose_name='收货人联系电话', max_length=256)
 
-    #费用
+    # 费用
     collectFee = models.FloatField(default=0, verbose_name='接货费')
     sendFee = models.FloatField(default=0, verbose_name='送货费')
     paymentOnAccountFreight = models.FloatField(default=0, verbose_name='垫付运费')
@@ -49,10 +50,12 @@ class ShipmentOrder(models.Model):
     packingFee = models.FloatField(default=0, verbose_name='包装费')
     totalPrice = models.FloatField(default=0, verbose_name='总价')
 
-    #其他
+    # 其他
     mode = models.CharField(null=False, verbose_name='运输方式', max_length=256)
     comments = models.CharField(verbose_name='备注', max_length=256)
-    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:草稿， 1:待审核， 2:审核通过， 3:审核不通过
+    create_date = models.DateField(verbose_name='创建时间', null=False)
+    handle = models.ForeignKey(User, null=False, verbose_name='经办')
+    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:草稿， 1:待审核， 2:审核通过， 3:送达
 
 
 class Goods(models.Model):

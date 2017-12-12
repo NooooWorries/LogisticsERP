@@ -1,20 +1,27 @@
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from ShipmentOrder.forms import OrderCreationOneForm, OrderCreationTwoForm, OrderCreationThreeForm
 from ShipmentOrder.models import ShipmentOrder, Goods
 from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+import datetime
 
 
 # 添加订单 第一步 基本信息
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def add_order_stage_one(request):
     if request.method == 'POST':
         form = OrderCreationOneForm(request.POST)
         if form.is_valid():
             order = form.save(commit=False)
+            order.create_date = datetime.datetime.now().strftime("%Y-%m-%d")
+            order.handle = request.user
             order.save()
+            request.session['order'] = order.id
             return add_order_stage_two(request, order)
     else:
         form = OrderCreationOneForm()
@@ -23,15 +30,22 @@ def add_order_stage_one(request):
 
 # 添加订单 第二步 货物信息显示
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def add_order_stage_two(request, order):
+    if "order" not in request.session:
+        form_create = OrderCreationOneForm()
+        return render(request, "order/form-addorder-1.html", {'form': form_create})
     form = OrderCreationTwoForm()
-    request.session['order'] = order.id
     return render(request, "order/form-addorder-2.html", {'form': form, 'order': order})
 
 
 # 添加订单 第二步 货物信息添加 ajax
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def ajax_add_goods(request):
+    if "order" not in request.session:
+        form_create = OrderCreationOneForm()
+        return render(request, "order/form-addorder-1.html", {'form': form_create})
     form = OrderCreationTwoForm(request.POST)
     order = request.session['order']
     if form.is_valid():
@@ -56,7 +70,11 @@ def ajax_add_goods(request):
 
 # 添加订单 第二步 货物信息删除
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def ajax_delete_goods(request, good_id):
+    if "order" not in request.session:
+        form_create = OrderCreationOneForm()
+        return render(request, "order/form-addorder-1.html", {'form': form_create})
     order = request.session['order']
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
@@ -67,7 +85,11 @@ def ajax_delete_goods(request, good_id):
 
 # 添加订单 第三步骤 页面跳转
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def add_order_stage_three_redirect(request):
+    if "order" not in request.session:
+        form_create = OrderCreationOneForm()
+        return render(request, "order/form-addorder-1.html", {'form': form_create})
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
     sum_insurance = 0
@@ -105,7 +127,11 @@ def add_order_stage_three_redirect(request):
 
 # 添加订单 第四步 信息确认
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def add_order_summary(request):
+    if "order" not in request.session:
+        form_create = OrderCreationOneForm()
+        return render(request, "order/form-addorder-1.html", {'form': form_create})
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order)
@@ -114,9 +140,98 @@ def add_order_summary(request):
 
 # 添加订单 第五步 交由审核
 @csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def add_order_audit(request):
+    if "order" not in request.session:
+        form_create = OrderCreationOneForm()
+        return render(request, "order/form-addorder-1.html", {'form': form_create})
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
-    order_instance.status = 1
-    return render(request, "order/form-addorder-submitted.html")
+    goods_instance = Goods.objects.filter(shipment_order_id_id=order)
+    message = ""
+    if goods_instance.count() >= 1:
+        order_instance.status = 1
+        message = "您的订单已经交由审核"
+    else:
+        message = "无法提交审核，原因：没有货物。请前往草稿箱修改订单"
+    return render(request, "order/form-addorder-submitted.html", {'message': message})
 
+
+# 查询订单 管理端 所有订单
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_manager(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.all()
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/trackorder-manager.html", {'order': order})
+
+
+# 查询订单 管理端 未提交
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_manager(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.filter(status=0)
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/trackorder-manager.html", {'order': order})
+
+
+# 查询订单 管理端 待审核
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_manager(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.filter(status=1)
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/trackorder-manager.html", {'order': order})
+
+
+# 查询订单 管理端 审核通过
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_manager(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.filter(status=2)
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/trackorder-manager.html", {'order': order})
+
+
+# 查询订单 管理端 已完成
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_manager(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.filter(status=3)
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/trackorder-manager.html", {'order': order})

@@ -25,7 +25,7 @@ SECRET_KEY = 'z2c*ye*m04fvlb*(a$4#p&cmf*lr7+uvs+2sha3i(&a-#v+ilo'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ShipmentOrder'
+    'ShipmentOrder',
+    'Account',
+    'Settings'
 ]
 
 MIDDLEWARE = [
@@ -123,3 +125,7 @@ STATICFILES_DIRS = (
 
 )
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/index/'
+
+LOGOUT_REDIRECT_URL = '/login/'
