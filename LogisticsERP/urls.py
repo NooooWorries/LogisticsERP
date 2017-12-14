@@ -36,7 +36,16 @@ urlpatterns = [
     url(r'^order/delete/goods/(?P<good_id>[0-9]+)/$', order_view.ajax_delete_goods, name="delete_goods"),
 
     # track order pages
-    url(r'^order/track/manage$', order_view.track_order_manager, name="track_order_manager"),
+    url(r'^order/track/$', order_view.track_order_manager, name="track_order_manager"),
+    url(r'^order/track/detail/(?P<order_id>[0-9]+)/$', order_view.track_order_detail, name="track_order_detail"),
+    url(r'^order/track/modify/(?P<order_id>[0-9]+)/$', order_view.track_order_modify, name="track_order_modify"),
+    url(r'^order/track/delete/(?P<order_id>[0-9]+)/$', order_view.track_order_confirm_delete, name="track_order_confirm_delete"),
+    url(r'^order/track/delete/(?P<order_id>[0-9]+)/complete/$', order_view.track_order_delete, name="track_order_delete"),
+    url(r'^order/track/modify/add_good/$', order_view.ajax_add_goods_manage, name="add_goods_manage"),
+    url(r'^order/track/modify/delete_good/(?P<good_id>[0-9]+)/$', order_view.ajax_delete_goods_manage, name="delete_goods_manage"),
+    url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
+    url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
+    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result, name="track_order_search_advanced_result"),
 
     # registration pages
     url(r'^login/$', auth_views.login, name='login'),
@@ -44,7 +53,6 @@ urlpatterns = [
 
     # error pages
     url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
-
 ]
 
 # customized error page

@@ -2,25 +2,45 @@
 {% block body %}
     <div class="tpl-content-wrapper">
             <div class="tpl-content-page-title">
-                添加订单
+                管理订单
             </div>
             <ol class="am-breadcrumb">
                 <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
                 <li>运送订单</li>
-                <li>添加订单</li>
+                <li>管理订单</li>
+                <li class="am-active"><a href="{% url 'track_order_manager' %}">订单详情</a></li>
+                <li>订单{{ order.id }}</li>
             </ol>
             <div class="tpl-portlet-components">
                 <div class="portlet-title">
                     <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 添加订单 确认信息
+                        <span class="am-icon-code"></span> 订单详情
                     </div>
                 </div>
-                <div class="tpl-block ">
-
-                    <div class="am-g tpl-amazeui-form">
-                        <p><span class="label label-info">注意</span> 请仔细核对订单信息，然后提交审核。如果发现错误，请在草稿箱中修改后再提交。
-                        </p>
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
                     </div>
+                    <div class="details">
+                        <div class="desc"> 状态&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div class="number">
+                            {% if order.status == 0 %}
+                                未提交&nbsp;&nbsp;
+                            {% endif %}
+                            {% if order.status == 1 %}
+                                待审核&nbsp;&nbsp;
+                            {% endif %}
+                            {% if order.status == 2 %}
+                                审核通过&nbsp;&nbsp;
+                            {% endif %}
+                            {% if order.status == 3 %}
+                                送达&nbsp;&nbsp;
+                            {% endif %}
+                        </div>
+                    </div>
+                    <i class="m-icon-swapright m-icon-white"></i>
+                </div>
+                <div class="tpl-block ">
                     <div id="id_divInfo" class="note note-info">
                         <h2>订单详情</h2>
                         <p>订单ID：{{ order.id }}</p>
@@ -30,6 +50,7 @@
                         <p>收货人：{{ order.receiver }}</p>
                         <p>收货地址：{{ order.to_address }}</p>
                         <p>收货人联系电话：{{ order.receiver_contact }}</p>
+                        <p>生成日期：{{ order.create_date }}</p>
                     </div>
                     <div id="id_tableGoods" class="note note-info">
                         <h2>货物详情</h2>
@@ -71,14 +92,13 @@
                         <p>中转费：{{ order.transitFee }}</p>
                         <p>装卸费：{{ order.installFee }}</p>
                         <p>保管费：{{ order.storeFee }}</p>
+
                         <p>包装费：{{ order.packingFee }}</p>
                         <p>垫付运费：-{{ order.paymentOnAccountFreight }}</p>
                         <p>------------------</p>
                         <p>总价：{{ order.totalPrice }}</p>
                     </div>
-                    </div>
-                <button class="am-btn am-btn-danger" onclick="location.href='{% url 'add_order_audit' %}'">提交审核</button>
-                <button class="am-btn am-btn-primary">前往草稿箱修改</button>
+                </div>
             </div>
         </div>
 {% endblock %}

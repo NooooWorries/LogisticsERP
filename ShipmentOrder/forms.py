@@ -158,3 +158,114 @@ class OrderCreationThreeForm(forms.ModelForm):
         order_form.storeFee = self.cleaned_data["storeFee"]
         order_form.packingFee = self.cleaned_data["packingFee"]
         order_form.paymentOnAccountFreight = self.cleaned_data["paymentOnAccountFreight"]
+        if commit:
+            order_form.save()
+        return order_form
+
+
+class OrderModityForm(forms.ModelForm):
+    # 发货人信息
+    sender = forms.CharField(required=True,
+                             label="发件人",
+                             widget=forms.TextInput(attrs={'placeholder': '输入发件人姓名'}),
+                             error_messages={'required': '此为必填项目'}
+                             )
+    from_address = forms.CharField(required=True,
+                                   label="发件地址",
+                                   widget=forms.TextInput(attrs={'placeholder': '输入发件人地址'}),
+                                   error_messages={'required': '此为必填项目'})
+    sender_contact = forms.CharField(required=True,
+                                     label="发件人联系方式",
+                                     widget=forms.TextInput(attrs={'placeholder': '输入发件人联系电话'}),
+                                     error_messages={'required': '此为必填项目'})
+
+    # 收货人信息
+    receiver = forms.CharField(required=True,
+                               label="收件人",
+                               widget=forms.TextInput(attrs={'placeholder': '输入收件人姓名'}),
+                               error_messages={'required': '此为必填项目'})
+    to_address = forms.CharField(required=True,
+                                 label="收件地址",
+                                 widget=forms.TextInput(attrs={'placeholder': '输入收件人地址'}),
+                                 error_messages={'required': '此为必填项目'})
+    receiver_contact = forms.CharField(required=True,
+                                       label="收件人联系方式",
+                                       widget=forms.TextInput(attrs={'placeholder': '输入收件人联系电话'}),
+                                       error_messages={'required': '此为必填项目'})
+
+    # 其他
+    mode = forms.CharField(required=True,
+                           label="运送模式",
+                           widget=forms.TextInput(attrs={'placeholder': '输入运送模式'}),
+                           error_messages={'required': '此为必填项目'}
+                           )
+    comments = forms.CharField(required=False,
+                               label="备注",
+                               widget=forms.Textarea(attrs={'placeholder': '输入订单备注'})
+                               )
+
+    # 费用
+    collectFee = forms.FloatField(required=True,
+                                  label="接货费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入接货费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    sendFee = forms.FloatField(required=True,
+                               label="送货费",
+                               widget=forms.NumberInput(attrs={'placeholder': '输入送货费用'}),
+                               error_messages={'required': '此为必填项目'})
+    transitFee = forms.FloatField(required=True,
+                                  label="中转费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入中转费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    installFee = forms.FloatField(required=True,
+                                  label="装卸费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入装卸费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    storeFee = forms.FloatField(required=True,
+                                label="保管费",
+                                widget=forms.NumberInput(attrs={'placeholder': '输入保管费用'}),
+                                error_messages={'required': '此为必填项目'})
+    packingFee = forms.FloatField(required=True,
+                                  label="包装费",
+                                  widget=forms.NumberInput(attrs={'placeholder': '输入包装费用'}),
+                                  error_messages={'required': '此为必填项目'})
+    paymentOnAccountFreight = forms.FloatField(required=True,
+                                               label="垫货运费",
+                                               widget=forms.NumberInput(attrs={'placeholder': '输入已垫付费用'}),
+                                               error_messages={'required': '此为必填项目'})
+
+    class Meta:
+        model = ShipmentOrder
+        fields = ("sender", "from_address", "sender_contact", "receiver", "to_address",
+                  "receiver_contact", "mode", "comments","collectFee", "sendFee",
+                  "transitFee", "installFee", "storeFee", "packingFee", "paymentOnAccountFreight")
+
+    def save(self, commit=True, insurance=0, freight=0):
+        order_form = super(OrderModityForm, self).save(commit=False)
+        order_form.sender = self.cleaned_data["sender"]
+        order_form.from_address = self.cleaned_data["from_address"]
+        order_form.sender_contact = self.cleaned_data["sender_contact"]
+        order_form.receiver = self.cleaned_data["receiver"]
+        order_form.to_address = self.cleaned_data["to_address"]
+        order_form.receiver_contact = self.cleaned_data["receiver_contact"]
+        order_form.mode = self.cleaned_data["mode"]
+        order_form.comments = self.cleaned_data["comments"]
+        order_form.collectFee = self.cleaned_data["collectFee"]
+        order_form.sendFee = self.cleaned_data["sendFee"]
+        order_form.transitFee = self.cleaned_data["transitFee"]
+        order_form.installFee = self.cleaned_data["installFee"]
+        order_form.storeFee = self.cleaned_data["storeFee"]
+        order_form.packingFee = self.cleaned_data["packingFee"]
+        order_form.paymentOnAccountFreight = self.cleaned_data["paymentOnAccountFreight"]
+        order_form.totalPrice = insurance + freight + float(order_form.collectFee) \
+                                + float(order_form.sendFee) + float(order_form.transitFee) \
+                                + float(order_form.installFee) \
+                                + float(order_form.storeFee) + float(order_form.packingFee) \
+                                - float(order_form.paymentOnAccountFreight)
+        if commit:
+            order_form.save()
+        return order_form
+
+
+
+

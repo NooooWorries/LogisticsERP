@@ -55,7 +55,7 @@ class ShipmentOrder(models.Model):
     comments = models.CharField(verbose_name='备注', max_length=256)
     create_date = models.DateField(verbose_name='创建时间', null=False)
     handle = models.ForeignKey(User, null=False, verbose_name='经办')
-    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:草稿， 1:待审核， 2:审核通过， 3:送达
+    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:未提交， 1:待审核， 2:审核通过， 3:已完成
 
 
 class Goods(models.Model):
