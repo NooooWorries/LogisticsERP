@@ -22,11 +22,12 @@ def add_order_stage_one(request):
             order.create_date = datetime.datetime.now().strftime("%Y-%m-%d")
             order.handle = request.user
             order.save()
+            request.session['draft'] = request.session['draft'] + 1
             request.session['order'] = order.id
             return add_order_stage_two(request, order)
     else:
         form = OrderCreationOneForm()
-    return render(request, "order/form-addorder-1.html", {'form': form})
+    return render(request, "order/add/form-addorder-1.html", {'form': form})
 
 
 # 添加订单 第二步 货物信息显示
@@ -34,10 +35,9 @@ def add_order_stage_one(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_two(request, order):
     if "order" not in request.session:
-        form_create = OrderCreationOneForm()
-        return render(request, "order/form-addorder-1.html", {'form': form_create})
+        return render(request, 'error/redirect_error.html')
     form = OrderCreationTwoForm()
-    return render(request, "order/form-addorder-2.html", {'form': form, 'order': order})
+    return render(request, "order/add/form-addorder-2.html", {'form': form, 'order': order})
 
 
 # 添加订单 第二步 货物信息添加 ajax
@@ -45,8 +45,7 @@ def add_order_stage_two(request, order):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_add_goods(request):
     if "order" not in request.session:
-        form_create = OrderCreationOneForm()
-        return render(request, "order/form-addorder-1.html", {'form': form_create})
+        return render(request, 'error/redirect_error.html')
     form = OrderCreationTwoForm(request.POST)
     order = request.session['order']
     if form.is_valid():
@@ -74,8 +73,7 @@ def ajax_add_goods(request):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_delete_goods(request, good_id):
     if "order" not in request.session:
-        form_create = OrderCreationOneForm()
-        return render(request, "order/form-addorder-1.html", {'form': form_create})
+        return render(request, 'error/redirect_error.html')
     order = request.session['order']
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
@@ -89,8 +87,7 @@ def ajax_delete_goods(request, good_id):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_three_redirect(request):
     if "order" not in request.session:
-        form_create = OrderCreationOneForm()
-        return render(request, "order/form-addorder-1.html", {'form': form_create})
+        return render(request, 'error/redirect_error.html')
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
     sum_insurance = 0
@@ -122,7 +119,7 @@ def add_order_stage_three_redirect(request):
         order_instance.insuranceFee = sum_insurance
         order_instance.freight = sum_freight
         order_instance.save()
-        return render(request, "order/form-addorder-3.html", {'form': form, 'insurance': sum_insurance,
+        return render(request, "order/add/form-addorder-3.html", {'form': form, 'insurance': sum_insurance,
                                                               'freight': sum_freight, 'order': order_instance})
 
 
@@ -131,12 +128,11 @@ def add_order_stage_three_redirect(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_summary(request):
     if "order" not in request.session:
-        form_create = OrderCreationOneForm()
-        return render(request, "order/form-addorder-1.html", {'form': form_create})
+        return render(request, 'error/redirect_error.html')
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order)
-    return render(request, "order/form-addorder-summary.html", {'order': order_instance, 'good': goods_instance})
+    return render(request, "order/add/form-addorder-summary.html", {'order': order_instance, 'good': goods_instance})
 
 
 # 添加订单 第五步 交由审核
@@ -145,17 +141,18 @@ def add_order_summary(request):
 def add_order_audit(request):
     if "order" not in request.session:
         form_create = OrderCreationOneForm()
-        return render(request, "order/form-addorder-1.html", {'form': form_create})
+        return render(request, "order/add/form-addorder-1.html", {'form': form_create})
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order)
-    message = ""
     if goods_instance.count() >= 1:
         order_instance.status = 1
+        order_instance.save()
+        request.session['draft'] = request.session['draft'] - 1
         message = "您的订单已经交由审核"
     else:
         message = "无法提交审核，原因：没有货物。请前往草稿箱修改订单"
-    return render(request, "order/form-addorder-submitted.html", {'message': message})
+    return render(request, "order/add/form-addorder-submitted.html", {'message': message})
 
 
 # 查询订单 管理端 所有订单
@@ -171,7 +168,7 @@ def track_order_manager(request):
         order = paginator.page(1)
     except EmptyPage:
         order = paginator.page(paginator.num_pages)
-    return render(request, "order/trackorder-manager.html", {'order': order})
+    return render(request, "order/manage/trackorder-manager.html", {'order': order})
 
 
 # 查询订单 详情页
@@ -180,7 +177,7 @@ def track_order_manager(request):
 def track_order_detail(request, order_id):
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     good = Goods.objects.filter(shipment_order_id_id=order_id)
-    return render(request, "order/trackorder-detail.html", {'order': order, 'good': good})
+    return render(request, "order/manage/trackorder-detail.html", {'order': order, 'good': good})
 
 
 # 查询订单 编辑页
@@ -203,8 +200,8 @@ def track_order_modify(request, order_id):
         order_instance.freight = sum_freight
         order_instance.insuranceFee = sum_insurance
         order_form.save(insurance=sum_insurance, freight=sum_freight)
-        return render(request, "order/trackorder-modify-complete.html")
-    return render(request, "order/trackorder-modify.html", {'form': order_form,
+        return render(request, "order/manage/trackorder-modify-complete.html")
+    return render(request, "order/manage/trackorder-modify.html", {'form': order_form,
                                                             'good_form': goods_form,
                                                             'good_instance': goods_instance,
                                                             'order': order_id})
@@ -253,16 +250,18 @@ def ajax_add_goods_manage(request):
 def track_order_confirm_delete(request, order_id):
     order_instance = ShipmentOrder.objects.get(pk=order_id)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-    return render(request, "order/trackorder-delete-confirm.html", {'order': order_instance, 'good': goods_instance})
+    return render(request, "order/manage/trackorder-delete-confirm.html", {'order': order_instance, 'good': goods_instance})
 
 
 # 管理订单 订单删除
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_delete(request, order_id):
-    order_object = ShipmentOrder.objects.get(id=order_id)
+    order_object = get_object_or_404(ShipmentOrder, pk=order_id)
+    if order_object.handle == request.user and order_object.status == 0:
+        request.session['draft'] = request.session['draft'] - 1
     order_object.delete()
-    return render(request, "order/trackorder-delete-complete.html")
+    return render(request, "order/manage/trackorder-delete-complete.html")
 
 
 # 管理订单 订单搜索
@@ -287,15 +286,16 @@ def track_order_search(request):
         order = paginator.page(1)
     except EmptyPage:
         order = paginator.page(paginator.num_pages)
-    return render(request, "order/trackorder-manager.html", {'order': order, 'query': query})
+    return render(request, "order/manage/trackorder-manager.html", {'order': order, 'query': query})
 
 
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search_advanced(request):
-    return render(request, "order/trackorder-search.html")
+    return render(request, "order/search/trackorder-search.html")
 
 
+# 管理订单 订单搜索结果
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search_advanced_result(request):
@@ -338,8 +338,83 @@ def track_order_search_advanced_result(request):
         order = paginator.page(1)
     except EmptyPage:
         order = paginator.page(paginator.num_pages)
-    return render(request, "order/trackorder-search-result.html", {'order': order,
+    return render(request, "order/search/trackorder-search-result.html", {'order': order,
                                                                    'keyword': keyword,
                                                                    'start_date': start_date,
                                                                    'end_date': end_date,
                                                                    'status': status})
+
+
+# 管理订单 草稿箱
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_draft(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.filter(handle=request.user, status=0)
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/draft/trackorder-draft.html", {'order': order})
+
+
+# 管理订单 草稿箱 编辑
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_draft_modify(request, order_id):
+    request.session['order_manage'] = order_id
+    order_instance = get_object_or_404(ShipmentOrder, id=order_id)
+    order_form = OrderModityForm(request.POST or None, instance=order_instance)
+    goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+    goods_form = OrderCreationTwoForm(request.POST or None)
+
+    if order_form.is_valid():
+        goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+        sum_insurance = 0
+        sum_freight = 0
+        for item in goods_instance:
+            sum_insurance += item.insurance_fee
+            sum_freight += item.freight
+        order_instance.freight = sum_freight
+        order_instance.insuranceFee = sum_insurance
+        order_form.save(insurance=sum_insurance, freight=sum_freight)
+        return render(request, "order/draft/trackorder-draft-modify-complete.html")
+    return render(request, "order/draft/trackorder-draft-modify.html", {'form': order_form,
+                                                                        'good_form': goods_form,
+                                                                        'good_instance': goods_instance,
+                                                                        'order': order_id})
+
+
+# 管理订单 提交审核
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_submit_audit(request, order_id):
+    order_instance = ShipmentOrder.objects.get(pk=order_id)
+    goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+    if goods_instance.count() >= 1:
+        order_instance.status = 1
+        order_instance.save()
+        message = "您的订单已经交由审核"
+        request.session['draft'] = request.session['draft'] - 1
+    else:
+        message = "无法提交审核，原因：没有货物。请前往草稿箱修改订单"
+    return render(request, "order/draft/trackorder-draft-submitted.html", {'message': message})
+
+
+# 管理订单 审核订单
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_audit(request):
+    page = request.GET.get('page')
+    order_list = ShipmentOrder.objects.filter(status=1)
+    paginator = Paginator(order_list, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/audit/trackorder-audit.html", {'order': order})

@@ -2,13 +2,13 @@
 {% block body %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-                查询订单
+                修改订单
             </div>
         <ol class="am-breadcrumb">
                 <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
                 <li>运送订单</li>
-                <li>管理订单</li>
-                <li class="am-active"><a href="{% url 'track_order_manager' %}">修改订单</a></li>
+                <li><a href="{% url 'track_order_manager' %}">管理订单</a></li>
+                <li class="am-active">修改订单</li>
                 <li>订单{{ order }}</li>
         </ol>
         <div class="tpl-portlet-components">

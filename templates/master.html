@@ -168,12 +168,13 @@
                                 <span>添加订单</span>
                             </a>
 
-                            <a href="{% url 'track_order_manager' %}" onclick="clearSearch()">
+                            <a href="{% url 'track_order_draft' %}" onclick="clearSearch()">
                                 <i class="am-icon-angle-right"></i>
                                 <span>草稿箱</span>
+                                <i class="tpl-left-nav-content tpl-badge-success">{{ request.session.draft }}</i>
                             </a>
 
-                            <a href="{% url 'track_order_manager' %}" onclick="clearSearch()">
+                            <a href="{% url 'track_order_audit' %}" onclick="clearSearch()">
                                 <i class="am-icon-angle-right"></i>
                                 <span>审核订单</span>
                             </a>
@@ -186,6 +187,25 @@
                             <a href="{% url 'track_order_search_advanced' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>高级搜索</span>
+                            </a>
+                        </li>
+                    </ul>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-user"></i>
+                        <span>客户簿</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu">
+                        <li>
+                            <a href="form-amazeui.html">
+                                <i class="am-icon-angle-right"></i>
+                                <span>添加客户</span>
+                                <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
+                            </a>
+                            <a href="form-line.html">
+                                <i class="am-icon-angle-right"></i>
+                                <span>管理客户</span>
                             </a>
                         </li>
                     </ul>

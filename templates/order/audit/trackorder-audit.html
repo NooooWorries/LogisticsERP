@@ -2,18 +2,25 @@
 {% block body %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-                高级搜索结果
+                审核订单
         </div>
         <ol class="am-breadcrumb">
                 <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
                 <li>运送订单</li>
-                <li>高级搜索</li>
-                <li>搜索结果</li>
+                <li><a href="{% url 'track_order_manager' %}">审核订单</a></li>
             </ol>
         <div class="tpl-portlet-components">
             <div class="portlet-title">
                 <div class="caption font-green bold">
-                    <span class="am-icon-code"></span> 高级搜索结果
+                    <span class="am-icon-code"></span> 审核订单
+                </div>
+                <div class="tpl-portlet-input tpl-fz-ml">
+                <form action="/order/track/search/">
+                    <div class="portlet-input input-small input-inline input-icon">
+                        <i class="am-icon-search"></i>
+                        <input type="text" id="id_search"name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">
+                    </div>
+                </form>
                 </div>
             </div>
             <div class="tpl-block">
@@ -58,9 +65,7 @@
                                     <td>
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 审核订单</button>
                                             </div>
                                         </div>
                                     </td>
@@ -74,7 +79,7 @@
                                     <ul class="am-pagination tpl-pagination">
                                         <li>
                                         {% if order.has_previous %}
-                                            <a href="?page={{ order.previous_page_number }}&keyword={{ keyword }}&start_date={{ start_date }}&&end_date={{ end_date }}&status={{ status }}" class="active">&laquo;</a>
+                                            <a href="?page={{ order.previous_page_number }}&query=" onclick="getLink(this)" class="active">&laquo;</a>
                                         {% endif %}
                                         {% if not order.has_previous %}
                                             <a href="" >&laquo;</a>
@@ -83,14 +88,14 @@
                                         <li>
                                             {% for i in order.paginator.page_range %}
                                                 <li {% if order.number == i %}class="am-active"{% endif %}>
-                                                    <a href="?page={{ i }}&keyword={{ keyword }}&start_date={{ start_date }}&&end_date={{ end_date }}&status={{ status }}" >{{ i }}
+                                                    <a href="?page={{ i }}&query=" onclick="getLink(this)">{{ i }}
                                                     </a>
                                                 </li>
                                             {% endfor %}
                                         </li>
                                         <li>
                                             {% if order.has_next %}
-                                                <a href="?page={{ order.next_page_number }}&keyword={{ keyword }}&start_date={{ start_date }}&&end_date={{ end_date }}&status={{ status }}">&raquo;</a>
+                                                <a href="?page={{ order.next_page_number }}&query=" onclick="getLink(this)">&raquo;</a>
                                             {% endif %}
                                             {% if not order.has_next %}
                                                 <a href="" >&raquo;</a>
@@ -111,12 +116,8 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        $(document).on('click', '.btn-check', function () {
-            var url_mask = "{% url 'track_order_detail' order_id=12345 %}".replace(/12345/, this.id.toString());
-            window.location.replace(url_mask);
-        });
         $(document).on('click', '.btn-modify', function () {
-            var url_mask = "{% url 'track_order_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'track_order_draft_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-delete', function () {
@@ -124,5 +125,19 @@
             window.location.replace(url_mask);
         });
 
+        document.getElementById("id_search").value = getSavedValue();
+        function saveValue(e){
+            var val = e.value;
+            localStorage.setItem("txtValue", val);
+        }
+        function getSavedValue(){
+            if (localStorage.getItem("txtValue") === null) {
+                return "";
+            }
+            return localStorage.getItem("txtValue");
+        }
+        function getLink(link){
+            link.href = link.href + localStorage.getItem("txtValue")
+        }
     </script>
 {% endblock %}
