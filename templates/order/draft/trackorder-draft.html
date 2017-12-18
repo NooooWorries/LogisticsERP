@@ -7,7 +7,7 @@
         <ol class="am-breadcrumb">
                 <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
                 <li>运送订单</li>
-                <li><a href="{% url 'track_order_manager' %}">草稿箱</a></li>
+                <li><a href="{% url 'track_order_draft' %}">草稿箱</a></li>
             </ol>
         <div class="tpl-portlet-components">
             <div class="portlet-title">
@@ -15,7 +15,7 @@
                     <span class="am-icon-code"></span> 草稿箱
                 </div>
                 <div class="tpl-portlet-input tpl-fz-ml">
-                <form action="/order/track/search/">
+                <form action="/order/track/draft/search/">
                     <div class="portlet-input input-small input-inline input-icon">
                         <i class="am-icon-search"></i>
                         <input type="text" id="id_search"name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">

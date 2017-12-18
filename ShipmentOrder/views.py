@@ -9,6 +9,15 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 import json
 import datetime
+import barcode
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from LogisticsERP import settings
+import os
+from xhtml2pdf.default import DEFAULT_FONT
+from barcode.writer import ImageWriter
 
 
 # 添加订单 第一步 基本信息
@@ -78,6 +87,15 @@ def ajax_delete_goods(request, good_id):
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=order)
+    order_instance = get_object_or_404(ShipmentOrder, pk=order)
+    insurance_fee = 0
+    freight = 0
+    for item in good:
+        insurance_fee = insurance_fee + item.insurance_fee
+        freight = freight + item.freight
+    order_instance.insuranceFee = insurance_fee
+    order_instance.freight = freight
+    order_instance.save()
     data = serializers.serialize('json', good)
     return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -214,6 +232,15 @@ def ajax_delete_goods_manage(request, good_id):
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=request.session['order_manage'])
+    order_instance = get_object_or_404(ShipmentOrder, pk=request.session['order_manage'])
+    insurance_fee = 0
+    freight = 0
+    for item in good:
+        insurance_fee = insurance_fee + item.insurance_fee
+        freight = freight + item.freight
+    order_instance.insuranceFee = insurance_fee
+    order_instance.freight = freight
+    order_instance.save()
     data = serializers.serialize('json', good)
     return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -339,10 +366,10 @@ def track_order_search_advanced_result(request):
     except EmptyPage:
         order = paginator.page(paginator.num_pages)
     return render(request, "order/search/trackorder-search-result.html", {'order': order,
-                                                                   'keyword': keyword,
-                                                                   'start_date': start_date,
-                                                                   'end_date': end_date,
-                                                                   'status': status})
+                                                                          'keyword': keyword,
+                                                                          'start_date': start_date,
+                                                                          'end_date': end_date,
+                                                                          'status': status})
 
 
 # 管理订单 草稿箱
@@ -359,6 +386,31 @@ def track_order_draft(request):
     except EmptyPage:
         order = paginator.page(paginator.num_pages)
     return render(request, "order/draft/trackorder-draft.html", {'order': order})
+
+
+# 管理订单 草稿箱 订单搜索
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_draft_search(request):
+    query = request.GET.get('query')
+    page = request.GET.get('page')
+    result = ShipmentOrder.objects.filter(
+        Q(sender__icontains=query)|
+        Q(from_address__icontains=query)|
+        Q(sender_contact__icontains=query)|
+        Q(receiver__icontains=query)|
+        Q(to_address__icontains=query)|
+        Q(receiver_contact__icontains=query)|
+        Q(mode__icontains=query)|
+        Q(comments__icontains=query), Q(status__exact=0), Q(handle__exact=request.user.id))
+    paginator = Paginator(result, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/draft/trackorder-draft.html", {'order': order, 'query': query})
 
 
 # 管理订单 草稿箱 编辑
@@ -418,3 +470,81 @@ def track_order_audit(request):
     except EmptyPage:
         order = paginator.page(paginator.num_pages)
     return render(request, "order/audit/trackorder-audit.html", {'order': order})
+
+
+# 管理订单 审核订单 订单搜索
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_audit_search(request):
+    query = request.GET.get('query')
+    page = request.GET.get('page')
+    result = ShipmentOrder.objects.filter(
+        Q(sender__icontains=query)|
+        Q(from_address__icontains=query)|
+        Q(sender_contact__icontains=query)|
+        Q(receiver__icontains=query)|
+        Q(to_address__icontains=query)|
+        Q(receiver_contact__icontains=query)|
+        Q(mode__icontains=query)|
+        Q(comments__icontains=query), Q(status__exact=1))
+    paginator = Paginator(result, 10)
+    try:
+        order = paginator.page(page)
+    except PageNotAnInteger:
+        order = paginator.page(1)
+    except EmptyPage:
+        order = paginator.page(paginator.num_pages)
+    return render(request, "order/audit/trackorder-audit.html", {'order': order, 'query': query})
+
+
+# 管理订单 审核订单 编辑
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_audit_modify(request, order_id):
+    request.session['order_manage'] = order_id
+    order_instance = get_object_or_404(ShipmentOrder, id=order_id)
+    order_form = OrderModityForm(request.POST or None, instance=order_instance)
+    goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+    goods_form = OrderCreationTwoForm(request.POST or None)
+
+    if order_form.is_valid():
+        goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+        sum_insurance = 0
+        sum_freight = 0
+        for item in goods_instance:
+            sum_insurance += item.insurance_fee
+            sum_freight += item.freight
+        order_instance.freight = sum_freight
+        order_instance.insuranceFee = sum_insurance
+        order_form.save(insurance=sum_insurance, freight=sum_freight)
+        return render(request, "order/audit/trackorder-audit-modify-complete.html")
+    return render(request, "order/audit/trackorder-audit-modify.html", {'form': order_form,
+                                                                        'good_form': goods_form,
+                                                                        'good_instance': goods_instance,
+                                                                        'order': order_id})
+
+
+# 生成订单pdf
+def generate_PDF(request, order_id):
+    order = get_object_or_404(ShipmentOrder, pk=order_id)
+    good = Goods.objects.filter(shipment_order_id_id=order_id)
+    ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
+    barcode_img = ean.save("OrderPDF/barcode/" + str(order_id))
+    data = {'order': order, 'good': good, 'today': datetime.datetime.now().strftime("%Y-%m-%d"), 'barcode': barcode_img}
+    html = get_template('order/pdf.html').render(data)
+    file = open('test.pdf', "w+b")
+    pdfmetrics.registerFont(TTFont("yh", os.path.join(settings.DOMAIN_NAME, 'static/fonts/fzlt.ttf')))
+    DEFAULT_FONT['helvetica'] = 'yh'
+    pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
+    file.seek(0)
+    pdf = file.read()
+    file.close()
+    return HttpResponse(pdf, 'application/pdf')
+
+
+# 完成审核 出单
+def track_order_audit_finalize(request, order_id):
+    order = get_object_or_404(ShipmentOrder, pk=order_id)
+    order.status = 2
+    order.save()
+    return generate_PDF(request, order_id)

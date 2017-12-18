@@ -17,9 +17,11 @@ from django.conf.urls import url, handler404, handler500
 from django.contrib import admin
 from LogisticsERP import views as main_view
 from ShipmentOrder import views as order_view
+from ShipmentOrder import pdf as pdf_view
 from Account import views as account_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -49,6 +51,8 @@ urlpatterns = [
     url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
     url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
     url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result, name="track_order_search_advanced_result"),
+    url(r'^order/track/draft/search/$', order_view.track_order_draft_search, name="track_order_draft_search"),
+    url(r'^order/track/audit/search/$', order_view.track_order_audit_search, name="track_order_audit_search"),
 
     # draft
     url(r'^order/track/draft/$', order_view.track_order_draft, name="track_order_draft"),
@@ -57,6 +61,9 @@ urlpatterns = [
 
     # audit
     url(r'^order/track/audit/$', order_view.track_order_audit, name="track_order_audit"),
+    url(r'^order/track/audit/(?P<order_id>[0-9]+)/$', order_view.track_order_audit_modify, name="track_order_audit_modify"),
+    url(r'^order/track/audit/(?P<order_id>[0-9]+)/submit/$', order_view.track_order_audit_finalize, name="track_order_audit_finalize"),
+    url(r'^pdf/(?P<order_id>[0-9]+)/$', order_view.generate_PDF, name="pdf"),
 
     # registration pages
     url(r'^login/$', auth_views.login, name='login'),
@@ -65,6 +72,8 @@ urlpatterns = [
     # error pages
     url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
     url(r'^error/redirect/$', main_view.error_redirect, name="error_redirect"),
+
+
 ]
 
 # customized error page

@@ -10,7 +10,10 @@ def index(request):
     user = request.user
     draft_instances = ShipmentOrder.objects.filter(handle=request.user, status=0)
     draft_count = draft_instances.count()
+    audit_instances = ShipmentOrder.objects.filter(status=1)
+    audit_count = audit_instances.count()
     request.session['draft'] = draft_count
+    request.session['audit'] = audit_count
     return render(request, 'index.html', {'user': user})
 
 

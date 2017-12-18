@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="ch">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -177,6 +178,7 @@
                             <a href="{% url 'track_order_audit' %}" onclick="clearSearch()">
                                 <i class="am-icon-angle-right"></i>
                                 <span>审核订单</span>
+                                <i class="tpl-left-nav-content tpl-badge-primary">{{ request.session.audit }}</i>
                             </a>
 
                             <a href="{% url 'track_order_manager' %}" onclick="clearSearch()">

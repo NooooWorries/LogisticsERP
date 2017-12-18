@@ -1,0 +1,10 @@
+Collecting xhtml2pdf
+  Using cached xhtml2pdf-0.0.6.zip
+Collecting html5lib (from xhtml2pdf)
+  Downloading html5lib-1.0.1-py2.py3-none-any.whl (117kB)
+Collecting pyPdf2 (from xhtml2pdf)
+  Using cached PyPDF2-1.26.0.tar.gz
+Collecting Pillow (from xhtml2pdf)
+  Downloading Pillow-4.3.0-cp27-cp27m-macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl (3.5MB)
+Collecting reportlab>=2.2 (from xhtml2pdf)
+  Using cached reportlab-3.4.0.tar.gz

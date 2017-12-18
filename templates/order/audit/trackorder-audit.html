@@ -15,7 +15,7 @@
                     <span class="am-icon-code"></span> 审核订单
                 </div>
                 <div class="tpl-portlet-input tpl-fz-ml">
-                <form action="/order/track/search/">
+                <form action="/order/track/audit/search/">
                     <div class="portlet-input input-small input-inline input-icon">
                         <i class="am-icon-search"></i>
                         <input type="text" id="id_search"name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">
@@ -117,7 +117,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.btn-modify', function () {
-            var url_mask = "{% url 'track_order_draft_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'track_order_audit_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-delete', function () {
