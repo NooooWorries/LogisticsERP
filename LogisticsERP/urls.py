@@ -17,8 +17,7 @@ from django.conf.urls import url, handler404, handler500
 from django.contrib import admin
 from LogisticsERP import views as main_view
 from ShipmentOrder import views as order_view
-from ShipmentOrder import pdf as pdf_view
-from Account import views as account_view
+from Customers import views as customer_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
@@ -47,13 +46,6 @@ urlpatterns = [
     url(r'^order/track/modify/add_good/$', order_view.ajax_add_goods_manage, name="add_goods_manage"),
     url(r'^order/track/modify/delete_good/(?P<good_id>[0-9]+)/$', order_view.ajax_delete_goods_manage, name="delete_goods_manage"),
 
-    # search
-    url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
-    url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
-    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result, name="track_order_search_advanced_result"),
-    url(r'^order/track/draft/search/$', order_view.track_order_draft_search, name="track_order_draft_search"),
-    url(r'^order/track/audit/search/$', order_view.track_order_audit_search, name="track_order_audit_search"),
-
     # draft
     url(r'^order/track/draft/$', order_view.track_order_draft, name="track_order_draft"),
     url(r'^order/track/draft/(?P<order_id>[0-9]+)/$', order_view.track_order_draft_modify, name="track_order_draft_modify"),
@@ -69,10 +61,32 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$',auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 
+
+    # customer management pages
+    # customer class
+    url(r'^customer/class/add/$', customer_view.add_customer_class, name="add_customer_class"),
+    url(r'^customer/class/$', customer_view.customer_class, name="customer_class"),
+    url(r'^customer/class/detail/(?P<class_id>[0-9]+)/$', customer_view.customer_class_detail, name="customer_class_detail"),
+    url(r'^customer/class/modify/(?P<class_id>[0-9]+)/$', customer_view.customer_class_modify, name="customer_class_modify"),
+
+    # customer
+    url(r'^customer/add/$', customer_view.add_customer, name="add_customer"),
+    url(r'^customer/$', customer_view.customer, name="customer"),
+
+
     # error pages
     url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
     url(r'^error/redirect/$', main_view.error_redirect, name="error_redirect"),
 
+    # search
+    url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
+    url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
+    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result,
+        name="track_order_search_advanced_result"),
+    url(r'^order/track/draft/search/$', order_view.track_order_draft_search, name="track_order_draft_search"),
+    url(r'^order/track/audit/search/$', order_view.track_order_audit_search, name="track_order_audit_search"),
+    url(r'^customer/class/search/$', customer_view.customer_class_search, name="customer_class_search"),
+    url(r'^customer/search/$', customer_view.customer_search, name="customer_search"),
 
 ]
 

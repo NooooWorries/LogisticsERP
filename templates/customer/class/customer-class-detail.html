@@ -1,0 +1,32 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+            <div class="tpl-content-page-title">
+                管理客户组
+            </div>
+            <ol class="am-breadcrumb">
+                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+                <li>客户管理</li>
+                <li><a href="{% url 'customer_class' %}">管理客户组</a></li>
+                <li>客户组详情</li>
+                <li>客户组{{ customer_class.id }}</li>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">
+                        <span class="am-icon-code"></span> 客户组详情
+                    </div>
+                </div>
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div id="id_divFee" class="note note-info">
+                        <p>ID：{{ customer_class.id }}</p>
+                        <p>用户组：{{ customer_class.class_name}}</p>
+                        <p>描述：{{ customer_class.comments }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,7 +1,5 @@
 from django import forms
-from django.contrib.auth.models import User
-from django.db import models
-from ShipmentOrder.models import UserProfile, CustomerClass, Customer, ShipmentOrder, Goods
+from ShipmentOrder.models import ShipmentOrder, Goods
 
 
 class OrderCreationOneForm(forms.ModelForm):

@@ -195,17 +195,25 @@
                 <li class="tpl-left-nav-item">
                     <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
                         <i class="am-icon-user"></i>
-                        <span>客户簿</span>
-                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                        <span>客户管理</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
-                    <ul class="tpl-left-nav-sub-menu">
+                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
                         <li>
-                            <a href="form-amazeui.html">
+                            <a href="{% url 'add_customer_class' %}">
                                 <i class="am-icon-angle-right"></i>
-                                <span>添加客户</span>
+                                <span>添加客户组</span>
                                 <i class="am-icon-star tpl-left-nav-content-ico am-fr am-margin-right"></i>
                             </a>
-                            <a href="form-line.html">
+                            <a href="{% url 'customer_class' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>管理客户组</span>
+                            </a>
+                            <a href="{% url 'add_customer' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>添加客户</span>
+                            </a>
+                            <a href="{% url 'customer' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>管理客户</span>
                             </a>
