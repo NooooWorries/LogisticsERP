@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from ShipmentOrder.forms import OrderCreationOneForm, OrderCreationTwoForm, OrderCreationThreeForm, OrderModityForm
-from ShipmentOrder.models import ShipmentOrder, Goods
+from ShipmentOrder.models import ShipmentOrder, Goods, Customer
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -24,6 +24,7 @@ from barcode.writer import ImageWriter
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_one(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     if request.method == 'POST':
         form = OrderCreationOneForm(request.POST)
         if form.is_valid():
@@ -39,10 +40,21 @@ def add_order_stage_one(request):
     return render(request, "order/add/form-addorder-1.html", {'form': form})
 
 
+# 添加订单 第一步 选择客户
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def add_order_select_customer(request, customer_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    customer_instance = Customer.objects.filter(pk=customer_id)
+    data = serializers.serialize('json', customer_instance)
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 # 添加订单 第二步 货物信息显示
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_two(request, order):
+    request.session.set_expiry(request.session.get_expiry_age())
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     form = OrderCreationTwoForm()
@@ -53,25 +65,32 @@ def add_order_stage_two(request, order):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def ajax_add_goods(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     form = OrderCreationTwoForm(request.POST)
     order = request.session['order']
     if form.is_valid():
+        pack_count = Goods.objects.filter(shipment_order_id_id=order).count()
         new_good = Goods(
             shipment_order_id_id=order,
+            pack_number=pack_count + 1,
             goods_name=request.POST.get('goods_name'),
             amount=request.POST.get('amount'),
-            volume=request.POST.get('volume'),
             weight=request.POST.get('weight'),
-            freight=request.POST.get('freight'),
-            claim_value=request.POST.get('claim_value'),
-            insurance_rate=request.POST.get('insurance_rate'),
-            insurance_fee=float(request.POST.get('insurance_rate')) * float(request.POST.get('claim_value')) / 100
+            unit_price=request.POST.get('unit_price'),
         )
+        new_good.freight = float(new_good.weight) * float(new_good.unit_price)
         new_good.save()
         good = Goods.objects.filter(shipment_order_id_id=order)
         data = serializers.serialize('json', good)
+        # update freight
+        order_instance = get_object_or_404(ShipmentOrder, pk=order)
+        freight = 0
+        for item in good:
+            freight = freight + item.freight
+        order_instance.freight = freight
+        order_instance.save()
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
         print(form.errors)
@@ -81,22 +100,21 @@ def ajax_add_goods(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def ajax_delete_goods(request, good_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     order = request.session['order']
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=order)
+    data = serializers.serialize('json', good)
+    # update freight
     order_instance = get_object_or_404(ShipmentOrder, pk=order)
-    insurance_fee = 0
     freight = 0
     for item in good:
-        insurance_fee = insurance_fee + item.insurance_fee
         freight = freight + item.freight
-    order_instance.insuranceFee = insurance_fee
     order_instance.freight = freight
     order_instance.save()
-    data = serializers.serialize('json', good)
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
@@ -104,47 +122,38 @@ def ajax_delete_goods(request, good_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_three_redirect(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     order = request.session['order']
     order_instance = ShipmentOrder.objects.get(pk=order)
-    sum_insurance = 0
-    sum_freight = 0
 
     if request.method == 'POST':
         form = OrderCreationThreeForm(request.POST)
         if form.is_valid():
-            order_instance.collectFee = float(request.POST.get('collectFee'))
-            order_instance.sendFee = float(request.POST.get("sendFee"))
-            order_instance.paymentOnAccountFreight = float(request.POST.get("paymentOnAccountFreight"))
-            order_instance.transitFee = float(request.POST.get("transitFee"))
-            order_instance.installFee = float(request.POST.get("installFee"))
-            order_instance.storeFee = float(request.POST.get("storeFee"))
             order_instance.packingFee = float(request.POST.get("packingFee"))
-            order_instance.totalPrice = order_instance.collectFee + order_instance.sendFee + \
-                                        float(order_instance.freight) + float(order_instance.insuranceFee) + order_instance.transitFee - \
-                                        order_instance.paymentOnAccountFreight + order_instance.installFee + \
-                                        order_instance.storeFee + order_instance.packingFee
+            order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(request.POST.get("insurance_rate")) / 100
+            order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
+                                        order_instance.paymentOnAccountFreight + order_instance.packingFee
+            order_instance.volume = form.cleaned_data["volume"]
+            # 计算密度
+            total_weight = 0
+            good_instance = Goods.objects.filter(shipment_order_id_id=order)
+            for item in good_instance:
+                total_weight = total_weight + item.weight
+            order_instance.density = (total_weight/1000) / order_instance.volume
             order_instance.save()
             return add_order_summary(request)
     else:
         form = OrderCreationThreeForm()
-        good = Goods.objects.filter(shipment_order_id_id=order)
-
-        for item in good:
-            sum_insurance += item.insurance_fee
-            sum_freight += item.freight
-        order_instance.insuranceFee = sum_insurance
-        order_instance.freight = sum_freight
-        order_instance.save()
-        return render(request, "order/add/form-addorder-3.html", {'form': form, 'insurance': sum_insurance,
-                                                              'freight': sum_freight, 'order': order_instance})
+        return render(request, "order/add/form-addorder-3.html", {'form': form, 'order': order_instance})
 
 
 # 添加订单 第四步 信息确认
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def add_order_summary(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     order = request.session['order']
@@ -157,6 +166,7 @@ def add_order_summary(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def add_order_audit(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     if "order" not in request.session:
         form_create = OrderCreationOneForm()
         return render(request, "order/add/form-addorder-1.html", {'form': form_create})
@@ -177,6 +187,7 @@ def add_order_audit(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_manager(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     page = request.GET.get('page')
     order_list = ShipmentOrder.objects.all()
     paginator = Paginator(order_list, 10)
@@ -193,6 +204,7 @@ def track_order_manager(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_detail(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     good = Goods.objects.filter(shipment_order_id_id=order_id)
     return render(request, "order/manage/trackorder-detail.html", {'order': order, 'good': good})
@@ -202,6 +214,7 @@ def track_order_detail(request, order_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_modify(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -210,14 +223,21 @@ def track_order_modify(request, order_id):
 
     if order_form.is_valid():
         goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        sum_insurance = 0
         sum_freight = 0
         for item in goods_instance:
-            sum_insurance += item.insurance_fee
             sum_freight += item.freight
         order_instance.freight = sum_freight
-        order_instance.insuranceFee = sum_insurance
-        order_form.save(insurance=sum_insurance, freight=sum_freight)
+        order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
+            request.POST.get("insurance_rate")) / 100
+        order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
+                                    order_instance.paymentOnAccountFreight + order_instance.packingFee
+        # 计算密度
+        total_weight = 0
+        good_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+        for item in good_instance:
+            total_weight = total_weight + item.weight
+        order_instance.density = (total_weight / 1000) / order_instance.volume
+        order_form.save(freight=sum_freight)
         return render(request, "order/manage/trackorder-modify-complete.html")
     return render(request, "order/manage/trackorder-modify.html", {'form': order_form,
                                                             'good_form': goods_form,
@@ -229,19 +249,23 @@ def track_order_modify(request, order_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def ajax_delete_goods_manage(request, good_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=request.session['order_manage'])
+    data = serializers.serialize('json', good)
+    # update freight
     order_instance = get_object_or_404(ShipmentOrder, pk=request.session['order_manage'])
-    insurance_fee = 0
     freight = 0
     for item in good:
-        insurance_fee = insurance_fee + item.insurance_fee
         freight = freight + item.freight
-    order_instance.insuranceFee = insurance_fee
     order_instance.freight = freight
+    # 计算密度
+    total_weight = 0
+    for item in good:
+        total_weight = total_weight + item.weight
+    order_instance.density = (total_weight / 1000) / order_instance.volume
     order_instance.save()
-    data = serializers.serialize('json', good)
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
@@ -249,32 +273,40 @@ def ajax_delete_goods_manage(request, good_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def ajax_add_goods_manage(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     goods_form = OrderCreationTwoForm(request.POST)
     order = request.session['order_manage']
     if goods_form.is_valid():
+        pack_count = Goods.objects.filter(shipment_order_id_id=order).count()
         new_good = Goods(
             shipment_order_id_id=order,
+            pack_number=pack_count + 1,
             goods_name=request.POST.get('goods_name'),
             amount=request.POST.get('amount'),
-            volume=request.POST.get('volume'),
             weight=request.POST.get('weight'),
-            freight=request.POST.get('freight'),
-            claim_value=request.POST.get('claim_value'),
-            insurance_rate=request.POST.get('insurance_rate'),
-            insurance_fee=float(request.POST.get('insurance_rate')) * float(request.POST.get('claim_value')) / 100
+            unit_price=request.POST.get('unit_price'),
         )
+        new_good.freight = float(new_good.weight) * float(new_good.unit_price)
         new_good.save()
         good = Goods.objects.filter(shipment_order_id_id=order)
         data = serializers.serialize('json', good)
+        # 计算密度
+        order_instance = get_object_or_404(ShipmentOrder, pk=order)
+        total_weight = 0
+        for item in good:
+            total_weight = total_weight + item.weight
+        order_instance.density = (total_weight / 1000) / order_instance.volume
+        order_instance.save()
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
         print(goods_form.errors)
 
 
-# 管理订单 确认
+# 管理订单 确认删除
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_confirm_delete(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     order_instance = ShipmentOrder.objects.get(pk=order_id)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     return render(request, "order/manage/trackorder-delete-confirm.html", {'order': order_instance, 'good': goods_instance})
@@ -284,6 +316,7 @@ def track_order_confirm_delete(request, order_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_delete(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     order_object = get_object_or_404(ShipmentOrder, pk=order_id)
     if order_object.handle == request.user and order_object.status == 0:
         request.session['draft'] = request.session['draft'] - 1
@@ -295,6 +328,7 @@ def track_order_delete(request, order_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
     page = request.GET.get('page')
     result = ShipmentOrder.objects.filter(
@@ -319,6 +353,7 @@ def track_order_search(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search_advanced(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     return render(request, "order/search/trackorder-search.html")
 
 
@@ -326,6 +361,7 @@ def track_order_search_advanced(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search_advanced_result(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     keyword = request.GET.get('keyword')
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -376,6 +412,7 @@ def track_order_search_advanced_result(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     page = request.GET.get('page')
     order_list = ShipmentOrder.objects.filter(handle=request.user, status=0)
     paginator = Paginator(order_list, 10)
@@ -392,6 +429,7 @@ def track_order_draft(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft_search(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
     page = request.GET.get('page')
     result = ShipmentOrder.objects.filter(
@@ -417,6 +455,7 @@ def track_order_draft_search(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft_modify(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -425,14 +464,23 @@ def track_order_draft_modify(request, order_id):
 
     if order_form.is_valid():
         goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        sum_insurance = 0
         sum_freight = 0
         for item in goods_instance:
-            sum_insurance += item.insurance_fee
             sum_freight += item.freight
         order_instance.freight = sum_freight
-        order_instance.insuranceFee = sum_insurance
-        order_form.save(insurance=sum_insurance, freight=sum_freight)
+        order_form.save(freight=sum_freight)
+
+        # 计算密度
+        total_weight = 0
+        for item in goods_instance:
+            total_weight = total_weight + item.weight
+        order_instance.density = (total_weight / 1000) / order_instance.volume
+        # 计算总价
+        order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
+            request.POST.get("insurance_rate")) / 100
+        order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
+                                    order_instance.paymentOnAccountFreight + order_instance.packingFee
+        order_instance.save()
         return render(request, "order/draft/trackorder-draft-modify-complete.html")
     return render(request, "order/draft/trackorder-draft-modify.html", {'form': order_form,
                                                                         'good_form': goods_form,
@@ -444,6 +492,7 @@ def track_order_draft_modify(request, order_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_submit_audit(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     order_instance = ShipmentOrder.objects.get(pk=order_id)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     if goods_instance.count() >= 1:
@@ -460,6 +509,7 @@ def track_order_submit_audit(request, order_id):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     page = request.GET.get('page')
     order_list = ShipmentOrder.objects.filter(status=1)
     paginator = Paginator(order_list, 10)
@@ -476,6 +526,7 @@ def track_order_audit(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_search(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
     page = request.GET.get('page')
     result = ShipmentOrder.objects.filter(
@@ -501,6 +552,7 @@ def track_order_audit_search(request):
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_modify(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -509,14 +561,21 @@ def track_order_audit_modify(request, order_id):
 
     if order_form.is_valid():
         goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        sum_insurance = 0
         sum_freight = 0
         for item in goods_instance:
-            sum_insurance += item.insurance_fee
             sum_freight += item.freight
         order_instance.freight = sum_freight
-        order_instance.insuranceFee = sum_insurance
-        order_form.save(insurance=sum_insurance, freight=sum_freight)
+        order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
+            request.POST.get("insurance_rate")) / 100
+        order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
+                                    order_instance.paymentOnAccountFreight + order_instance.packingFee
+        # 计算密度
+        total_weight = 0
+        good_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+        for item in good_instance:
+            total_weight = total_weight + item.weight
+        order_instance.density = (total_weight / 1000) / order_instance.volume
+        order_form.save(freight=sum_freight)
         return render(request, "order/audit/trackorder-audit-modify-complete.html")
     return render(request, "order/audit/trackorder-audit-modify.html", {'form': order_form,
                                                                         'good_form': goods_form,
@@ -525,17 +584,20 @@ def track_order_audit_modify(request, order_id):
 
 
 # 生成订单pdf
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
 def generate_PDF(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     good = Goods.objects.filter(shipment_order_id_id=order_id)
     ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
     barcode_img = ean.save("OrderPDF/barcode/" + str(order_id))
     data = {'order': order, 'good': good, 'today': datetime.datetime.now().strftime("%Y-%m-%d"), 'barcode': barcode_img}
     html = get_template('order/pdf.html').render(data)
-    file = open('test.pdf', "w+b")
+    file = open("OrderPDF/documents/" + str(order_id) + ".pdf", "w+b")
     pdfmetrics.registerFont(TTFont("yh", os.path.join(settings.DOMAIN_NAME, 'static/fonts/fzlt.ttf')))
     DEFAULT_FONT['helvetica'] = 'yh'
-    pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8')
+    pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8', )
     file.seek(0)
     pdf = file.read()
     file.close()
@@ -544,6 +606,7 @@ def generate_PDF(request, order_id):
 
 # 完成审核 出单
 def track_order_audit_finalize(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     order.status = 2
     order.save()

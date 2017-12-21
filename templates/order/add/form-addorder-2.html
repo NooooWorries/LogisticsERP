@@ -35,14 +35,12 @@
                                 <table class="am-table am-table-striped am-table-hover table-main" >
                                     <thead>
                                         <tr>
-                                            <th class="table-title">货物名称</th>
-                                            <th class="table-author am-hide-sm-only">数量</th>
-                                            <th class="table-type">体积</th>
+                                            <th class="table-title">包裹序号</th>
+                                            <th class="table-author am-hide-sm-only">货物名称</th>
+                                            <th class="table-type">数量</th>
                                             <th class="table-date am-hide-sm-only">重量</th>
-                                            <th class="table-set">运费</th>
-                                            <th class="table-set">声明价值</th>
-                                            <th class="table-set">保价率</th>
-                                            <th class="table-set">保价费</th>
+                                            <th class="table-set">运费单价</th>
+                                            <th class="table-set">总运费</th>
                                             <th class="table-set">操作</th>
                                         </tr>
                                     </thead>
@@ -87,14 +85,12 @@
             var content = "<table class=\"am-table am-table-striped am-table-hover table-main\" >\n" +
                 "                                    <thead>\n" +
                 "                                        <tr>\n" +
-                "                                            <th class=\"table-title\">货物名称</th>\n" +
-                "                                            <th class=\"table-author am-hide-sm-only\">数量</th>\n" +
-                "                                            <th class=\"table-type\">体积</th>\n" +
+                "                                            <th class=\"table-title\">包裹序号</th>\n" +
+                "                                            <th class=\"table-author am-hide-sm-only\">货物名称</th>\n" +
+                "                                            <th class=\"table-type\">数量</th>\n" +
                 "                                            <th class=\"table-date am-hide-sm-only\">重量</th>\n" +
-                "                                            <th class=\"table-set\">运费</th>\n" +
-                "                                            <th class=\"table-set\">声明价值</th>\n" +
-                "                                            <th class=\"table-set\">保价率</th>\n" +
-                "                                            <th class=\"table-set\">保价费</th>\n" +
+                "                                            <th class=\"table-set\">运费单价</th>\n" +
+                "                                            <th class=\"table-set\">总运费</th>\n" +
                 "                                            <th class=\"table-set\">操作</th>\n" +
                 "                                        </tr>\n" +
                 "                                    </thead>";
@@ -102,14 +98,12 @@
 
             for (var i = 0; i < json.length; i++) {
                 content += "<tr>\n" +
+                        "<td>" + json[i].fields.pack_number + "</td>\n" +
                         "<td>" + json[i].fields.goods_name + "</td>\n" +
                         "<td>" + json[i].fields.amount + "</td>\n" +
-                        "<td>" + json[i].fields.volume + "</td>\n" +
                         "<td>" + json[i].fields.weight + "</td>\n" +
+                        "<td>" + json[i].fields.unit_price + "</td>\n" +
                         "<td>" + json[i].fields.freight + "</td>\n" +
-                        "<td>" + json[i].fields.claim_value + "</td>\n" +
-                        "<td>" + json[i].fields.insurance_rate + "</td>\n" +
-                        "<td>" + json[i].fields.insurance_fee + "</td>\n" +
                         "<td>"
                         + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
                         + "</td>";

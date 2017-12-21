@@ -1,0 +1,45 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+            <div class="tpl-content-page-title">
+                管理客户组
+            </div>
+            <ol class="am-breadcrumb">
+                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+                <li>客户管理</li>
+                <li><a href="{% url 'customer_class' %}">管理客户组</a></li>
+                <li>删除客户组</li>
+                <li>客户{{ customer.id }}</li>
+            </ol>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">
+                        <span class="am-icon-code"></span> 确认删除
+                    </div>
+                </div>
+                <div class="tpl-block ">
+                    <div class="am-g tpl-amazeui-form">
+                        <p><span class="label label-danger">警告</span> 您即将删除该客户组，请仔细核对，该操作无法恢复。</p>
+                        <p><span class="label label-danger">警告</span> 若您删除该客户组，该客户组下的所有客户的类别，将变成未分类。</p>
+                        <p><span class="label label-info">提示</span> 如需批量删除，请联系超级管理员。</p>
+                    </div>
+                    <div id="id_divInfo" class="note note-info">
+                        <h2>客户组详情</h2>
+                        <p>客户组ID：{{ customer_class.id }}</p>
+                        <p>客户组名：{{ customer_class.class_name }}</p>
+                        <p>描述：{{ customer_class.comments }}</p>
+                        <h3 style="color: red">该客户组下有{{ customer_count }}个客户。若您删除该客户组，该客户组下的所有客户的类别，将变成未分类。</h3>
+                    </div>
+                    </div>
+                <button class="am-btn am-btn-danger btn-delete">确认删除</button>
+            </div>
+        </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).on('click', '.btn-delete', function () {
+            var url_mask = "{% url 'customer_class_delete' class_id=12345 %}".replace(/12345/, {{ customer_class.id }});
+            window.location.replace(url_mask);
+        });
+    </script>
+{% endblock %}

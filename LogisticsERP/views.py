@@ -7,6 +7,7 @@ from ShipmentOrder.models import ShipmentOrder
 
 @login_required(login_url='/error/not-logged-in/')
 def index(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     user = request.user
     draft_instances = ShipmentOrder.objects.filter(handle=request.user, status=0)
     draft_count = draft_instances.count()
@@ -18,20 +19,24 @@ def index(request):
 
 
 def error_404(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     data = {}
     return render(request, 'error/404.html', data)
 
 
 def error_500(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     data = {}
     return render(request, 'error/500.html', data)
 
 
 def error_not_logged_in(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     data = {}
     return render(request, 'error/not-logged-in.html', data)
 
 
 def error_redirect(request):
+    request.session.set_expiry(request.session.get_expiry_age())
     data = {}
     return render(request, 'error/redirect_error.html', data)

@@ -159,7 +159,7 @@
                 <li class="tpl-left-nav-item">
                     <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
                         <i class="am-icon-wpforms"></i>
-                        <span>运送订单</span>
+                        <span>订单管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
                     <ul class="tpl-left-nav-sub-menu" style="display: block;">
@@ -188,7 +188,7 @@
 
                             <a href="{% url 'track_order_search_advanced' %}">
                                 <i class="am-icon-angle-right"></i>
-                                <span>高级搜索</span>
+                                <span>订单高级搜索</span>
                             </a>
                         </li>
                     </ul>
@@ -216,6 +216,37 @@
                             <a href="{% url 'customer' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>管理客户</span>
+                            </a>
+                            <a href="{% url 'customer_search_advanced' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>客户高级搜索</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-truck"></i>
+                        <span>出车</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
+                        <li>
+                            <a href="{% url 'customer_search_advanced' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>添加司机</span>
+                            </a>
+                            <a href="{% url 'customer_search_advanced' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>管理司机</span>
+                            </a>
+                            <a href="{% url 'add_customer_class' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>添加出车记录</span>
+                            </a>
+                            <a href="{% url 'customer_class' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>管理出车记录</span>
                             </a>
                         </li>
                     </ul>

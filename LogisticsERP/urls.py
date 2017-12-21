@@ -22,6 +22,7 @@ from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
@@ -30,6 +31,7 @@ urlpatterns = [
 
     # add order pages
     url(r'^order/add/1/$', order_view.add_order_stage_one, name="add_order_stage_one"),
+    url(r'^order/add/1/customer/(?P<customer_id>[0-9]+)/$', order_view.add_order_select_customer, name="add_order_select_customer"),
     url(r'^order/add/3/$', order_view.add_order_stage_three_redirect, name="add_order_stage_three_redirect"),
     url(r'^order/add/summary/$', order_view.add_order_summary, name="add_order_summary"),
     url(r'^order/add/submit/$', order_view.add_order_audit, name="add_order_audit"),
@@ -61,18 +63,22 @@ urlpatterns = [
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$',auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 
-
     # customer management pages
     # customer class
     url(r'^customer/class/add/$', customer_view.add_customer_class, name="add_customer_class"),
     url(r'^customer/class/$', customer_view.customer_class, name="customer_class"),
     url(r'^customer/class/detail/(?P<class_id>[0-9]+)/$', customer_view.customer_class_detail, name="customer_class_detail"),
     url(r'^customer/class/modify/(?P<class_id>[0-9]+)/$', customer_view.customer_class_modify, name="customer_class_modify"),
+    url(r'^customer/class/delete/(?P<class_id>[0-9]+)/$', customer_view.customer_class_confirm_delete, name="customer_class_confirm_delete"),
+    url(r'^customer/class/delete/(?P<class_id>[0-9]+)/complete/$', customer_view.customer_class_delete, name="customer_class_delete"),
 
     # customer
     url(r'^customer/add/$', customer_view.add_customer, name="add_customer"),
     url(r'^customer/$', customer_view.customer, name="customer"),
-
+    url(r'^customer/detail/(?P<customer_id>[0-9]+)/$', customer_view.customer_detail, name="customer_detail"),
+    url(r'^customer/modify/(?P<customer_id>[0-9]+)/$', customer_view.customer_modify, name="customer_modify"),
+    url(r'^customer/delete/(?P<customer_id>[0-9]+)/$', customer_view.customer_confirm_delete, name="customer_confirm_delete"),
+    url(r'^customer/delete/(?P<customer_id>[0-9]+)/complete/$', customer_view.customer_delete, name="customer_delete"),
 
     # error pages
     url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
@@ -81,12 +87,13 @@ urlpatterns = [
     # search
     url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
     url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
-    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result,
-        name="track_order_search_advanced_result"),
+    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result,name="track_order_search_advanced_result"),
     url(r'^order/track/draft/search/$', order_view.track_order_draft_search, name="track_order_draft_search"),
     url(r'^order/track/audit/search/$', order_view.track_order_audit_search, name="track_order_audit_search"),
     url(r'^customer/class/search/$', customer_view.customer_class_search, name="customer_class_search"),
     url(r'^customer/search/$', customer_view.customer_search, name="customer_search"),
+    url(r'^customer/search/advanced/$', customer_view.customer_search_advanced, name="customer_search_advanced"),
+    url(r'^customer/search/advanced/result/$', customer_view.customer_search_advanced_result, name="customer_search_advanced_result"),
 
 ]
 

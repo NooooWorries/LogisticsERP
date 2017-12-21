@@ -16,7 +16,7 @@ class CustomerClass(models.Model):
 
 
 class Customer(models.Model):
-    customer_class = models.ForeignKey(CustomerClass, null=True)
+    customer_class = models.ForeignKey(CustomerClass, null=True, on_delete=models.SET_NULL)
     customer_name = models.CharField(null=False, verbose_name='客户名', max_length=256)
     contact_person = models.CharField(null=False, verbose_name='联系人', max_length=256)
     contact_number = models.CharField(null=False, verbose_name='联系电话', max_length=256)
@@ -28,6 +28,9 @@ class Customer(models.Model):
 
 
 class ShipmentOrder(models.Model):
+    # 客户
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+
     # 发货人信息
     sender = models.CharField(null=False, verbose_name='发货人', max_length=256)
     from_address = models.CharField(null=False, verbose_name='发出地地址', max_length=256)
@@ -39,35 +42,43 @@ class ShipmentOrder(models.Model):
     receiver_contact = models.CharField(null=False, verbose_name='收货人联系电话', max_length=256)
 
     # 费用
-    collectFee = models.FloatField(default=0, verbose_name='接货费')
-    sendFee = models.FloatField(default=0, verbose_name='送货费')
     paymentOnAccountFreight = models.FloatField(default=0, verbose_name='垫付运费')
-    transitFee = models.FloatField(default=0, verbose_name='中转费')
-    installFee = models.FloatField(default=0, verbose_name='装卸费')
-    storeFee = models.FloatField(default=0, verbose_name='保管费')
-    insuranceFee = models.FloatField(default=0, verbose_name='保价费')
+    claimed_value = models.FloatField(null=False, default=0, verbose_name='声明价值')
+    insurance_rate = models.FloatField(null=False, default=1, verbose_name='保价率')
+    insurance_fee = models.FloatField(null=False, default=0, verbose_name='保价费')
     freight = models.FloatField(default=0, verbose_name='运费')
     packingFee = models.FloatField(default=0, verbose_name='包装费')
     totalPrice = models.FloatField(default=0, verbose_name='总价')
 
     # 其他
     mode = models.CharField(null=False, verbose_name='运输方式', max_length=256)
+    volume = models.FloatField(null=False, verbose_name='体积', default=0)
+    density = models.FloatField(null=False, verbose_name='密度', default=0)
     comments = models.CharField(verbose_name='备注', max_length=256)
     create_date = models.DateField(verbose_name='创建时间', null=False)
     handle = models.ForeignKey(User, null=False, verbose_name='经办')
+    market = models.CharField(verbose_name='市场', max_length=200, null=True)
     status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:未提交， 1:待审核， 2:审核通过， 3:已完成
 
 
 class Goods(models.Model):
     shipment_order_id = models.ForeignKey(ShipmentOrder)
+    pack_number = models.IntegerField(null=False, default=1, verbose_name="包号")
     goods_name = models.CharField(null=False, verbose_name='货物名称', max_length=256)
-    amount = models.FloatField(null=False, default=1, verbose_name='数量')
-    volume = models.FloatField(null=False, verbose_name='体积')
+
+    # 数据
+    amount = models.FloatField(null=False, default=0, verbose_name='数量')
+    unit_price = models.FloatField(null=False,verbose_name='运费单价')
     weight = models.FloatField(null=False, verbose_name='重量')
     freight = models.FloatField(null=False, verbose_name='运费')
-    claim_value = models.FloatField(null=False, verbose_name='申明价值')
-    insurance_rate = models.FloatField(null=False, default=1, verbose_name='保价率')
-    insurance_fee = models.FloatField(null=False, default=0, verbose_name='保价费')
+
+    # 日期
+    store_date = models.DateField(verbose_name='入库日期', null=True)
+    send_date = models.DateField(verbose_name='发货日期', null=True)
+    receive_date = models.DateField(verbose_name='到达日期', null=True)
+
+    # 其他
+    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0：入库，1：装车，2：口岸，3：到达
 
 
 class BankAccount(models.Model):

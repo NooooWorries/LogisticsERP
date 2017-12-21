@@ -30,33 +30,31 @@
                         <p>收货人：{{ order.receiver }}</p>
                         <p>收货地址：{{ order.to_address }}</p>
                         <p>收货人联系电话：{{ order.receiver_contact }}</p>
+                        <p>体积 ：{{ order.volume }} 立方</p>
+                        <p>密度 ：{{ order.density }} 吨/立方</p>
                     </div>
                     <div id="id_tableGoods" class="note note-info">
                         <h2>货物详情</h2>
                         <table class="am-table am-table-striped am-table-hover table-main">
                             <thead>
                             <tr>
-                                <th class="table-title">货物名称</th>
-                                <th class="table-author am-hide-sm-only">数量</th>
-                                <th class="table-type">体积</th>
+                                <th class="table-title">包裹序号</th>
+                                <th class="table-author am-hide-sm-only">货物名称</th>
+                                <th class="table-type">数量</th>
                                 <th class="table-date am-hide-sm-only">重量</th>
-                                <th class="table-set">运费</th>
-                                <th class="table-set">声明价值</th>
-                                <th class="table-set">保价率</th>
-                                <th class="table-set">保价费</th>
+                                <th class="table-set">运费单价</th>
+                                <th class="table-set">总运费</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for item in good %}
                                 <tr>
-                                    <td>{{ item.goods_name }}</td>
-                                    <td>{{ item.amount }}</td>
-                                    <td>{{ item.volume }}</td>
-                                    <td>{{ item.weight }}</td>
-                                    <td>{{ item.freight }}</td>
-                                    <td>{{ item.claim_value }}</td>
-                                    <td>{{ item.insurance_rate }}</td>
-                                    <td>{{ item.insurance_fee }}</td>
+                                    <td>{{ item.pack_number }}</td>
+                                        <td>{{ item.goods_name }}</td>
+                                        <td>{{ item.amount }}</td>
+                                        <td>{{ item.weight }}</td>
+                                        <td>{{ item.unit_price }}</td>
+                                        <td>{{ item.freight }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -65,12 +63,8 @@
                     <div id="id_divFee" class="note note-info">
                         <h2>报价</h2>
                         <p>运费：{{ order.freight }}</p>
-                        <p>保价费：{{ order.insuranceFee}}</p>
-                        <p>接货费：{{ order.collectFee }}</p>
-                        <p>送货费：{{ order.sendFee }}</p>
-                        <p>中转费：{{ order.transitFee }}</p>
-                        <p>装卸费：{{ order.installFee }}</p>
-                        <p>保管费：{{ order.storeFee }}</p>
+
+                        <p>保价费：{{ order.insurance_fee}}</p>
                         <p>包装费：{{ order.packingFee }}</p>
                         <p>垫付运费：-{{ order.paymentOnAccountFreight }}</p>
                         <p>------------------</p>

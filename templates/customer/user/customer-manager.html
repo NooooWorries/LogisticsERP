@@ -106,18 +106,19 @@
                 </div>
             </div>
         </div>
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.btn-check', function () {
-            var url_mask = "{% url 'track_order_detail' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'customer_detail' customer_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-modify', function () {
-            var url_mask = "{% url 'track_order_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'customer_modify' customer_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-delete', function () {
-            var url_mask = "{% url 'track_order_confirm_delete' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'customer_confirm_delete' customer_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
 

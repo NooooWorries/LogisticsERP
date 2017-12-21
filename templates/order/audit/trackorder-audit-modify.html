@@ -86,28 +86,24 @@
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                     <tr>
-                                        <th class="table-title">货物名称</th>
-                                        <th class="table-author am-hide-sm-only">数量</th>
-                                        <th class="table-type">体积</th>
+                                        <th class="table-title">包裹序号</th>
+                                        <th class="table-author am-hide-sm-only">货物名称</th>
+                                        <th class="table-type">数量</th>
                                         <th class="table-date am-hide-sm-only">重量</th>
-                                        <th class="table-set">运费</th>
-                                        <th class="table-set">声明价值</th>
-                                        <th class="table-set">保价率</th>
-                                        <th class="table-set">保价费</th>
+                                        <th class="table-set">运费单价</th>
+                                        <th class="table-set">总运费</th>
                                         <th class="table-set">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for item in good_instance %}
                                     <tr>
+                                        <td>{{ item.pack_number }}</td>
                                         <td>{{ item.goods_name }}</td>
                                         <td>{{ item.amount }}</td>
-                                        <td>{{ item.volume }}</td>
                                         <td>{{ item.weight }}</td>
+                                        <td>{{ item.unit_price }}</td>
                                         <td>{{ item.freight }}</td>
-                                        <td>{{ item.claim_value }}</td>
-                                        <td>{{ item.insurance_rate }}</td>
-                                        <td>{{ item.insurance_fee }}</td>
                                         <td>
                                             <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
                                         </td>
@@ -201,34 +197,6 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.sendFee.label }}</label>
-                                    <div class="am-u-sm-9">
-                                        {{ form.sendFee }}
-                                        <small>{{ form.sendFee.errors }}</small>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.transitFee.label }}</label>
-                                    <div class="am-u-sm-9">
-                                        {{ form.transitFee }}
-                                        <small>{{ form.transitFee.errors }}</small>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.installFee.label }}</label>
-                                    <div class="am-u-sm-9">
-                                        {{ form.installFee }}
-                                        <small>{{ form.installFee.errors }}</small>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.storeFee.label }}</label>
-                                    <div class="am-u-sm-9">
-                                        {{ form.storeFee }}
-                                        <small>{{ form.storeFee.errors }}</small>
-                                    </div>
-                                </div>
-                                <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.packingFee.label }}</label>
                                     <div class="am-u-sm-9">
                                         {{ form.packingFee }}
@@ -236,10 +204,31 @@
                                     </div>
                                 </div>
                                 <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.claimed_value.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.claimed_value }}
+                                        <small>{{ form.claimed_value.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.insurance_rate.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.insurance_rate }}
+                                        <small>{{ form.insurance_rate.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.paymentOnAccountFreight.label }}</label>
                                     <div class="am-u-sm-9">
                                         {{ form.paymentOnAccountFreight }}
                                         <small>{{ form.paymentOnAccountFreight.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.volume.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.volume }}
+                                        <small>{{ form.volume.errors }}</small>
                                     </div>
                                 </div>
 
@@ -250,6 +239,7 @@
                                     </div>
                                 </div>
                             </form>
+                        <small>请先保存，再提交审核。否则当前修改的内容将作废。</small><br />
                         <button class="am-btn am-btn-danger" target="_newtab" onclick="showDiv();location.href='{% url 'track_order_audit_finalize' order %}'">完成审核，打印订单</button>
 
                         </div>
@@ -274,14 +264,12 @@
             var content = "<table class=\"am-table am-table-striped am-table-hover table-main\" >\n" +
                 "                                    <thead>\n" +
                 "                                        <tr>\n" +
-                "                                            <th class=\"table-title\">货物名称</th>\n" +
-                "                                            <th class=\"table-author am-hide-sm-only\">数量</th>\n" +
-                "                                            <th class=\"table-type\">体积</th>\n" +
+                "                                            <th class=\"table-title\">包裹序号</th>\n" +
+                "                                            <th class=\"table-author am-hide-sm-only\">货物名称</th>\n" +
+                "                                            <th class=\"table-type\">数量</th>\n" +
                 "                                            <th class=\"table-date am-hide-sm-only\">重量</th>\n" +
-                "                                            <th class=\"table-set\">运费</th>\n" +
-                "                                            <th class=\"table-set\">声明价值</th>\n" +
-                "                                            <th class=\"table-set\">保价率</th>\n" +
-                "                                            <th class=\"table-set\">保价费</th>\n" +
+                "                                            <th class=\"table-set\">运费单价</th>\n" +
+                "                                            <th class=\"table-set\">总运费</th>\n" +
                 "                                            <th class=\"table-set\">操作</th>\n" +
                 "                                        </tr>\n" +
                 "                                    </thead>";
@@ -289,14 +277,12 @@
 
             for (var i = 0; i < json.length; i++) {
                 content += "<tr>\n" +
+                        "<td>" + json[i].fields.pack_number + "</td>\n" +
                         "<td>" + json[i].fields.goods_name + "</td>\n" +
                         "<td>" + json[i].fields.amount + "</td>\n" +
-                        "<td>" + json[i].fields.volume + "</td>\n" +
                         "<td>" + json[i].fields.weight + "</td>\n" +
+                        "<td>" + json[i].fields.unit_price + "</td>\n" +
                         "<td>" + json[i].fields.freight + "</td>\n" +
-                        "<td>" + json[i].fields.claim_value + "</td>\n" +
-                        "<td>" + json[i].fields.insurance_rate + "</td>\n" +
-                        "<td>" + json[i].fields.insurance_fee + "</td>\n" +
                         "<td>"
                         + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
                         + "</td>";

@@ -26,7 +26,7 @@
         <img class="barImage" src="{{ barcode }}" />
     </div>
     <div id="title">
-        <h1>物 流 订 单 详 情</h1>
+        <h1>物 流 订 单 详 情 （回 单）</h1>
     </div>
     <div id="idInformation" class="information">
         <p>订单号：{{ order.id }}</p>
@@ -49,6 +49,7 @@
             </td>
         </table>
         <p>运输方式： {{ order.mode }}</p>
+        <p>声明价值： {{ order.claimed_value }} 元</p>
         <p>备注：{{ order.comments }}</p>
     </div>
     <br />
@@ -56,26 +57,22 @@
     <div id="goodInformation" class="information">
         <table id="goodTable" border="0.5">
             <tr>
-                <th>货物名称</th>
-                <th>数量</th>
-                <th>体积</th>
-                <th>重量</th>
-                <th>运费</th>
-                <th>声明价值</th>
-                <th>保价率</th>
-                <th>保价费</th>
+                <th class="table-title">包裹序号</th>
+                <th class="table-author am-hide-sm-only">货物名称</th>
+                <th class="table-type">数量</th>
+                <th class="table-date am-hide-sm-only">重量</th>
+                <th class="table-set">运费单价</th>
+                <th class="table-set">总运费</th>
             </tr>
 
             {% for item in good %}
                 <tr>
+                    <td>{{ item.pack_number }}</td>
                     <td width="50%">{{ item.goods_name }}</td>
                     <td>{{ item.amount }} 件</td>
-                    <td>{{ item.volume }} 立方</td>
-                    <td>{{ item.weight }} 公斤</td>
+                    <td>{{ item.weight }} 千克</td>
+                    <td>{{ item.unit_price }} 元/千克</td>
                     <td>{{ item.freight }} 元</td>
-                    <td>{{ item.claim_value }} 元</td>
-                    <td>{{ item.insurance_rate }}%</td>
-                    <td>{{ item.insurance_fee }} 元</td>
                 </tr>
             {% endfor %}
 
@@ -87,18 +84,14 @@
         <table>
             <td>
                 <p>运费：{{ order.freight }} 元</p>
-                <p>中转费：{{ order.transitFee }} 元</p>
+            </td>
+             <td>
+                <p>保价率：{{ order.insurance_rate }}%</p>
             </td>
             <td>
-                <p>保价费：{{ order.insuranceFee }} 元</p>
-                <p>装卸费：{{ order.installFee }} 元</p>
+                <p>保价费：{{ order.insurance_fee }} 元</p>
             </td>
             <td>
-                <p>接货费：{{ order.collectFee }} 元</p>
-                <p>保管费：{{ order.storeFee }} 元</p>
-            </td>
-            <td>
-                <p>送货费：{{ order.sendFee }} 元</p>
                 <p>包装费：{{ order.packingFee }} 元</p>
             </td>
         </table>
@@ -109,10 +102,12 @@
     <br />
     <p class="level-2-title">注意事项</p>
     <div id="commentInformation" class="information">
-        1.所有违禁品均不受理，如有发现虚报瞒报，本公司有权将其扣押，货物在运输中出现地震等自然不可抗拒因素造成货物损失，本公司不负责赔偿。<br />
-        2.托运货物的包装必须符合标准，承运方向提货人交付货物以货物外包装完好为检查标准，提货时双方当面交接清楚，如货物提走后发现缺少货物本公司不负责。<br />
-        3.货到3日内现金提货，预期不提费用由客户自己承担，易碎货物在承运过程中产生破损，丢失，只赔偿丢失货物，不赔偿破碎。<br />
-        4.本公司拥有以上规定最终解释权。<br />
+        1.以上货物及数量均由商家自行提供,所有数据仅供客户参考，本公司不负责清点数量。<br />
+        2.请您认真仔细核对回单，保险金额，如果有金额不妥，请您在3日内联系我们，3日后我们将以我们运单为准，谢谢您的配合。<br />
+        3.所有违禁品均不受理，如有发现虚报瞒报，本公司有权将其扣押，货物在运输中出现地震等自然不可抗拒因素造成货物损失，本公司不负责赔偿。<br />
+        4.托运货物的包装必须符合标准，承运方向提货人交付货物以货物外包装完好为检查标准，提货时双方当面交接清楚，如货物提走后发现缺少货物本公司不负责。<br />
+        5.货到3日内现金提货，预期不提费用由客户自己承担，易碎货物在承运过程中产生破损，丢失，只赔偿丢失货物，不赔偿破碎。<br />
+        6.本公司拥有以上规定最终解释权。<br />
     </div>
 </head>
 </html>

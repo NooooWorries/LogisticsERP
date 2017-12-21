@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ShipmentOrder',
+    'Customers',
     'Account',
     'Settings'
 ]
@@ -132,3 +133,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # 域名
 DOMAIN_NAME = 'http://127.0.0.1:8000/'
+
+SESSION_COOKIE_AGE = 3000
+
