@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'ShipmentOrder',
     'Customers',
     'Account',
-    'Settings'
+    'Settings',
+    'Dispatch'
 ]
 
 MIDDLEWARE = [
@@ -80,8 +81,12 @@ WSGI_APPLICATION = 'LogisticsERP.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'LogisticsERP',
+        'USER': 'root',
+        'PASSWORD': 'cheng2277980',
+        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
 
@@ -134,5 +139,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 # 域名
 DOMAIN_NAME = 'http://127.0.0.1:8000/'
 
-SESSION_COOKIE_AGE = 3000
+# 会话过期时间（秒）
+SESSION_COOKIE_AGE = 3600
 

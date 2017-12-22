@@ -21,7 +21,11 @@
                     <div id="id_divInfo" class="note note-info">
                         <h2>客户详情</h2>
                         <p>客户ID：{{ customer.id }}</p>
-                        <p>客户类别：<a href="{% url 'customer_class_detail' customer.customer_class.id %}">{{ customer.customer_class.class_name }}</a></p>
+                        <p>客户类别：{% if item.customer_class == none %}
+                                            未分类
+                        {% else %}<a href="{% url 'customer_class_detail' customer.customer_class.id %}">{{ customer.customer_class.class_name }}</a>
+                        {% endif %}
+                        </p>
                         <p>客户名：{{ customer.customer_name }}</p>
                         <p>联系人：{{ customer.contact_person }}</p>
                         <p>联系电话：{{ customer.contact_number }}</p>

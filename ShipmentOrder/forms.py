@@ -1,5 +1,6 @@
 from django import forms
-from ShipmentOrder.models import ShipmentOrder, Goods, Customer
+from ShipmentOrder.models import ShipmentOrder, Goods
+from Customers.models import Customer
 
 
 class CustomerChoiceField(forms.ModelChoiceField):
@@ -190,7 +191,6 @@ class OrderModityForm(forms.ModelForm):
                                widget=forms.Textarea(attrs={'placeholder': '输入订单备注'})
                                )
 
-    # 费用
     # 费用
     packingFee = forms.FloatField(required=True,
                                   label="包装费",

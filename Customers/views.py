@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from Customers.forms import CustomerClassCreationForm, CustomerCreationForm
-from ShipmentOrder.models import CustomerClass, Customer
+from Customers.models import CustomerClass, Customer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 
@@ -16,8 +16,7 @@ def add_customer_class(request):
     if request.method == "POST":
         form = CustomerClassCreationForm(request.POST)
         if form.is_valid():
-            customer_class = form.save(commit=False)
-            customer_class.save()
+            form.save()
             return customer_class(request)
     else:
         form = CustomerClassCreationForm()

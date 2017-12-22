@@ -1,35 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
-from time import gmtime, strftime
-
-
-class UserProfile(models.Model):
-    user_id = models.ForeignKey(User, verbose_name='用户ID')
-    gender = models.BooleanField(verbose_name='性别')
-    birthday = models.DateTimeField(null=True, verbose_name='生日')
-    role = models.IntegerField(null=0, verbose_name='角色')
-
-
-class CustomerClass(models.Model):
-    class_name = models.CharField(null=False, verbose_name='类名', max_length=256)
-    comments = models.CharField(null=False, verbose_name='备注', max_length=256)
-
-
-class Customer(models.Model):
-    customer_class = models.ForeignKey(CustomerClass, null=True, on_delete=models.SET_NULL)
-    customer_name = models.CharField(null=False, verbose_name='客户名', max_length=256)
-    contact_person = models.CharField(null=False, verbose_name='联系人', max_length=256)
-    contact_number = models.CharField(null=False, verbose_name='联系电话', max_length=256)
-    identity_number = models.CharField(null=True, verbose_name='身份证号码', max_length=18)
-    gender = models.BooleanField(verbose_name='性别')
-    address = models.CharField(null=False, verbose_name='地址', max_length=256)
-    comments = models.CharField(verbose_name='备注', max_length=18)
-    payable = models.FloatField(default=0, verbose_name='应收余额')
-
+from Customers import models as customer_model
+from Dispatch import models as dispatch_model
 
 class ShipmentOrder(models.Model):
     # 客户
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    customer = models.ForeignKey(customer_model.Customer, null=True, on_delete=models.SET_NULL)
 
     # 发货人信息
     sender = models.CharField(null=False, verbose_name='发货人', max_length=256)
@@ -77,25 +53,6 @@ class Goods(models.Model):
     send_date = models.DateField(verbose_name='发货日期', null=True)
     receive_date = models.DateField(verbose_name='到达日期', null=True)
 
-    # 其他
+    # 出车
     status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0：入库，1：装车，2：口岸，3：到达
-
-
-class BankAccount(models.Model):
-    account_name = models.CharField(null=False, verbose_name='账号名', max_length=256)
-    bank = models.CharField(null=False, verbose_name='开户银行', max_length=256)
-    account_number = models.IntegerField(null=False, verbose_name='账号')
-    card_holder = models.CharField(null=False, verbose_name='持卡人', max_length=256)
-
-
-class Payment(models.Model):
-    summary = models.CharField(null=False, verbose_name='摘要', max_length=1024)
-    customer = models.ForeignKey(Customer, verbose_name='客户')
-    amount = models.FloatField(null=False, verbose_name='支付金额')
-    time = models.DateTimeField(null=False, verbose_name='制单时间')
-    handle = models.ForeignKey(User, verbose_name='经办')
-
-
-class PaymentOrder(models.Model):
-    payment_id = models.ForeignKey(Payment, verbose_name='付款账单')
-    order = models.ForeignKey(ShipmentOrder, verbose_name='运送单')
+    dispatch = models.ForeignKey(dispatch_model.DispatchRecord, on_delete=models.SET_NULL, null=True)

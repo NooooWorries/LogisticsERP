@@ -3,7 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from ShipmentOrder.forms import OrderCreationOneForm, OrderCreationTwoForm, OrderCreationThreeForm, OrderModityForm
-from ShipmentOrder.models import ShipmentOrder, Goods, Customer
+from ShipmentOrder.models import ShipmentOrder, Goods
+from Customers.models import Customer
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -18,6 +19,7 @@ from LogisticsERP import settings
 import os
 from xhtml2pdf.default import DEFAULT_FONT
 from barcode.writer import ImageWriter
+from ShipmentOrder.operation import calculate_freight, calculate_density, rearrange_pack_number
 
 
 # 添加订单 第一步 基本信息
@@ -83,14 +85,13 @@ def ajax_add_goods(request):
         new_good.freight = float(new_good.weight) * float(new_good.unit_price)
         new_good.save()
         good = Goods.objects.filter(shipment_order_id_id=order)
+        rearrange_pack_number(good)
         data = serializers.serialize('json', good)
-        # update freight
+        # 更新运费
         order_instance = get_object_or_404(ShipmentOrder, pk=order)
-        freight = 0
-        for item in good:
-            freight = freight + item.freight
-        order_instance.freight = freight
+        calculate_freight(order_instance, good)
         order_instance.save()
+
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
         print(form.errors)
@@ -107,14 +108,14 @@ def ajax_delete_goods(request, good_id):
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=order)
+    rearrange_pack_number(good)
     data = serializers.serialize('json', good)
-    # update freight
+
+    # 更新运费
     order_instance = get_object_or_404(ShipmentOrder, pk=order)
-    freight = 0
-    for item in good:
-        freight = freight + item.freight
-    order_instance.freight = freight
+    calculate_freight(order_instance, good)
     order_instance.save()
+
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
@@ -136,12 +137,10 @@ def add_order_stage_three_redirect(request):
             order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
                                         order_instance.paymentOnAccountFreight + order_instance.packingFee
             order_instance.volume = form.cleaned_data["volume"]
+
             # 计算密度
-            total_weight = 0
             good_instance = Goods.objects.filter(shipment_order_id_id=order)
-            for item in good_instance:
-                total_weight = total_weight + item.weight
-            order_instance.density = (total_weight/1000) / order_instance.volume
+            calculate_density(order_instance, good_instance)
             order_instance.save()
             return add_order_summary(request)
     else:
@@ -210,6 +209,7 @@ def track_order_detail(request, order_id):
     return render(request, "order/manage/trackorder-detail.html", {'order': order, 'good': good})
 
 
+
 # 查询订单 编辑页
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
@@ -232,12 +232,9 @@ def track_order_modify(request, order_id):
         order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
                                     order_instance.paymentOnAccountFreight + order_instance.packingFee
         # 计算密度
-        total_weight = 0
         good_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        for item in good_instance:
-            total_weight = total_weight + item.weight
-        order_instance.density = (total_weight / 1000) / order_instance.volume
-        order_form.save(freight=sum_freight)
+        calculate_density(order_instance, good_instance)
+        order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
         return render(request, "order/manage/trackorder-modify-complete.html")
     return render(request, "order/manage/trackorder-modify.html", {'form': order_form,
                                                             'good_form': goods_form,
@@ -253,18 +250,13 @@ def ajax_delete_goods_manage(request, good_id):
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=request.session['order_manage'])
+    rearrange_pack_number(good)
     data = serializers.serialize('json', good)
-    # update freight
+    # 计算运费
     order_instance = get_object_or_404(ShipmentOrder, pk=request.session['order_manage'])
-    freight = 0
-    for item in good:
-        freight = freight + item.freight
-    order_instance.freight = freight
+    calculate_freight(order_instance, good)
     # 计算密度
-    total_weight = 0
-    for item in good:
-        total_weight = total_weight + item.weight
-    order_instance.density = (total_weight / 1000) / order_instance.volume
+    calculate_density(order_instance, good)
     order_instance.save()
     return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -289,13 +281,11 @@ def ajax_add_goods_manage(request):
         new_good.freight = float(new_good.weight) * float(new_good.unit_price)
         new_good.save()
         good = Goods.objects.filter(shipment_order_id_id=order)
+        rearrange_pack_number(good)
         data = serializers.serialize('json', good)
         # 计算密度
         order_instance = get_object_or_404(ShipmentOrder, pk=order)
-        total_weight = 0
-        for item in good:
-            total_weight = total_weight + item.weight
-        order_instance.density = (total_weight / 1000) / order_instance.volume
+        calculate_density(order_instance, good)
         order_instance.save()
         return HttpResponse(json.dumps(data), content_type="application/json")
     else:
@@ -464,17 +454,10 @@ def track_order_draft_modify(request, order_id):
 
     if order_form.is_valid():
         goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        sum_freight = 0
-        for item in goods_instance:
-            sum_freight += item.freight
-        order_instance.freight = sum_freight
-        order_form.save(freight=sum_freight)
-
+        calculate_freight(order_instance, goods_instance)
+        order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
         # 计算密度
-        total_weight = 0
-        for item in goods_instance:
-            total_weight = total_weight + item.weight
-        order_instance.density = (total_weight / 1000) / order_instance.volume
+        calculate_density(order_instance, goods_instance)
         # 计算总价
         order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
             request.POST.get("insurance_rate")) / 100
@@ -561,21 +544,14 @@ def track_order_audit_modify(request, order_id):
 
     if order_form.is_valid():
         goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        sum_freight = 0
-        for item in goods_instance:
-            sum_freight += item.freight
-        order_instance.freight = sum_freight
+        calculate_freight(order_instance, goods_instance)
         order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
             request.POST.get("insurance_rate")) / 100
         order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
                                     order_instance.paymentOnAccountFreight + order_instance.packingFee
         # 计算密度
-        total_weight = 0
-        good_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        for item in good_instance:
-            total_weight = total_weight + item.weight
-        order_instance.density = (total_weight / 1000) / order_instance.volume
-        order_form.save(freight=sum_freight)
+        calculate_density(order_instance, goods_instance)
+        order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
         return render(request, "order/audit/trackorder-audit-modify-complete.html")
     return render(request, "order/audit/trackorder-audit-modify.html", {'form': order_form,
                                                                         'good_form': goods_form,

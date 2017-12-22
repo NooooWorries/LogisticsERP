@@ -1,5 +1,5 @@
 from django import forms
-from ShipmentOrder.models import CustomerClass, Customer
+from Customers.models import CustomerClass, Customer
 
 
 class CustomerClassCreationForm(forms.ModelForm):
