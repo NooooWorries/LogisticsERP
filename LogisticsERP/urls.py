@@ -18,17 +18,28 @@ from django.contrib import admin
 from LogisticsERP import views as main_view
 from ShipmentOrder import views as order_view
 from Customers import views as customer_view
+from Dispatch import views as dispatch_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
 
 
 urlpatterns = [
+    # MANAGEMENT SYSTEM PAGE
     url(r'^admin/', admin.site.urls),
 
-    # index page
+    # INDEX PAGE
     url(r'^index/$', main_view.index, name="load_index"),
 
+    # ACCOUNT PAGES
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$',auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
+
+    # ERROR PAGES
+    url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
+    url(r'^error/redirect/$', main_view.error_redirect, name="error_redirect"),
+
+    # ORDER PAGES
     # add order pages
     url(r'^order/add/1/$', order_view.add_order_stage_one, name="add_order_stage_one"),
     url(r'^order/add/1/customer/(?P<customer_id>[0-9]+)/$', order_view.add_order_select_customer, name="add_order_select_customer"),
@@ -38,7 +49,6 @@ urlpatterns = [
     url(r'^order/add/goods/$', order_view.ajax_add_goods, name="add_goods"),
     url(r'^order/delete/goods/(?P<good_id>[0-9]+)/$', order_view.ajax_delete_goods, name="delete_goods"),
 
-    # track order pages
     # manager
     url(r'^order/track/$', order_view.track_order_manager, name="track_order_manager"),
     url(r'^order/track/detail/(?P<order_id>[0-9]+)/$', order_view.track_order_detail, name="track_order_detail"),
@@ -59,11 +69,14 @@ urlpatterns = [
     url(r'^order/track/audit/(?P<order_id>[0-9]+)/submit/$', order_view.track_order_audit_finalize, name="track_order_audit_finalize"),
     url(r'^pdf/(?P<order_id>[0-9]+)/$', order_view.generate_PDF, name="pdf"),
 
-    # registration pages
-    url(r'^login/$', auth_views.login, name='login'),
-    url(r'^logout/$',auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
+    # search
+    url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
+    url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
+    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result, name="track_order_search_advanced_result"),
+    url(r'^order/track/draft/search/$', order_view.track_order_draft_search, name="track_order_draft_search"),
+    url(r'^order/track/audit/search/$', order_view.track_order_audit_search, name="track_order_audit_search"),
 
-    # customer management pages
+    # CUSTOMER MANAGEMENT PAGES
     # customer class
     url(r'^customer/class/add/$', customer_view.add_customer_class, name="add_customer_class"),
     url(r'^customer/class/$', customer_view.customer_class, name="customer_class"),
@@ -80,20 +93,20 @@ urlpatterns = [
     url(r'^customer/delete/(?P<customer_id>[0-9]+)/$', customer_view.customer_confirm_delete, name="customer_confirm_delete"),
     url(r'^customer/delete/(?P<customer_id>[0-9]+)/complete/$', customer_view.customer_delete, name="customer_delete"),
 
-    # error pages
-    url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
-    url(r'^error/redirect/$', main_view.error_redirect, name="error_redirect"),
-
     # search
-    url(r'^order/track/search/$', order_view.track_order_search, name="track_order_search"),
-    url(r'^order/track/search/advanced/$', order_view.track_order_search_advanced, name="track_order_search_advanced"),
-    url(r'^order/track/search/advanced/result/$', order_view.track_order_search_advanced_result,name="track_order_search_advanced_result"),
-    url(r'^order/track/draft/search/$', order_view.track_order_draft_search, name="track_order_draft_search"),
-    url(r'^order/track/audit/search/$', order_view.track_order_audit_search, name="track_order_audit_search"),
     url(r'^customer/class/search/$', customer_view.customer_class_search, name="customer_class_search"),
     url(r'^customer/search/$', customer_view.customer_search, name="customer_search"),
     url(r'^customer/search/advanced/$', customer_view.customer_search_advanced, name="customer_search_advanced"),
     url(r'^customer/search/advanced/result/$', customer_view.customer_search_advanced_result, name="customer_search_advanced_result"),
+
+    # DISPATCH PAGES
+    # driver
+    url(r'^dispatch/driver/add/$', dispatch_view.add_driver, name="add_driver"),
+    url(r'^dispatch/driver/$', dispatch_view.manage_driver, name="manage_driver"),
+    url(r'^dispatch/driver/detail/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_detail, name="driver_detail"),
+    url(r'^dispatch/driver/modify/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_modify, name="driver_modify"),
+
+
 
 ]
 

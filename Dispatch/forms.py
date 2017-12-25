@@ -14,7 +14,7 @@ class DriverCreationForm(forms.ModelForm):
                            )
     birthday = forms.DateField(required=True,
                                label="出生日期",
-                               widget=forms.TextInput(attrs={'placeholder': '出生日期'}),
+                               widget=forms.TextInput(attrs={'placeholder': '出生日期', ' data-am-datepicker':'', 'readonly':''}),
                                error_messages={'required': '此为必填项目'}
                                )
     license = forms.CharField(required=True,
@@ -22,10 +22,14 @@ class DriverCreationForm(forms.ModelForm):
                               widget=forms.TextInput(attrs={'placeholder': '输入驾照号码'}),
                               error_messages={'required': '此为必填项目'}
                               )
+    comments = forms.CharField(required=False,
+                               label="备注",
+                               widget=forms.Textarea(attrs={'placeholder': '输入备注'}),
+                               )
 
     class Meta:
         model = Driver
-        fields = ('name', 'identity_number', 'birthday', 'license')
+        fields = ('name', 'identity_number', 'birthday', 'license', 'comments')
 
     def save(self, commit=True):
         driver_form = super(DriverCreationForm, self).save(commit=False)
@@ -33,6 +37,9 @@ class DriverCreationForm(forms.ModelForm):
         driver_form.identity_number = self.cleaned_data["identity_number"]
         driver_form.birthday = self.cleaned_data["birthday"]
         driver_form.license = self.cleaned_data["license"]
+        driver_form.comments = self.cleaned_data["comments"]
         if commit:
             driver_form.save()
         return driver_form
+
+

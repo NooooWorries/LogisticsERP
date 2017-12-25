@@ -23,7 +23,7 @@ def add_customer_class(request):
     return render(request, "customer/class/form-addcustomerclass.html", {'form': form})
 
 
-# 查询客户组 所有客户组
+# 管理客户组
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def customer_class(request):
@@ -126,7 +126,7 @@ def add_customer(request):
         if form.is_valid():
             customer = form.save(commit=False)
             customer.save()
-            return HttpResponse("success")
+            return customer(request)
     else:
         form = CustomerCreationForm()
     return render(request, "customer/user/form-addcustomer.html", {'form': form})

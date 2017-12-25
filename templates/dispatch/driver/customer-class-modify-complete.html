@@ -1,0 +1,25 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            修改司机
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>出车</li>
+            <li class="am-active">修改司机</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 修改司机
+                </div>
+            </div>
+            <h2 class="am-text-center am-text-xl am-margin-top-lg">司机修改完成</h2>
+            <div align="center">
+                <a href="{% url 'manage_driver' %}"><button class="am-btn am-btn-primary">返回列表</button></a>
+                <a href="{% url 'load_index' %}"><button class="am-btn am-btn-primary">返回主页</button></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
