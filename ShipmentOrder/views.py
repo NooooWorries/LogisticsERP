@@ -237,9 +237,9 @@ def track_order_modify(request, order_id):
         order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
         return render(request, "order/manage/trackorder-modify-complete.html")
     return render(request, "order/manage/trackorder-modify.html", {'form': order_form,
-                                                            'good_form': goods_form,
-                                                            'good_instance': goods_instance,
-                                                            'order': order_id})
+                                                                   'good_form': goods_form,
+                                                                   'good_instance': goods_instance,
+                                                                   'order': order_id})
 
 
 # 修改订单 货物信息删除 ajax
@@ -567,6 +567,7 @@ def generate_PDF(request, order_id):
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     good = Goods.objects.filter(shipment_order_id_id=order_id)
     ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
+    ean.default_writer_options['write_text'] = False
     barcode_img = ean.save("OrderPDF/barcode/" + str(order_id))
     data = {'order': order, 'good': good, 'today': datetime.datetime.now().strftime("%Y-%m-%d"), 'barcode': barcode_img}
     html = get_template('order/pdf.html').render(data)

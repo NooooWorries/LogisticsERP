@@ -126,7 +126,7 @@ def add_customer(request):
         if form.is_valid():
             customer = form.save(commit=False)
             customer.save()
-            return customer(request)
+            return render(request, "customer/user/customer-manager.html")
     else:
         form = CustomerCreationForm()
     return render(request, "customer/user/form-addcustomer.html", {'form': form})

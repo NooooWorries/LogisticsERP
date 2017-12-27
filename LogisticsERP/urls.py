@@ -23,7 +23,6 @@ from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
 
-
 urlpatterns = [
     # MANAGEMENT SYSTEM PAGE
     url(r'^admin/', admin.site.urls),
@@ -105,9 +104,18 @@ urlpatterns = [
     url(r'^dispatch/driver/$', dispatch_view.manage_driver, name="manage_driver"),
     url(r'^dispatch/driver/detail/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_detail, name="driver_detail"),
     url(r'^dispatch/driver/modify/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_modify, name="driver_modify"),
+    url(r'^dispatch/driver/delete/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_delete, name="driver_delete"),
 
+    # add dispatch record
+    url(r'^dispatch/order/add/1/$', dispatch_view.add_dispatch_order, name="add_dispatch_order"),
+    url(r'^dispatch/order/add/2/(?P<order_id>[0-9]+)/$', dispatch_view.add_dispatch_order_choose_good, name="add_dispatch_order_choose_good"),
+    url(r'^dispatch/order/choose/(?P<order_id>[0-9]+)/(?P<good_id>[0-9]+)/$', dispatch_view.ajax_select_good, name="ajax_select_good"),
+    url(r'^dispatch/order/add/3/(?P<order_id>[0-9]+)/$', dispatch_view.add_dispatch_order_summary, name="add_dispatch_order_summary"),
+    url(r'^dispatch/order/pdf/(?P<order_id>[0-9]+)/$', dispatch_view.generate_PDF, name="generate_dispatch_pdf"),
 
-
+    # manage dispatch record
+    url(r'^dispatch/order/$', dispatch_view.manage_dispatch_order, name="manage_dispatch_order"),
+    url(r'^dispatch/order/detail/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_detail, name="dispatch_order_detail"),
 ]
 
 # customized error page

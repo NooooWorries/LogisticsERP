@@ -1,32 +1,64 @@
 {% extends 'master.html' %}
 {% block body %}
     <div class="tpl-content-wrapper">
-            <div class="tpl-content-page-title">
-                司机详情
-            </div>
-            <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>出车</li>
-                <li><a href="{% url 'customer_class' %}">管理司机</a></li>
-                <li>司机详情</li>
-                <li>司机{{ driver.id }}</li>
-            </ol>
-            <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 司机详情
-                    </div>
-                </div>
-                    <div id="id_divFee" class="note note-info">
-                        <p>ID：{{ driver.id }}</p>
-                        <p>姓名：{{ driver.name}}</p>
-                        <p>身份证号：{{ driver.identity_number}}</p>
-                        <p>驾照：{{ driver.license}}</p>
-                        <p>备注：{{ driver.comments }}</p>
-
-                    </div>
+        <div class="tpl-content-page-title">
+            司机详情
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>出车</li>
+            <li><a href="{% url 'customer_class' %}">管理司机</a></li>
+            <li>司机详情</li>
+            <li>司机{{ driver.id }}</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 司机详情
                 </div>
             </div>
+            <div id="id_divFee" class="note note-info">
+                <p>ID：{{ driver.id }}</p><p>姓名：{{ driver.name}}</p>
+                <p>身份证号：{{ driver.identity_number}}</p>
+                <p>驾照：{{ driver.license}}</p>
+                <p>备注：{{ driver.comments }}</p>
+            </div>
+            <h2>该司机负责过以下出车单</h2>
+            <div id="id_tableGoods">
+                <table class="am-table am-table-hover table-main" >
+                    <thead>
+                    <tr>
+                        <th class="table-author am-hide-sm-only">出车单ID</th>
+                        <th class="table-date am-hide-sm-only">司机</th>
+                        <th class="table-set">车牌号</th>
+                        <th class="table-set">发车日期</th>
+                        <th class="table-set">发出地</th>
+                        <th class="table-set">到达地</th>
+                        <th class="table-set">状态</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order %}
+                        <tr class="table-tr" id="{{ item.id }}">
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.driver.name }}</td>
+                            <td>{{ item.vehicle_number }}</td>
+                            <td>{{ item.dispatch_date }}</td>
+                            <td>{{ item.origin }}</td>
+                            <td>{{ item.destination }}</td>
+                            <td>
+                                {% if item.status == 0 %}
+                                    草稿
+                                {% else %}
+                                    已发车
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
@@ -57,6 +89,5 @@
         function getLink(link){
             link.href = link.href + localStorage.getItem("txtValue")
         }
-
     </script>
 {% endblock %}

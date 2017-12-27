@@ -1,0 +1,115 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            出车单详情
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>出车</li>
+            <li><a href="{% url 'manage_dispatch_order' %}">管理出车记录</a></li>
+            <li>出车单详情：单号 {{ order.id }}</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 出车单详情
+                </div>
+            </div>
+            <div class="dashboard-stat blue">
+                <div class="visual">
+                    <i class="am-icon-comments-o"></i>
+                </div>
+                <div class="details">
+                    <div class="desc"> 状态&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    <div class="number">
+                        {% if order.status == 0 %}
+                            草稿&nbsp;&nbsp;
+                        {% endif %}
+                        {% if order.status == 1 %}
+                            已发车&nbsp;&nbsp;
+                        {% endif %}
+                        {% if order.status == 2 %}
+                            已到达&nbsp;&nbsp;
+                        {% endif %}
+                    </div>
+                </div>
+                    <i class="m-icon-swapright m-icon-white"></i>
+                </div>
+            <h2>出车单信息</h2>
+            <div id="id_divFee" class="note note-info">
+                <p>ID：{{ order.id }}</p>
+                <p>车牌号：{{ order.vehicle_number }}</p>
+                <p>发车日期：{{ order.dispatch_date }}</p>
+                <p>发出地：{{ order.origin }}</p>
+                <p>到达地：{{ order.destination }}</p>
+                <p>备注：{{ order.comments }}</p>
+            </div>
+            <h2>司机信息</h2>
+            <div id="id_divFee" class="note note-info">
+                <p>ID：{{ order.driver.id }}</p>
+                <p>姓名：{{ order.driver.name}}</p>
+                <p>身份证号：{{ order.driver.identity_number }}</p>
+                <p>驾照：{{ order.driver.license}}</p>
+                <p>备注：{{ order.driver.comments }}</p>
+            </div>
+            <h2>该出车单包含以下货物</h2>
+            <div id="id_tableGoods">
+                <table class="am-table am-table-hover table-main" >
+                    <thead>
+                    <tr>
+                        <th class="table-author am-hide-sm-only">货物名称</th>
+                        <th class="table-date am-hide-sm-only">重量</th>
+                        <th class="table-set">所属订单</th>
+                        <th class="table-set">收件人</th>
+                        <th class="table-set">发出地址</th>
+                        <th class="table-set">到达地址</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in good %}
+                        <tr class="table-tr" id="{{ item.id }}">
+                            <td>{{ item.goods_name }}</td>
+                            <td>{{ item.weight }}</td>
+                            <td>{{ item.shipment_order_id.id }}</td>
+                            <td>{{ item.shipment_order_id.receiver }}</td>
+                            <td>{{ item.shipment_order_id.from_address }}</td>
+                            <td>{{ item.shipment_order_id.to_address }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).on('click', '.btn-check', function () {
+            var url_mask = "{% url 'customer_detail' customer_id=12345 %}".replace(/12345/, this.id.toString());
+            window.location.replace(url_mask);
+        });
+        $(document).on('click', '.btn-modify', function () {
+            var url_mask = "{% url 'customer_modify' customer_id=12345 %}".replace(/12345/, this.id.toString());
+            window.location.replace(url_mask);
+        });
+        $(document).on('click', '.btn-delete', function () {
+            var url_mask = "{% url 'customer_confirm_delete' customer_id=12345 %}".replace(/12345/, this.id.toString());
+            window.location.replace(url_mask);
+        });
+
+        document.getElementById("id_search").value = getSavedValue();
+        function saveValue(e){
+            var val = e.value;
+            localStorage.setItem("txtValue", val);
+        }
+        function getSavedValue(){
+            if (localStorage.getItem("txtValue") === null) {
+                return "";
+            }
+            return localStorage.getItem("txtValue");
+        }
+        function getLink(link){
+            link.href = link.href + localStorage.getItem("txtValue")
+        }
+    </script>
+{% endblock %}

@@ -18,7 +18,7 @@
                 <form action="/customer/class/search/">
                     <div class="portlet-input input-small input-inline input-icon">
                         <i class="am-icon-search"></i>
-                        <input type="text" id="id_search"name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">
+                        <input type="text" id="id_search" name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">
                     </div>
                 </form>
                 </div>
@@ -26,19 +26,23 @@
             <div class="tpl-block">
                 <div class="am-g">
                     <div class="am-u-sm-12">
-                            <table class="am-table am-table-striped am-table-hover table-main">
-                                <thead>
-                                <tr>
-                                    <th class="table-id">ID</th>
-                                    <th class="table-title">姓名</th>
-                                    <th class="table-type">身份证号</th>
-                                    <th class="table-type">出生日期</th>
-                                    <th class="table-type">驾照号</th>
-                                    <th class="table-set"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for item in driver %}
+                    <div id="id_divFee" class="note note-info">
+                        <p><span class="label label-danger">注意:</span> 仅能删除名下<b>没有</b>出车记录的司机。</p>
+                        <p><span class="label label-info">提示:</span> 如需删除名下<b>有</b>出车记录的司机，请联系超级管理员。</p>
+                    </div>
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                            <tr>
+                                <th class="table-id">ID</th>
+                                <th class="table-title">姓名</th>
+                                <th class="table-type">身份证号</th>
+                                <th class="table-type">出生日期</th>
+                                <th class="table-type">驾照号</th>
+                                <th class="table-set"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in driver %}
                                 <tr>
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.name }}</td>
@@ -50,19 +54,21 @@
                                             <div class="am-btn-group am-btn-group-xs">
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                                 <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
+                                                {% if item.dispatch_count == 0 %}
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <!--分页-->
-                            <nav >
-                                <div class="am-fr">
-                                    <ul class="am-pagination tpl-pagination">
-                                        <li>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <!--分页-->
+                        <nav >
+                            <div class="am-fr">
+                                <ul class="am-pagination tpl-pagination">
+                                    <li>
                                         {% if customer_class.has_previous %}
                                             <a href="?page={{ customer_class.previous_page_number }}&query=" onclick="getLink(this)" class="active">&laquo;</a>
                                         {% endif %}
@@ -77,23 +83,23 @@
                                                     </a>
                                                 </li>
                                             {% endfor %}
-                                        </li>
-                                        <li>
-                                            {% if customer_class.has_next %}
-                                                <a href="?page={{ customer_class.next_page_number }}&query=" onclick="getLink(this)">&raquo;</a>
-                                            {% endif %}
-                                            {% if not customer_class.has_next %}
-                                                <a href="" >&raquo;</a>
-                                            {% endif %}
-                                        </li>
-                                        <li>
-                                            第{{ customer_class.number }}页，共{{ customer_class.paginator.num_pages }}页
-                                        </li>
-                                    </ul>
-                                </div>
-                            </nav>
-                            <!--ending 分页-->
-                            <hr>
+                                    </li>
+                                    <li>
+                                        {% if customer_class.has_next %}
+                                            <a href="?page={{ customer_class.next_page_number }}&query=" onclick="getLink(this)">&raquo;</a>
+                                        {% endif %}
+                                        {% if not customer_class.has_next %}
+                                            <a href="" >&raquo;</a>
+                                        {% endif %}
+                                    </li>
+                                    <li>
+                                        第{{ customer_class.number }}页，共{{ customer_class.paginator.num_pages }}页
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <!--ending 分页-->
+                        <hr>
                     </div>
                 </div>
             </div>
@@ -110,7 +116,7 @@
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-delete', function () {
-            var url_mask = "{% url 'customer_class_confirm_delete' class_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'driver_delete' driver_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
 

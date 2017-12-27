@@ -1,0 +1,138 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+            <div class="tpl-content-page-title">
+                添加出车记录
+            </div>
+             <ol class="am-breadcrumb">
+                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+                <li>出车</li>
+                <li>添加出车记录</li>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">
+                        <span class="am-icon-code"></span> 添加出车记录 第二步：选择出车货物
+                    </div>
+                </div>
+                <div class="tpl-block ">
+
+                    <div class="am-g tpl-amazeui-form">
+                        <div class="note note-info">
+                                <h3>订单已经生成
+                                    <span class="close" data-close="note"></span>
+                                </h3>
+                                <p>订单ID：{{ order.id }}</p>
+                                <p>司机：{{ order.driver.name }}</p>
+                                <p>发车日期：{{ order.dispatch_date }}</p>
+                                <p>发出地：{{ order.origin }}</p>
+                                <p>到达地：{{ order.destination }}</p>
+                                <p><span class="label label-info">提示:</span> 在订单提交完成前，您可以随时在草稿箱中修改您的订单信息
+                                </p>
+                        </div>
+                        <h2>请选择要出车的货物</h2>
+                            <div id="id_tableGoods">
+                                <table class="am-table am-table-hover table-main" >
+                                    <thead>
+                                        <tr>
+                                            <th class="table-author am-hide-sm-only">货物名称</th>
+                                            <th class="table-date am-hide-sm-only">重量</th>
+                                            <th class="table-set">所属订单</th>
+                                            <th class="table-set">收件人</th>
+                                            <th class="table-set">发出地址</th>
+                                            <th class="table-set">到达地址</th>
+                                            <th class="table-set">添加</th>
+                                            <th class="table-set">选中</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in good %}
+                                            {% if item.dispatch is not None %}
+                                                <tr class="table-tr am-primary" id="{{ item.id }}">
+                                            {%  else  %}
+                                                <tr class="table-tr" id="{{ item.id }}">
+                                            {% endif %}
+                                            <td>{{ item.goods_name }}</td>
+                                            <td>{{ item.weight }}</td>
+                                            <td>{{ item.shipment_order_id.id }}</td>
+                                            <td>{{ item.shipment_order_id.receiver }}</td>
+                                            <td>{{ item.shipment_order_id.from_address }}</td>
+                                            <td>{{ item.shipment_order_id.to_address }}</td>
+                                            <td>
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-add" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 添加到发车货物列表</button>
+                                            </td>
+                                            <td> <div class="field-selected" id="{{ item.id }}">
+                                                {% if item.dispatch is not None %}
+                                                   <i class="am-icon-truck"></i>
+                                                {% endif %}
+                                            </div></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--分页-->
+                            <nav >
+                                <div class="am-fr">
+                                    <ul class="am-pagination tpl-pagination">
+                                        <li>
+                                        {% if good.has_previous %}
+                                            <a href="?page={{ good.previous_page_number }}" onclick="getLink(this)" class="active">&laquo;</a>
+                                        {% endif %}
+                                        {% if not good.has_previous %}
+                                            <a href="" >&laquo;</a>
+                                        {% endif %}
+                                        </li>
+                                        <li>
+                                            <li>
+                                            {{ good.number }}/{{ good.paginator.num_pages }}页
+                                        </li>
+                                        </li>
+                                        <li>
+                                            {% if good.has_next %}
+                                                <a href="?page={{ good.next_page_number }}" onclick="getLink(this)">&raquo;</a>
+                                            {% endif %}
+                                            {% if not good.has_next %}
+                                                <a href="" >&raquo;</a>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </nav>
+                            <!--ending 分页-->
+                        <br />
+
+                        <div class="am-form-group ">
+                            <div class="am-u-sm-12 am-u-md-9">
+                                <button class="am-btn am-btn-primary btn-next">下一步</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+   $(document).on('click', '.btn-add', function () {
+        var good_id = this.id.toString();
+        var url_mask = "{% url 'ajax_select_good' good_id=12345 order_id=6789 %}".replace(/12345/, this.id.toString()).replace(/6789/, {{ order.id }});
+        $.ajax({
+            cache: false,
+            type: "GET",
+            dataType: "json",
+            url: url_mask,
+            async: true,
+            success: function(data) {
+                $("#" + good_id + " .field-selected").html("<i class=\"am-icon-truck\"></i>");
+            }
+        });
+        return false;
+    });
+   $(document).on('click', '.btn-next', function () {
+            var url_mask = "{% url 'add_dispatch_order_summary' order_id=12345 %}".replace(/12345/, {{ order.id }});
+            window.location.replace(url_mask);
+   });
+    </script>
+{% endblock %}

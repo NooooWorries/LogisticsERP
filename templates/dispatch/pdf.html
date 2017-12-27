@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <style>
+        #title{
+            text-align: center;
+            font-size: xx-large;
+        }
+        .level-2-title{
+            font-size: large;
+        }
+        .information{
+            font-size: medium;
+        }
+        #goodTable{
+            text-align: center;
+        }
+        .barImage{
+            width: 200px;
+            height: 75px;
+        }
+        .goodbarImage{
+            width: 80px;
+            height: 30px;
+        }
+    </style>
+    <div id="barcode">
+        <img class="barImage" src="{{ barcode }}" />
+    </div>
+    <div id="title">
+        <h1>司 机 出 车 单</h1>
+    </div>
+    <div id="idInformation" class="information">
+        <p>出车单单号：{{ order.id }}</p>
+        <p>打印日期：{{ today }}</p>
+    </div>
+    <br />
+    <p class="level-2-title">基本信息</p>
+    <div id="basicInformation" class="information">
+        <table>
+            <td>
+                <p>司机：{{ order.driver.name }}</p>
+                <p>车牌号 ：{{ order.vehicle_number }}</p>
+                <p>发车日期：{{ order.dispatch_date }}</p>
+            </td>
+            <td>
+                <p>发出地：{{ order.origin }}</p>
+                <p>到达地：{{ order.destination }}</p>
+            </td>
+        </table>
+        <p>备注：<br />{{ order.comments }}</p>
+    </div>
+    <br />
+    <p class="level-2-title">货物信息</p>
+    <div id="goodInformation" class="information">
+        <table id="goodTable" border="0.5">
+            <tr>
+                <th class="table-title">包裹条码</th>
+                <th>ID</th>
+                <th class="table-author am-hide-sm-only">货物名称</th>
+                <th class="table-date am-hide-sm-only">重量</th>
+                <th class="table-set">所属订单</th>
+                <th class="table-set">收件人</th>
+                <th class="table-set">发出地址</th>
+                <th class="table-set">到达地址</th>
+            </tr>
+
+            {% for item in good %}
+                <tr>
+                    <td><img class="goodbarImage" src="{{ item.barcode }}" /></td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.goods_name }}</td>
+                    <td>{{ item.weight }}</td>
+                    <td>{{ item.shipment_order_id.id }}</td>
+                    <td>{{ item.shipment_order_id.receiver }}</td>
+                    <td>{{ item.shipment_order_id.from_address }}</td>
+                    <td>{{ item.shipment_order_id.to_address }}</td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+    <br />
+    <p class="level-2-title">内容确认</p>
+    <div id="commentInformation" class="information">
+    请司机确认上述货物，并签字。
+        <p align="right">
+            司机签字：&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp <br /> <br />
+            &nbsp &nbsp &nbsp &nbsp 年 &nbsp &nbsp 月 &nbsp &nbsp 日
+        </p>
+    </div>
+</head>
+</html>
