@@ -41,7 +41,7 @@
                                             <th class="table-set">收件人</th>
                                             <th class="table-set">发出地址</th>
                                             <th class="table-set">到达地址</th>
-                                            <th class="table-set">添加</th>
+                                            <th class="table-set">操作</th>
                                             <th class="table-set">选中</th>
                                         </tr>
                                     </thead>
@@ -59,7 +59,11 @@
                                             <td>{{ item.shipment_order_id.from_address }}</td>
                                             <td>{{ item.shipment_order_id.to_address }}</td>
                                             <td>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-add" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 添加到发车货物列表</button>
+                                                {% if item.dispatch == None %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-add" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 添加</button>
+                                                {% else %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% endif %}
                                             </td>
                                             <td> <div class="field-selected" id="{{ item.id }}">
                                                 {% if item.dispatch != None %}
@@ -115,6 +119,21 @@
             async: true,
             success: function(data) {
                 $("#" + good_id + " .field-selected").html("<i class=\"am-icon-truck\"></i>");
+            }
+        });
+        return false;
+    });
+   $(document).on('click', '.btn-delete', function () {
+        var good_id = this.id.toString();
+        var url_mask = "{% url 'ajax_select_good_cancel' good_id=12345 %}".replace(/12345/, this.id.toString());
+        $.ajax({
+            cache: false,
+            type: "GET",
+            dataType: "json",
+            url: url_mask,
+            async: true,
+            success: function(data) {
+                $("#" + good_id + " .field-selected").html("<i></i>");
             }
         });
         return false;

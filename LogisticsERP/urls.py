@@ -1,18 +1,4 @@
-"""LogisticsERP URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
+# LogisticsERP URL Configuration
 from django.conf.urls import url, handler404, handler500
 from django.contrib import admin
 from LogisticsERP import views as main_view
@@ -111,6 +97,7 @@ urlpatterns = [
     url(r'^dispatch/order/add/1/$', dispatch_view.add_dispatch_order, name="add_dispatch_order"),
     url(r'^dispatch/order/add/2/(?P<order_id>[0-9]+)/$', dispatch_view.add_dispatch_order_choose_good, name="add_dispatch_order_choose_good"),
     url(r'^dispatch/order/choose/(?P<order_id>[0-9]+)/(?P<good_id>[0-9]+)/$', dispatch_view.ajax_select_good, name="ajax_select_good"),
+    url(r'^dispatch/order/choose/(?P<good_id>[0-9]+)/cancel/$', dispatch_view.ajax_select_good_cancel, name="ajax_select_good_cancel"),
     url(r'^dispatch/order/add/3/(?P<order_id>[0-9]+)/$', dispatch_view.add_dispatch_order_summary, name="add_dispatch_order_summary"),
     url(r'^dispatch/order/pdf/(?P<order_id>[0-9]+)/$', dispatch_view.generate_PDF, name="generate_dispatch_pdf"),
 
@@ -118,6 +105,7 @@ urlpatterns = [
     url(r'^dispatch/order/$', dispatch_view.manage_dispatch_order, name="manage_dispatch_order"),
     url(r'^dispatch/order/search/$', dispatch_view.dispatch_order_search, name="dispatch_order_search"),
     url(r'^dispatch/order/detail/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_detail, name="dispatch_order_detail"),
+    url(r'^dispatch/order/modify/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_modify, name="dispatch_order_modify"),
     url(r'^dispatch/order/delete/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_delete, name="dispatch_order_delete"),
 
     # dispatch record draft

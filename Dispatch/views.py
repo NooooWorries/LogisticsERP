@@ -94,11 +94,14 @@ def driver_search(request):
     all_driver = Driver.objects.filter(Q(name__icontains=query) |
                                    Q(identity_number__icontains=query) |
                                    Q(license__icontains=query) |
-                                   Q(comments__icontains=query))
-    driver = all_driver[startPos:endPos]
+                                   Q(comments__icontains=query)).count()
+    driver = Driver.objects.filter(Q(name__icontains=query) |
+                                   Q(identity_number__icontains=query) |
+                                   Q(license__icontains=query) |
+                                   Q(comments__icontains=query))[startPos:endPos]
     # 计算所负责的订单数量
     for item in driver:
-        item.dispatch_count = DispatchRecord.objects.filter(driver_id=item.id).count()
+        item.dispatch_count = all_driver
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_driver.count()
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -155,7 +158,6 @@ def add_dispatch_order(request):
 def add_dispatch_order_choose_good(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
     order = get_object_or_404(DispatchRecord, pk=order_id)
-
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -171,9 +173,10 @@ def add_dispatch_order_choose_good(request, order_id):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
+    good_all = Goods.objects.filter(Q(dispatch_id__isnull=True) | Q(dispatch=order_id)).count()
     good = Goods.objects.filter(Q(dispatch_id__isnull=True) | Q(dispatch=order_id))[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
-        allPostCounts = DispatchRecord.objects.count()
+        allPostCounts = good_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
         remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
         if remainPost > 0:
@@ -192,6 +195,17 @@ def ajax_select_good(request, order_id, good_id):
     good = get_object_or_404(Goods, pk=good_id)
     order = get_object_or_404(DispatchRecord, pk=order_id)
     good.dispatch = order
+    good.save()
+    return HttpResponse('{"status": "success"}', content_type="application/json")
+
+
+# 取消选择货物 ajax
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def ajax_select_good_cancel(request, good_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    good = get_object_or_404(Goods, pk=good_id)
+    good.dispatch = None
     good.save()
     return HttpResponse('{"status": "success"}', content_type="application/json")
 
@@ -217,10 +231,10 @@ def add_dispatch_order_summary(request, order_id):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    good_all = Goods.objects.filter(dispatch=order_id)
-    good = good_all[startPos:endPos]
+    good_all = Goods.objects.filter(dispatch=order_id).count()
+    good = Goods.objects.filter(dispatch=order_id)[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
-        allPostCounts = good_all.count()
+        allPostCounts = good_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
         remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
         if remainPost > 0:
@@ -329,10 +343,14 @@ def dispatch_order_search(request):
                                           Q(vehicle_number__icontains=query) |
                                           Q(origin__icontains=query) |
                                           Q(destination__icontains=query) |
-                                          Q(comments__icontains=query))
-    order = all_order[startPos:endPos]
+                                          Q(comments__icontains=query)).count()
+    order = DispatchRecord.objects.filter(Q(driver__name__icontains=query) |
+                                          Q(vehicle_number__icontains=query) |
+                                          Q(origin__icontains=query) |
+                                          Q(destination__icontains=query) |
+                                          Q(comments__icontains=query))[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
-        allPostCounts = all_order.count()
+        allPostCounts = all_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
         remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
         if remainPost > 0:
@@ -384,10 +402,10 @@ def draft_dispatch_order(request):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    order_all = DispatchRecord.objects.filter(status__exact=0)
-    order = order_all[startPos:endPos]
+    order_all = DispatchRecord.objects.filter(status__exact=0).count()
+    order = DispatchRecord.objects.filter(status__exact=0)[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
-        allPostCounts = order_all.count()
+        allPostCounts = order_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
         remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
         if remainPost > 0:
@@ -395,3 +413,16 @@ def draft_dispatch_order(request):
     return render(request, "dispatch/record/draft/dispatch-order-draft.html", {'order': order,
                                                                                'allPage': allPage,
                                                                                'curPage': curPage})
+
+
+# 出车单 修改
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def dispatch_order_modify(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    order_instance = get_object_or_404(DispatchRecord, pk=order_id)
+    form = DispatchRecordCreationForm(request.POST or None, instance=order_instance)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("Success")
+    return render(request, 'dispatch/record/manage/dispatch-order-modify.html', {'form': form})

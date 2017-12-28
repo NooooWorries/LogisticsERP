@@ -5,20 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc47d555-99ca-4701-bdb7-2cd8abfbddb5" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/static/js/el-pagination.js" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Dispatch/models.py" afterPath="$PROJECT_DIR$/Dispatch/models.py" />
       <change beforePath="$PROJECT_DIR$/Dispatch/views.py" afterPath="$PROJECT_DIR$/Dispatch/views.py" />
-      <change beforePath="$PROJECT_DIR$/LogisticsERP/settings.py" afterPath="$PROJECT_DIR$/LogisticsERP/settings.py" />
       <change beforePath="$PROJECT_DIR$/LogisticsERP/urls.py" afterPath="$PROJECT_DIR$/LogisticsERP/urls.py" />
-      <change beforePath="$PROJECT_DIR$/OrderPDF/documents/1.pdf" afterPath="$PROJECT_DIR$/OrderPDF/documents/1.pdf" />
       <change beforePath="$PROJECT_DIR$/OrderPDF/documents/29.pdf" afterPath="$PROJECT_DIR$/OrderPDF/documents/29.pdf" />
-      <change beforePath="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" afterPath="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" />
       <change beforePath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" />
       <change beforePath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html" />
+      <change beforePath="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
       <change beforePath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" />
-      <change beforePath="$PROJECT_DIR$/templates/master.html" afterPath="$PROJECT_DIR$/templates/master.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,43 +33,40 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LogisticsERP/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="120" column="115" lean-forward="false" selection-start-line="120" selection-start-column="115" selection-end-line="120" selection-end-column="115" />
+            <state relative-caret-position="-1289">
+              <caret line="0" column="32" lean-forward="false" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
               <folding>
-                <element signature="e#646#702#0" expanded="true" />
+                <element signature="e#33#89#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="master.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/master.html">
+      <file leaf-file-name="dispatch-order-manager.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-14">
-              <caret line="230" column="88" lean-forward="false" selection-start-line="230" selection-start-column="88" selection-end-line="230" selection-end-column="88" />
+            <state relative-caret-position="379">
+              <caret line="117" column="57" lean-forward="false" selection-start-line="117" selection-start-column="57" selection-end-line="117" selection-end-column="57" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="from-add-dispatch-choose-goods.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html">
+      <file leaf-file-name="dispatch-order-modify.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="156" column="9" lean-forward="false" selection-start-line="125" selection-start-column="4" selection-end-line="156" selection-end-column="9" />
-              <folding>
-                <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="e#6871#8152#0#HTML" expanded="false" />
-              </folding>
+            <state relative-caret-position="225">
+              <caret line="15" column="61" lean-forward="false" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Dispatch/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="352" column="64" lean-forward="false" selection-start-line="352" selection-start-column="64" selection-end-line="352" selection-end-column="64" />
+            <state relative-caret-position="436">
+              <caret line="426" column="8" lean-forward="false" selection-start-line="426" selection-start-column="8" selection-end-line="426" selection-end-column="8" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -82,58 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dispatch-order-manager.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Customers/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1635">
-              <caret line="125" column="57" lean-forward="false" selection-start-line="125" selection-start-column="57" selection-end-line="125" selection-end-column="57" />
-              <folding>
-                <element signature="n#ul#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="e#7723#8960#0#HTML" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dispatch-order-draft.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="329">
-              <caret line="104" column="115" lean-forward="false" selection-start-line="104" selection-start-column="115" selection-end-line="104" selection-end-column="115" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Dispatch/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="77" lean-forward="false" selection-start-line="8" selection-start-column="77" selection-end-line="8" selection-end-column="77" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="driver-manager.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="389">
-              <caret line="31" column="26" lean-forward="false" selection-start-line="27" selection-start-column="20" selection-end-line="31" selection-end-column="26" />
-              <folding>
-                <element signature="e#4876#4895#0#HTML" expanded="true" />
-                <element signature="e#6461#7674#0#HTML" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="customer-class-manager.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/customer/class/customer-class-manager.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-225">
-              <caret line="77" column="76" lean-forward="false" selection-start-line="77" selection-start-column="76" selection-end-line="77" selection-end-column="76" />
+            <state relative-caret-position="170">
+              <caret line="92" column="68" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -151,9 +96,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>volume</find>
-      <find>insuranceFee</find>
-      <find>草稿箱</find>
       <find>insurance_fee</find>
       <find>advanced</find>
       <find>insurance</find>
@@ -166,7 +108,6 @@
       <find>create</find>
       <find>succe</find>
       <find>modi</find>
-      <find>modify</find>
       <find>=</find>
       <find>ajax</find>
       <find>barcode</find>
@@ -177,10 +118,14 @@
       <find>serialize</find>
       <find>json</find>
       <find>search</find>
-      <find>query</find>
       <find>getLink</find>
       <find>delete</find>
       <find>driver</find>
+      <find>all</find>
+      <find>good = good_all</find>
+      <find>query</find>
+      <find>instance</find>
+      <find>modify</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -189,7 +134,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/templates/order/search/trackorder-search-result.html" />
         <option value="$PROJECT_DIR$/templates/order/search/trackorder-search.html" />
         <option value="$PROJECT_DIR$/templates/order/add/form-addorder-1.html" />
         <option value="$PROJECT_DIR$/templates/order/add/form-addorder-2.html" />
@@ -233,13 +177,14 @@
         <option value="$PROJECT_DIR$/templates/customer/class/customer-class-manager.html" />
         <option value="$PROJECT_DIR$/Dispatch/models.py" />
         <option value="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" />
+        <option value="$PROJECT_DIR$/templates/master.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html" />
-        <option value="$PROJECT_DIR$/templates/master.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" />
         <option value="$PROJECT_DIR$/LogisticsERP/urls.py" />
-        <option value="$PROJECT_DIR$/Dispatch/views.py" />
-        <option value="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" />
+        <option value="$PROJECT_DIR$/Dispatch/views.py" />
       </list>
     </option>
   </component>
@@ -282,6 +227,11 @@
             <path>
               <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
               <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
+              <item name="Customers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
               <item name="Dispatch" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -300,22 +250,7 @@
               <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="dispatch" type="462c0819:PsiDirectoryNode" />
-              <item name="driver" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatch" type="462c0819:PsiDirectoryNode" />
               <item name="record" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatch" type="462c0819:PsiDirectoryNode" />
-              <item name="record" type="462c0819:PsiDirectoryNode" />
-              <item name="draft" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
@@ -347,9 +282,9 @@
       <recent name="$PROJECT_DIR$/OrderPDF" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates/dispatch/record/manage" />
       <recent name="$PROJECT_DIR$/templates/dispatch/record/draft" />
       <recent name="$PROJECT_DIR$/static/js" />
-      <recent name="$PROJECT_DIR$/templates/dispatch/record/manage" />
       <recent name="$PROJECT_DIR$/templates/dispatch" />
       <recent name="$PROJECT_DIR$/templates/dispatch/record" />
     </key>
@@ -484,13 +419,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Customers/tests.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/order/draft/trackorder-draft-modify-complete.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -645,13 +573,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="86">
           <caret line="50" column="4" lean-forward="false" selection-start-line="50" selection-start-column="4" selection-end-line="54" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Customers/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3677">
-          <caret line="273" column="52" lean-forward="true" selection-start-line="268" selection-start-column="4" selection-end-line="273" selection-end-column="52" />
           <folding />
         </state>
       </provider>
@@ -793,35 +714,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1957">
-          <caret line="201" column="49" lean-forward="true" selection-start-line="201" selection-start-column="49" selection-end-line="201" selection-end-column="49" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/master.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-14">
-          <caret line="230" column="88" lean-forward="false" selection-start-line="230" selection-start-column="88" selection-end-line="230" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="156" column="9" lean-forward="false" selection-start-line="125" selection-start-column="4" selection-end-line="156" selection-end-column="9" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#6871#8152#0#HTML" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Dispatch/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -841,42 +733,81 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Dispatch/views.py">
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="352" column="64" lean-forward="false" selection-start-line="352" selection-start-column="64" selection-end-line="352" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="178">
+          <caret line="55" column="48" lean-forward="false" selection-start-line="55" selection-start-column="48" selection-end-line="55" selection-end-column="206" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html">
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="104" column="115" lean-forward="false" selection-start-line="104" selection-start-column="115" selection-end-line="104" selection-end-column="115" />
+        <state relative-caret-position="196">
+          <caret line="190" column="33" lean-forward="true" selection-start-line="190" selection-start-column="33" selection-end-line="190" selection-end-column="33" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/master.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-14">
+          <caret line="230" column="88" lean-forward="false" selection-start-line="230" selection-start-column="88" selection-end-line="230" selection-end-column="88" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="135" column="62" lean-forward="false" selection-start-line="135" selection-start-column="62" selection-end-line="135" selection-end-column="62" />
+          <folding>
+            <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#7803#9084#0#HTML" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/LogisticsERP/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="120" column="115" lean-forward="false" selection-start-line="120" selection-start-column="115" selection-end-line="120" selection-end-column="115" />
+        <state relative-caret-position="-1289">
+          <caret line="0" column="32" lean-forward="false" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
           <folding>
-            <element signature="e#646#702#0" expanded="true" />
+            <element signature="e#33#89#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1635">
-          <caret line="125" column="57" lean-forward="false" selection-start-line="125" selection-start-column="57" selection-end-line="125" selection-end-column="57" />
+        <state relative-caret-position="379">
+          <caret line="117" column="57" lean-forward="false" selection-start-line="117" selection-start-column="57" selection-end-line="117" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="61" lean-forward="false" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Customers/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="92" column="68" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Dispatch/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="436">
+          <caret line="426" column="8" lean-forward="false" selection-start-line="426" selection-start-column="8" selection-end-line="426" selection-end-column="8" />
           <folding>
-            <element signature="n#ul#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#7723#8960#0#HTML" expanded="false" />
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
