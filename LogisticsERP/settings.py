@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from django.conf.global_settings import TEMPLATES
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -87,8 +87,9 @@ DATABASES = {
         'NAME': 'LogisticsERP',
         'USER': 'root',
         'PASSWORD': 'cheng2277980',
-        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
+        'HOST': 'localhost',
         'PORT': '3306',
+        'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'rds', 'mysql-ssl-ca-cert.pem')}
     }
 }
 
@@ -144,4 +145,5 @@ DOMAIN_NAME = 'http://127.0.0.1:8000/'
 # 会话过期时间（秒）
 SESSION_COOKIE_AGE = 3600
 
-DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'
+# 每个页面显示条目数量
+ONE_PAGE_OF_DATA  = 10

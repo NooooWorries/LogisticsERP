@@ -3,17 +3,17 @@
 
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-                管理出车记录
+                出车
         </div>
         <ol class="am-breadcrumb">
                 <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
                 <li>出车</li>
-                <li>管理出车记录</li>
+                <li>草稿箱</li>
             </ol>
         <div class="tpl-portlet-components">
             <div class="portlet-title">
                 <div class="caption font-green bold">
-                    <span class="am-icon-code"></span> 管理出车记录
+                    <span class="am-icon-code"></span> 出车草稿箱
                 </div>
                 <div class="tpl-portlet-input tpl-fz-ml">
                 <form action="/dispatch/order/search/">
@@ -26,11 +26,6 @@
             </div>
             <div class="tpl-block">
                 <div class="am-g">
-                <div class="am-u-sm-12">
-                    <div id="id_divFee" class="note note-info">
-                        <p><span class="label label-danger">注意:</span> 仅能删除<b>草稿</b>出车记录。</p>
-                        <p><span class="label label-info">提示:</span> 如需删除<b>已出车或已提交</b>的出车记录，请联系超级管理员。</p>
-                    </div>
                     <div class="am-u-sm-12">
                         <table class="am-table am-table-striped am-table-hover table-main">
                             <thead>
@@ -41,7 +36,6 @@
                                 <th class="table-type">发车日期</th>
                                 <th class="table-type">发出地</th>
                                 <th class="table-set">到达地</th>
-                                <th class="table-set">状态</th>
                                 <th class="table-set">操作</th>
                             </tr>
                             </thead>
@@ -55,22 +49,11 @@
                                     <td>{{ item.origin }}</td>
                                     <td>{{ item.destination }}</td>
                                     <td>
-                                        {% if item.status == 0 %}
-                                            草稿
-                                        {% elif item.status == 1 %}
-                                            已出车
-                                        {% elif item.status == 2 %}
-                                            已送达
-                                        {% endif %}
-                                    </td>
-                                    <td>
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                                 <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
-                                                {% if item.status == 0 %}
-                                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
-                                                {% endif %}
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
                                                 {% if item.status != 0 %}
                                                     <button class="am-btn am-btn-default am-btn-xs am-text-warning btn-print" id="{{ item.id }}"><span class="am-icon-print"></span> 打印出车单</button>
                                                 {% endif %}
@@ -122,10 +105,6 @@
             var url_mask = "{% url 'dispatch_order_delete' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
-        $(document).on('click', '.btn-print', function () {
-            var url_mask = "{% url 'generate_dispatch_pdf' order_id=12345 %}".replace(/12345/, this.id.toString());
-            window.location.replace(url_mask);
-        });
 
         document.getElementById("id_search").value = getSavedValue();
         function saveValue(e){
@@ -145,7 +124,7 @@
         function pageRedirect(){
             var max = {{ allPage }}
             var page = document.getElementById("btn-redirect").value;
-            var url_mask = "{% url 'manage_dispatch_order' %}" + "/" + localStorage.getItem("txtValue")
+            var url_mask = "{% url 'draft_dispatch_order' %}" + "/" + localStorage.getItem("txtValue")
             console.log(url_mask);
             if (page == ""){
                 return;
@@ -160,14 +139,14 @@
                 return;
             }
             else if(page == max){
-                url_mask = "{% url 'manage_dispatch_order' %}" +
+                url_mask = "{% url 'draft_dispatch_order' %}" +
                            "?curPage=" + (max - 1).toString() +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
 
             }
             else{
-                url_mask = "{% url 'manage_dispatch_order' %}" +
+                url_mask = "{% url 'draft_dispatch_order' %}" +
                            "?curPage=" + (page - 1).toString() +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&query=" + + localStorage.getItem("txtValue");

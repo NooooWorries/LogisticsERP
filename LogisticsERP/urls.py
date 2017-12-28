@@ -102,6 +102,7 @@ urlpatterns = [
     # driver
     url(r'^dispatch/driver/add/$', dispatch_view.add_driver, name="add_driver"),
     url(r'^dispatch/driver/$', dispatch_view.manage_driver, name="manage_driver"),
+    url(r'^dispatch/driver/search/$', dispatch_view.driver_search, name="driver_search"),
     url(r'^dispatch/driver/detail/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_detail, name="driver_detail"),
     url(r'^dispatch/driver/modify/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_modify, name="driver_modify"),
     url(r'^dispatch/driver/delete/(?P<driver_id>[0-9]+)/$', dispatch_view.driver_delete, name="driver_delete"),
@@ -115,7 +116,12 @@ urlpatterns = [
 
     # manage dispatch record
     url(r'^dispatch/order/$', dispatch_view.manage_dispatch_order, name="manage_dispatch_order"),
+    url(r'^dispatch/order/search/$', dispatch_view.dispatch_order_search, name="dispatch_order_search"),
     url(r'^dispatch/order/detail/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_detail, name="dispatch_order_detail"),
+    url(r'^dispatch/order/delete/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_delete, name="dispatch_order_delete"),
+
+    # dispatch record draft
+    url(r'^dispatch/order/draft/$', dispatch_view.draft_dispatch_order, name="draft_dispatch_order"),
 ]
 
 # customized error page

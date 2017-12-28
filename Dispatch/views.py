@@ -15,8 +15,10 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from LogisticsERP import settings
 import os
+import json
 from xhtml2pdf.default import DEFAULT_FONT
 import datetime
+from django.core import serializers
 
 # 添加司机
 @csrf_exempt
@@ -38,18 +40,74 @@ def add_driver(request):
 @login_required(login_url='/error/not-logged-in/')
 def manage_driver(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
-    driver_list = Driver.objects.all()
-    for item in driver_list:
-        item.dispatch_count = DispatchRecord.objects.filter(driver_id=item.id).count()
-    paginator = Paginator(driver_list, 10)
     try:
-        driver = paginator.page(page)
-    except PageNotAnInteger:
-        driver = paginator.page(1)
-    except EmptyPage:
-       driver = paginator.page(paginator.num_pages)
-    return render(request, "dispatch/driver/driver-manager.html", {'driver': driver})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    driver = Driver.objects.all()[startPos:endPos]
+    # 计算所负责的订单数量
+    for item in driver:
+        item.dispatch_count = DispatchRecord.objects.filter(driver_id=item.id).count()
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = Driver.objects.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/driver/driver-manager.html", {'driver': driver,
+                                                                   'allPage': allPage,
+                                                                   'curPage': curPage})
+
+
+# 司机搜索
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def driver_search(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    query = request.GET.get('query')
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    all_driver = Driver.objects.filter(Q(name__icontains=query) |
+                                   Q(identity_number__icontains=query) |
+                                   Q(license__icontains=query) |
+                                   Q(comments__icontains=query))
+    driver = all_driver[startPos:endPos]
+    # 计算所负责的订单数量
+    for item in driver:
+        item.dispatch_count = DispatchRecord.objects.filter(driver_id=item.id).count()
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = all_driver.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/driver/driver-manager.html", {'driver': driver,
+                                                                   'allPage': allPage,
+                                                                   'curPage': curPage})
 
 
 # 司机详情
@@ -97,17 +155,33 @@ def add_dispatch_order(request):
 def add_dispatch_order_choose_good(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
     order = get_object_or_404(DispatchRecord, pk=order_id)
-    good = Goods.objects.filter(Q(dispatch_id__isnull=True) | Q(dispatch=order_id))
-    page = request.GET.get('page')
-    paginator = Paginator(good, 10)
+
     try:
-        good = paginator.page(page)
-    except PageNotAnInteger:
-        good = paginator.page(1)
-    except EmptyPage:
-        good = paginator.page(paginator.num_pages)
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    good = Goods.objects.filter(Q(dispatch_id__isnull=True) | Q(dispatch=order_id))[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = DispatchRecord.objects.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
     return render(request, 'dispatch/record/add/from-add-dispatch-choose-goods.html', {"order": order,
-                                                                                       "good": good})
+                                                                                       "good": good,
+                                                                                       'allPage': allPage,
+                                                                                       'curPage': curPage})
 
 
 # 选择货物 ajax
@@ -127,18 +201,34 @@ def ajax_select_good(request, order_id, good_id):
 @login_required(login_url='/error/not-logged-in/')
 def add_dispatch_order_summary(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
     order = get_object_or_404(DispatchRecord, pk=order_id)
-    good = Goods.objects.filter(dispatch=order_id)
-    paginator = Paginator(good, 10)
     try:
-        good = paginator.page(page)
-    except PageNotAnInteger:
-        good = paginator.page(1)
-    except EmptyPage:
-        good = paginator.page(paginator.num_pages)
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    good_all = Goods.objects.filter(dispatch=order_id)
+    good = good_all[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = good_all.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
     return render(request, 'dispatch/record/add/from-add-dispatch-summary.html', {"order": order,
-                                                                                  "good": good})
+                                                                                  "good": good,
+                                                                                  'allPage': allPage,
+                                                                                  'curPage': curPage})
 
 
 # 生成出车单pdf
@@ -187,18 +277,69 @@ def driver_delete(request, driver_id):
 @login_required(login_url='/error/not-logged-in/')
 def manage_dispatch_order(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
-    order_list = DispatchRecord.objects.all()
-    for item in order_list:
-        item.dispatch_count = DispatchRecord.objects.filter(driver_id=item.id).count()
-    paginator = Paginator(order_list, 10)
     try:
-        order = paginator.page(page)
-    except PageNotAnInteger:
-        order = paginator.page(1)
-    except EmptyPage:
-        order = paginator.page(paginator.num_pages)
-    return render(request, "dispatch/record/manage/dispatch-order-manager.html", {'order': order})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    order = DispatchRecord.objects.all()[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = DispatchRecord.objects.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/record/manage/dispatch-order-manager.html", {'order': order,
+                                                                                  'allPage': allPage,
+                                                                                  'curPage': curPage})
+
+
+# 出车单搜索
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def dispatch_order_search(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    query = request.GET.get('query')
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    all_order = DispatchRecord.objects.filter(Q(driver__name__icontains=query) |
+                                          Q(vehicle_number__icontains=query) |
+                                          Q(origin__icontains=query) |
+                                          Q(destination__icontains=query) |
+                                          Q(comments__icontains=query))
+    order = all_order[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = all_order.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/record/manage/dispatch-order-manager.html", {'order': order,
+                                                                                  'allPage': allPage,
+                                                                                   'curPage': curPage})
 
 
 # 出车单详情
@@ -210,3 +351,47 @@ def dispatch_order_detail(request, order_id):
     good = Goods.objects.filter(dispatch=order_id)
     return render(request, "dispatch/record/manage/dispatch-order-detail.html", {'order': order,
                                                                                  'good': good})
+
+
+# 删除出车记录
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def dispatch_order_delete(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    order = get_object_or_404(DispatchRecord, pk=order_id)
+    if order.status == 0:
+        order.delete()
+    return redirect(manage_dispatch_order)
+
+
+# 出车单 草稿箱
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def draft_dispatch_order(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    order_all = DispatchRecord.objects.filter(status__exact=0)
+    order = order_all[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = order_all.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/record/draft/dispatch-order-draft.html", {'order': order,
+                                                                               'allPage': allPage,
+                                                                               'curPage': curPage})
