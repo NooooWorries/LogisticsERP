@@ -306,13 +306,14 @@ def customer_search_advanced(request):
 def customer_search_advanced_result(request):
     request.session.set_expiry(request.session.get_expiry_age())
     keyword = request.GET.get('keyword')
-    customer_class = request.GET.get('customer_class')
-    payable = request.GET.get('payable', 0)
+    customer_class = request.GET.get('customer_class', "")
+    payable = request.GET.get('payable')
     if payable is "":
         payable = 0
     else:
         payable = float(payable)
     if customer_class is not "":
+        customer_class = int(customer_class)
         result = Customer.objects.filter(
             Q(customer_class__class_name__icontains=keyword) |
             Q(customer_name__icontains=keyword) |
@@ -321,7 +322,7 @@ def customer_search_advanced_result(request):
             Q(identity_number__icontains=keyword) |
             Q(address__icontains=keyword) |
             Q(comments__icontains=keyword),
-            Q(customer_class__class_name__icontains=customer_class),
+            Q(customer_class_id__exact=customer_class),
             Q(payable__gte=payable)
         )
         result_count = result.count()

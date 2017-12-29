@@ -128,7 +128,7 @@
         function pageRedirect(){
             var max = {{ allPage }}
             var page = document.getElementById("btn-redirect").value;
-            var url_mask = "{% url 'track_order_audit' %}" +
+            var url_mask = "{% url 'track_order_audit_search' %}" +
                            "?curPage=0" +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
@@ -146,14 +146,14 @@
                 return;
             }
             else if(page == max){
-                url_mask = "{% url 'track_order_audit' %}" +
+                url_mask = "{% url 'track_order_audit_search' %}" +
                            "?curPage=" + (max - 1).toString() +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
 
             }
             else{
-                url_mask = "{% url 'track_order_audit' %}" +
+                url_mask = "{% url 'track_order_audit_search' %}" +
                            "?curPage=" + (page - 1).toString() +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&query=" + + localStorage.getItem("txtValue");
