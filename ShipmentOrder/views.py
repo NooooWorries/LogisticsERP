@@ -187,16 +187,32 @@ def add_order_audit(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_manager(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
-    order_list = ShipmentOrder.objects.all()
-    paginator = Paginator(order_list, 10)
     try:
-        order = paginator.page(page)
-    except PageNotAnInteger:
-        order = paginator.page(1)
-    except EmptyPage:
-        order = paginator.page(paginator.num_pages)
-    return render(request, "order/manage/trackorder-manager.html", {'order': order})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    order_list = ShipmentOrder.objects.all()[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = ShipmentOrder.objects.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "order/manage/trackorder-manager.html", {'order': order_list,
+                                                                    'allPage': allPage,
+                                                                    'curPage': curPage
+                                                                    })
 
 
 # 查询订单 详情页
@@ -320,8 +336,22 @@ def track_order_delete(request, order_id):
 def track_order_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
-    page = request.GET.get('page')
-    result = ShipmentOrder.objects.filter(
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+        # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    all_order = ShipmentOrder.objects.filter(
         Q(sender__icontains=query)|
         Q(from_address__icontains=query)|
         Q(sender_contact__icontains=query)|
@@ -329,17 +359,29 @@ def track_order_search(request):
         Q(to_address__icontains=query)|
         Q(receiver_contact__icontains=query)|
         Q(mode__icontains=query)|
-        Q(comments__icontains=query))
-    paginator = Paginator(result, 10)
-    try:
-        order = paginator.page(page)
-    except PageNotAnInteger:
-        order = paginator.page(1)
-    except EmptyPage:
-        order = paginator.page(paginator.num_pages)
-    return render(request, "order/manage/trackorder-manager.html", {'order': order, 'query': query})
+        Q(comments__icontains=query)).count()
+    order = ShipmentOrder.objects.filter(
+        Q(sender__icontains=query)|
+        Q(from_address__icontains=query)|
+        Q(sender_contact__icontains=query)|
+        Q(receiver__icontains=query)|
+        Q(to_address__icontains=query)|
+        Q(receiver_contact__icontains=query)|
+        Q(mode__icontains=query)|
+        Q(comments__icontains=query))[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = all_order
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "order/manage/trackorder-manager.html", {'order': order,
+                                                                    'query': query,
+                                                                    'allPage': allPage,
+                                                                    'curPage': curPage})
 
 
+# 管理订单 订单高级搜索
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search_advanced(request):
@@ -347,7 +389,7 @@ def track_order_search_advanced(request):
     return render(request, "order/search/trackorder-search.html")
 
 
-# 管理订单 订单搜索结果
+# 管理订单 订单高级搜索结果
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_search_advanced_result(request):
@@ -493,16 +535,32 @@ def track_order_submit_audit(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
-    order_list = ShipmentOrder.objects.filter(status=1)
-    paginator = Paginator(order_list, 10)
     try:
-        order = paginator.page(page)
-    except PageNotAnInteger:
-        order = paginator.page(1)
-    except EmptyPage:
-        order = paginator.page(paginator.num_pages)
-    return render(request, "order/audit/trackorder-audit.html", {'order': order})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+        # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    order_all = ShipmentOrder.objects.filter(status=1).count()
+    order = ShipmentOrder.objects.filter(status=1)[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = order_all
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "order/audit/trackorder-audit.html", {'order': order,
+                                                                 'allPage': allPage,
+                                                                 'curPage': curPage})
 
 
 # 管理订单 审核订单 订单搜索
@@ -511,8 +569,22 @@ def track_order_audit(request):
 def track_order_audit_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
-    page = request.GET.get('page')
-    result = ShipmentOrder.objects.filter(
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    all_order = ShipmentOrder.objects.filter(
         Q(sender__icontains=query)|
         Q(from_address__icontains=query)|
         Q(sender_contact__icontains=query)|
@@ -520,15 +592,26 @@ def track_order_audit_search(request):
         Q(to_address__icontains=query)|
         Q(receiver_contact__icontains=query)|
         Q(mode__icontains=query)|
-        Q(comments__icontains=query), Q(status__exact=1))
-    paginator = Paginator(result, 10)
-    try:
-        order = paginator.page(page)
-    except PageNotAnInteger:
-        order = paginator.page(1)
-    except EmptyPage:
-        order = paginator.page(paginator.num_pages)
-    return render(request, "order/audit/trackorder-audit.html", {'order': order, 'query': query})
+        Q(comments__icontains=query), Q(status__exact=1)).count()
+    order = ShipmentOrder.objects.filter(
+        Q(sender__icontains=query)|
+        Q(from_address__icontains=query)|
+        Q(sender_contact__icontains=query)|
+        Q(receiver__icontains=query)|
+        Q(to_address__icontains=query)|
+        Q(receiver_contact__icontains=query)|
+        Q(mode__icontains=query)|
+        Q(comments__icontains=query), Q(status__exact=1))[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = all_order
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "order/audit/trackorder-audit.html", {'order': order,
+                                                                 'query': query,
+                                                                 'allPage': allPage,
+                                                                 'curPage': curPage})
 
 
 # 管理订单 审核订单 编辑

@@ -6,6 +6,7 @@ from Customers.forms import CustomerClassCreationForm, CustomerCreationForm
 from Customers.models import CustomerClass, Customer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+from LogisticsERP import settings
 
 
 # 添加客户组
@@ -28,16 +29,31 @@ def add_customer_class(request):
 @login_required(login_url='/error/not-logged-in/')
 def customer_class(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
-    customer_class_list = CustomerClass.objects.all()
-    paginator = Paginator(customer_class_list, 10)
     try:
-        customer_class = paginator.page(page)
-    except PageNotAnInteger:
-        customer_class = paginator.page(1)
-    except EmptyPage:
-        customer_class = paginator.page(paginator.num_pages)
-    return render(request, "customer/class/customer-class-manager.html", {'customer_class': customer_class})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    customer_class = CustomerClass.objects.all()[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = CustomerClass.objects.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "customer/class/customer-class-manager.html", {'customer_class': customer_class,
+                                                                          'allPage': allPage,
+                                                                          'curPage': curPage})
 
 
 # 管理客户组 客户组搜索
@@ -46,18 +62,36 @@ def customer_class(request):
 def customer_class_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
-    page = request.GET.get('page')
-    result = CustomerClass.objects.filter(
-        Q(class_name__icontains=query) |
-        Q(comments__icontains=query))
-    paginator = Paginator(result, 10)
     try:
-        customer_class = paginator.page(page)
-    except PageNotAnInteger:
-        customer_class = paginator.page(1)
-    except EmptyPage:
-        customer_class = paginator.page(paginator.num_pages)
-    return render(request, "customer/class/customer-class-manager.html", {'customer_class': customer_class, 'query': query})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    all_customer_class = CustomerClass.objects.filter(
+                Q(class_name__icontains=query) |
+                Q(comments__icontains=query)).count()
+    customer_class = CustomerClass.objects.filter(
+            Q(class_name__icontains=query) |
+            Q(comments__icontains=query))[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = all_customer_class
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "customer/class/customer-class-manager.html", {'customer_class': customer_class,
+                                                                          'allPage': allPage,
+                                                                          'curPage': curPage})
 
 
 # 管理客户组 详情页
@@ -132,21 +166,36 @@ def add_customer(request):
     return render(request, "customer/user/form-addcustomer.html", {'form': form})
 
 
-# 查询客户 所有客户
+# 管理客户
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def customer(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    page = request.GET.get('page')
-    customer_list = Customer.objects.all()
-    paginator = Paginator(customer_list, 10)
     try:
-        customer = paginator.page(page)
-    except PageNotAnInteger:
-        customer = paginator.page(1)
-    except EmptyPage:
-        customer = paginator.page(paginator.num_pages)
-    return render(request, "customer/user/customer-manager.html", {'customer': customer})
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    customer = Customer.objects.all()[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = Customer.objects.count()
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "customer/user/customer-manager.html", {'customer': customer,
+                                                                   'allPage': allPage,
+                                                                   'curPage': curPage})
 
 
 # 管理客户 客户搜索
@@ -155,23 +204,48 @@ def customer(request):
 def customer_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
     query = request.GET.get('query')
-    page = request.GET.get('page')
-    result = Customer.objects.filter(
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    all_customer = Customer.objects.filter(
         Q(customer_class__class_name__icontains=query) |
         Q(customer_name__icontains=query) |
         Q(contact_person__icontains=query) |
         Q(contact_number__icontains=query) |
         Q(identity_number__icontains=query) |
         Q(address__icontains=query) |
-        Q(comments__icontains=query))
-    paginator = Paginator(result, 10)
-    try:
-        customer = paginator.page(page)
-    except PageNotAnInteger:
-        customer = paginator.page(1)
-    except EmptyPage:
-        customer = paginator.page(paginator.num_pages)
-    return render(request, "customer/user/customer-manager.html", {'customer': customer, 'query': query})
+        Q(comments__icontains=query)).count()
+    customer = Customer.objects.filter(
+        Q(customer_class__class_name__icontains=query) |
+        Q(customer_name__icontains=query) |
+        Q(contact_person__icontains=query) |
+        Q(contact_number__icontains=query) |
+        Q(identity_number__icontains=query) |
+        Q(address__icontains=query) |
+        Q(comments__icontains=query))[startPos: endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = all_customer
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "customer/user/customer-manager.html", {'customer': customer,
+                                                                   'query': query,
+                                                                   'allPage': allPage,
+                                                                   'curPage': curPage
+                                                                   })
 
 
 # 管理客户 编辑页
@@ -217,7 +291,6 @@ def customer_delete(request, customer_id):
     return render(request, "customer/user/customer-delete-complete.html")
 
 
-
 # 管理客户 高级搜索
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
@@ -234,14 +307,12 @@ def customer_search_advanced_result(request):
     request.session.set_expiry(request.session.get_expiry_age())
     keyword = request.GET.get('keyword')
     customer_class = request.GET.get('customer_class')
-    payable = request.GET.get('payable')
-    page = request.GET.get('page')
+    payable = request.GET.get('payable', 0)
     if payable is "":
         payable = 0
     else:
         payable = float(payable)
     if customer_class is not "":
-        customer_class = int(customer_class)
         result = Customer.objects.filter(
             Q(customer_class__class_name__icontains=keyword) |
             Q(customer_name__icontains=keyword) |
@@ -250,11 +321,11 @@ def customer_search_advanced_result(request):
             Q(identity_number__icontains=keyword) |
             Q(address__icontains=keyword) |
             Q(comments__icontains=keyword),
-            Q(customer_class_id__exact=customer_class),
-            payable__gte=payable
+            Q(customer_class__class_name__icontains=customer_class),
+            Q(payable__gte=payable)
         )
+        result_count = result.count()
     else:
-        customer_class = "全部"
         result = Customer.objects.filter(
             Q(customer_class__class_name__icontains=keyword) |
             Q(customer_name__icontains=keyword) |
@@ -265,14 +336,33 @@ def customer_search_advanced_result(request):
             Q(comments__icontains=keyword),
             payable__gte=payable
         )
-    paginator = Paginator(result, 10)
+        result_count = result.count()
     try:
-        result = paginator.page(page)
-    except PageNotAnInteger:
-        result = paginator.page(1)
-    except EmptyPage:
-        result = paginator.page(paginator.num_pages)
-    return render(request, "customer/user/customer-search-result.html", {"customer": result,
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    customer = result[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = result_count
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "customer/user/customer-search-result.html", {"customer": customer,
                                                                          "keyword": keyword,
                                                                          "class": customer_class,
-                                                                         "payable": payable})
+                                                                         "payable": payable,
+                                                                         'allPage': allPage,
+                                                                         'curPage': curPage
+                                                                         })

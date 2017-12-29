@@ -67,6 +67,7 @@
                         <hr>
                     <!-- 分页-->
                     <ul class="am-pagination am-pagination-centered">
+                    {% if allPage != 0 %}
                             <!-- 如果当前是第一页，就不显示【上一页】链接 -->
                             {% ifnotequal curPage 1 %}
                             <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&query=" onclick="getLink(this)">
@@ -82,7 +83,8 @@
                             {% endifnotequal %}
                             <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
                             <li><a onclick="pageRedirect()">Go</a></li>
-                        </ul>
+                    {% endif %}
+                    </ul>
                     <!-- 分页结束-->
                     </div>
 
@@ -122,7 +124,10 @@
         function pageRedirect(){
             var max = {{ allPage }}
             var page = document.getElementById("btn-redirect").value;
-            var url_mask = "{% url 'manage_driver' %}" + "/" + localStorage.getItem("txtValue")
+            var url_mask =  "{% url 'manage_driver' %}" +
+                           "?curPage=0" +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
             console.log(url_mask);
             if (page == ""){
                 return;

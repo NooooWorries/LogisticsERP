@@ -121,7 +121,10 @@
         function pageRedirect(){
             var max = {{ allPage }}
             var page = document.getElementById("btn-redirect").value;
-            var url_mask = "{% url 'draft_dispatch_order' %}" + "/" + localStorage.getItem("txtValue")
+            var url_mask = "{% url 'draft_dispatch_order' %}" +
+                           "?curPage=0" +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
             console.log(url_mask);
             if (page == ""){
                 return;

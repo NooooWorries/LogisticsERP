@@ -5,7 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 from Dispatch.forms import DriverCreationForm, DispatchRecordCreationForm
 from Dispatch.models import Driver, DispatchRecord
 from ShipmentOrder.models import Goods
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 import barcode
 from barcode.writer import ImageWriter
@@ -15,10 +14,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from LogisticsERP import settings
 import os
-import json
 from xhtml2pdf.default import DEFAULT_FONT
 import datetime
-from django.core import serializers
 
 # 添加司机
 @csrf_exempt
@@ -103,7 +100,7 @@ def driver_search(request):
     for item in driver:
         item.dispatch_count = all_driver
     if curPage == 1 and allPage == 1:  # 标记1
-        allPostCounts = all_driver.count()
+        allPostCounts = all_driver
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
         remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
         if remainPost > 0:
@@ -357,7 +354,7 @@ def dispatch_order_search(request):
             allPage += 1
     return render(request, "dispatch/record/manage/dispatch-order-manager.html", {'order': order,
                                                                                   'allPage': allPage,
-                                                                                   'curPage': curPage})
+                                                                                  'curPage': curPage})
 
 
 # 出车单详情
@@ -422,7 +419,36 @@ def dispatch_order_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
     order_instance = get_object_or_404(DispatchRecord, pk=order_id)
     form = DispatchRecordCreationForm(request.POST or None, instance=order_instance)
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    good_all = Goods.objects.filter(Q(dispatch_id__isnull=True) | Q(dispatch=order_id)).count()
+    good = Goods.objects.filter(Q(dispatch_id__isnull=True) | Q(dispatch=order_id))[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = good_all
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
     if form.is_valid():
         form.save()
-        return HttpResponse("Success")
-    return render(request, 'dispatch/record/manage/dispatch-order-modify.html', {'form': form})
+        return render(request, 'dispatch/record/manage/dispatch-order-modify-complete.html')
+    return render(request, 'dispatch/record/manage/dispatch-order-modify.html', {'form': form,
+                                                                                 "order": order_instance,
+                                                                                 "good": good,
+                                                                                 'allPage': allPage,
+                                                                                 'curPage': curPage})
+
+

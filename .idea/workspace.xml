@@ -5,15 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cc47d555-99ca-4701-bdb7-2cd8abfbddb5" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify-complete.html" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Customers/views.py" afterPath="$PROJECT_DIR$/Customers/views.py" />
       <change beforePath="$PROJECT_DIR$/Dispatch/views.py" afterPath="$PROJECT_DIR$/Dispatch/views.py" />
-      <change beforePath="$PROJECT_DIR$/LogisticsERP/urls.py" afterPath="$PROJECT_DIR$/LogisticsERP/urls.py" />
-      <change beforePath="$PROJECT_DIR$/OrderPDF/documents/29.pdf" afterPath="$PROJECT_DIR$/OrderPDF/documents/29.pdf" />
+      <change beforePath="$PROJECT_DIR$/OrderPDF/documents/1.pdf" afterPath="$PROJECT_DIR$/OrderPDF/documents/1.pdf" />
+      <change beforePath="$PROJECT_DIR$/OrderPDF/documents/2.pdf" afterPath="$PROJECT_DIR$/OrderPDF/documents/2.pdf" />
+      <change beforePath="$PROJECT_DIR$/OrderPDF/documents/31.pdf" afterPath="$PROJECT_DIR$/OrderPDF/documents/31.pdf" />
+      <change beforePath="$PROJECT_DIR$/ShipmentOrder/views.py" afterPath="$PROJECT_DIR$/ShipmentOrder/views.py" />
+      <change beforePath="$PROJECT_DIR$/templates/customer/class/customer-class-manager.html" afterPath="$PROJECT_DIR$/templates/customer/class/customer-class-manager.html" />
+      <change beforePath="$PROJECT_DIR$/templates/customer/user/customer-manager.html" afterPath="$PROJECT_DIR$/templates/customer/user/customer-manager.html" />
+      <change beforePath="$PROJECT_DIR$/templates/customer/user/customer-search-result.html" afterPath="$PROJECT_DIR$/templates/customer/user/customer-search-result.html" />
+      <change beforePath="$PROJECT_DIR$/templates/customer/user/customer-search.html" afterPath="$PROJECT_DIR$/templates/customer/user/customer-search.html" />
+      <change beforePath="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" afterPath="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" />
       <change beforePath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" />
-      <change beforePath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html" />
       <change beforePath="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
       <change beforePath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" />
+      <change beforePath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" afterPath="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" />
+      <change beforePath="$PROJECT_DIR$/templates/master.html" afterPath="$PROJECT_DIR$/templates/master.html" />
+      <change beforePath="$PROJECT_DIR$/templates/order/audit/trackorder-audit.html" afterPath="$PROJECT_DIR$/templates/order/audit/trackorder-audit.html" />
+      <change beforePath="$PROJECT_DIR$/templates/order/manage/trackorder-manager.html" afterPath="$PROJECT_DIR$/templates/order/manage/trackorder-manager.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,8 +44,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LogisticsERP/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1289">
-              <caret line="0" column="32" lean-forward="false" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
+            <state relative-caret-position="389">
+              <caret line="82" column="60" lean-forward="false" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="60" />
               <folding>
                 <element signature="e#33#89#0" expanded="true" />
               </folding>
@@ -42,31 +53,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dispatch-order-manager.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="379">
-              <caret line="117" column="57" lean-forward="false" selection-start-line="117" selection-start-column="57" selection-end-line="117" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dispatch-order-modify.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="61" lean-forward="false" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Dispatch/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="426" column="8" lean-forward="false" selection-start-line="426" selection-start-column="8" selection-end-line="426" selection-end-column="8" />
+            <state relative-caret-position="445">
+              <caret line="109" column="85" lean-forward="true" selection-start-line="107" selection-start-column="83" selection-end-line="109" selection-end-column="85" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -75,11 +66,35 @@
         </entry>
       </file>
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Customers/views.py">
+        <entry file="file://$PROJECT_DIR$/ShipmentOrder/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="92" column="68" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="68" />
+            <state relative-caret-position="548">
+              <caret line="603" column="74" lean-forward="false" selection-start-line="603" selection-start-column="74" selection-end-line="603" selection-end-column="74" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="trackorder-audit.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/order/audit/trackorder-audit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="217">
+              <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+              <folding>
+                <element signature="e#4153#5348#0#HTML" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="trackorder-manager.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/order/manage/trackorder-manager.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-929">
+              <caret line="161" column="33" lean-forward="true" selection-start-line="143" selection-start-column="28" selection-end-line="161" selection-end-column="33" />
+              <folding>
+                <element signature="e#6625#7820#0#HTML" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -96,14 +111,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>insurance_fee</find>
-      <find>advanced</find>
-      <find>insurance</find>
-      <find>freight</find>
-      <find>order_form.save</find>
-      <find>add_good</find>
-      <find>good</find>
-      <find>customer</find>
       <find>customer_class</find>
       <find>create</find>
       <find>succe</find>
@@ -126,6 +133,14 @@
       <find>query</find>
       <find>instance</find>
       <find>modify</find>
+      <find>all_dri</find>
+      <find>Paginator</find>
+      <find>payable</find>
+      <find>pageREDIRECT()</find>
+      <find>result</find>
+      <find>page</find>
+      <find>customer_search</find>
+      <find>audit</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -134,9 +149,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/templates/order/search/trackorder-search.html" />
-        <option value="$PROJECT_DIR$/templates/order/add/form-addorder-1.html" />
-        <option value="$PROJECT_DIR$/templates/order/add/form-addorder-2.html" />
         <option value="$PROJECT_DIR$/templates/order/add/form-addorder-3.html" />
         <option value="$PROJECT_DIR$/templates/order/add/form-addorder-summary.html" />
         <option value="$PROJECT_DIR$/templates/order/draft/trackorder-draft-modify.html" />
@@ -144,26 +156,21 @@
         <option value="$PROJECT_DIR$/templates/order/audit/trackorder-audit-modify.html" />
         <option value="$PROJECT_DIR$/templates/order/pdf.html" />
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/templates/customer/user/customer-search.html" />
-        <option value="$PROJECT_DIR$/templates/customer/user/customer-search-result.html" />
         <option value="$PROJECT_DIR$/Customers/forms.py" />
         <option value="$PROJECT_DIR$/Customers/models.py" />
         <option value="$PROJECT_DIR$/ShipmentOrder/forms.py" />
         <option value="$PROJECT_DIR$/templates/order/manage/trackorder-modify.html" />
         <option value="$PROJECT_DIR$/ShipmentOrder/operation.py" />
-        <option value="$PROJECT_DIR$/templates/customer/user/customer-manager.html" />
         <option value="$PROJECT_DIR$/templates/customer/user/customer-detail.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/driver/form-add-driver.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/driver/driver-class-manager.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/driver/driver-modify.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/driver/customer-class-modify-complete.html" />
         <option value="$PROJECT_DIR$/Dispatch/forms.py" />
-        <option value="$PROJECT_DIR$/Customers/views.py" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/form-add-dispatch-record.html" />
         <option value="$PROJECT_DIR$/LogisticsERP/pages.py" />
         <option value="$PROJECT_DIR$/ShipmentOrder/models.py" />
         <option value="$PROJECT_DIR$/templates/dispatch/pdf.html" />
-        <option value="$PROJECT_DIR$/ShipmentOrder/views.py" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/from-add-dispatch-choose-goods.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/from-add-dispatch-summary.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/driver/driver-detail.html" />
@@ -174,17 +181,25 @@
         <option value="$PROJECT_DIR$/templates/dispatch/record/manage/entry_template.html" />
         <option value="$PROJECT_DIR$/LogisticsERP/paginator.py" />
         <option value="$PROJECT_DIR$/LogisticsERP/settings.py" />
-        <option value="$PROJECT_DIR$/templates/customer/class/customer-class-manager.html" />
         <option value="$PROJECT_DIR$/Dispatch/models.py" />
-        <option value="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" />
-        <option value="$PROJECT_DIR$/templates/master.html" />
-        <option value="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
-        <option value="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" />
         <option value="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-summary.html" />
-        <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" />
         <option value="$PROJECT_DIR$/LogisticsERP/urls.py" />
-        <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify-complete.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html" />
+        <option value="$PROJECT_DIR$/templates/master.html" />
         <option value="$PROJECT_DIR$/Dispatch/views.py" />
+        <option value="$PROJECT_DIR$/templates/customer/user/customer-search.html" />
+        <option value="$PROJECT_DIR$/Customers/views.py" />
+        <option value="$PROJECT_DIR$/templates/customer/user/customer-search-result.html" />
+        <option value="$PROJECT_DIR$/templates/customer/user/customer-manager.html" />
+        <option value="$PROJECT_DIR$/templates/customer/class/customer-class-manager.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html" />
+        <option value="$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html" />
+        <option value="$PROJECT_DIR$/templates/order/manage/trackorder-manager.html" />
+        <option value="$PROJECT_DIR$/templates/order/audit/trackorder-audit.html" />
+        <option value="$PROJECT_DIR$/ShipmentOrder/views.py" />
       </list>
     </option>
   </component>
@@ -194,9 +209,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+  <component name="ProjectFrameBounds">
+    <option name="width" value="2880" />
+    <option name="height" value="1800" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -216,6 +231,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -227,44 +243,17 @@
             <path>
               <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
               <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="Customers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="Dispatch" type="462c0819:PsiDirectoryNode" />
+              <item name="ShipmentOrder" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
               <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatch" type="462c0819:PsiDirectoryNode" />
-              <item name="record" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LogisticsERP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="LogisticsERP" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatch" type="462c0819:PsiDirectoryNode" />
-              <item name="record" type="462c0819:PsiDirectoryNode" />
-              <item name="manage" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -272,21 +261,22 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/ShipmentOrder" />
-      <recent name="$PROJECT_DIR$/templates/dispatch/record/add" />
-      <recent name="$PROJECT_DIR$/templates/customer/class" />
-      <recent name="$PROJECT_DIR$/Customers" />
-      <recent name="$PROJECT_DIR$/OrderPDF" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/templates/dispatch/record/manage" />
       <recent name="$PROJECT_DIR$/templates/dispatch/record/draft" />
       <recent name="$PROJECT_DIR$/static/js" />
       <recent name="$PROJECT_DIR$/templates/dispatch" />
       <recent name="$PROJECT_DIR$/templates/dispatch/record" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ShipmentOrder" />
+      <recent name="$PROJECT_DIR$/templates/dispatch/record/add" />
+      <recent name="$PROJECT_DIR$/templates/customer/class" />
+      <recent name="$PROJECT_DIR$/Customers" />
+      <recent name="$PROJECT_DIR$/OrderPDF" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -357,6 +347,9 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="StructuralSearchPlugin">
+    <searchConfiguration name="user defined" created="1514510403114" text="zh-cn" recursive="true" caseInsensitive="true" type="ActionScript" history="1" />
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -372,30 +365,43 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33294117" sideWeight="0.50277776" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32810616" sideWeight="0.49713877" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" x="262" y="563" width="1124" height="406" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2870929" sideWeight="0.52503574" order="12" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19670959" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2870929" sideWeight="0.53648067" order="12" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20529328" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2870929" sideWeight="0.47496423" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2870929" sideWeight="0.4635193" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33294117" sideWeight="0.50277776" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32810616" sideWeight="0.49713877" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" x="262" y="563" width="1124" height="406" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30521092" sideWeight="0.53648067" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20693277" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Concurrent Activities Diagram" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2870929" sideWeight="0.4635193" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -414,48 +420,15 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="70" />
+      <option name="time" value="76" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/order/draft/trackorder-draft-modify-complete.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/order/pdf.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-147">
-          <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="925">
-          <caret line="63" column="44" lean-forward="false" selection-start-line="63" selection-start-column="44" selection-end-line="63" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/order/draft/trackorder-draft-modify.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="385">
           <caret line="44" column="67" lean-forward="true" selection-start-line="39" selection-start-column="40" selection-end-line="44" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/user/customer-search-result.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="27" column="37" lean-forward="false" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -463,7 +436,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="405">
           <caret line="27" column="43" lean-forward="false" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -478,7 +450,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
           <caret line="23" column="32" lean-forward="true" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -486,15 +457,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="412">
           <caret line="53" column="40" lean-forward="false" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/user/customer-manager.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="46" column="42" lean-forward="false" selection-start-line="46" selection-start-column="42" selection-end-line="46" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -502,7 +464,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-428">
           <caret line="272" column="48" lean-forward="false" selection-start-line="272" selection-start-column="48" selection-end-line="272" selection-end-column="48" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -510,7 +471,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -522,19 +482,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/user/customer-search.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="38" column="63" lean-forward="true" selection-start-line="38" selection-start-column="63" selection-end-line="38" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/order/search/trackorder-search.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="254">
           <caret line="35" column="137" lean-forward="false" selection-start-line="35" selection-start-column="118" selection-end-line="35" selection-end-column="137" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -549,7 +500,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="321">
           <caret line="26" column="50" lean-forward="false" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -557,7 +507,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
           <caret line="14" column="59" lean-forward="false" selection-start-line="14" selection-start-column="59" selection-end-line="14" selection-end-column="59" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -565,7 +514,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="19" column="46" lean-forward="false" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -573,7 +521,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="86">
           <caret line="50" column="4" lean-forward="false" selection-start-line="50" selection-start-column="4" selection-end-line="54" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -589,7 +536,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="292">
           <caret line="33" column="90" lean-forward="false" selection-start-line="33" selection-start-column="90" selection-end-line="33" selection-end-column="90" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -598,7 +544,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="790">
           <caret line="86" column="66" lean-forward="true" selection-start-line="86" selection-start-column="66" selection-end-line="86" selection-end-column="66" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -614,7 +559,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="246">
           <caret line="72" column="37" lean-forward="false" selection-start-line="72" selection-start-column="37" selection-end-line="72" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -622,7 +566,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
           <caret line="33" column="91" lean-forward="false" selection-start-line="33" selection-start-column="91" selection-end-line="33" selection-end-column="91" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -631,7 +574,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="24" column="18" lean-forward="true" selection-start-line="19" selection-start-column="12" selection-end-line="24" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -642,19 +584,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/order/manage/trackorder-manager.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="29" lean-forward="true" selection-start-line="10" selection-start-column="29" selection-end-line="10" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/order/manage/trackorder-detail.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="77">
           <caret line="19" column="16" lean-forward="false" selection-start-line="19" selection-start-column="16" selection-end-line="41" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -662,10 +595,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="415">
           <caret line="47" column="25" lean-forward="true" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
-          <folding>
-            <element signature="e#1072#1078#0#HTML" expanded="false" />
-            <element signature="e#1078#1084#0#HTML" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -692,25 +621,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1196">
           <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ShipmentOrder/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3382">
-          <caret line="321" column="36" lean-forward="true" selection-start-line="321" selection-start-column="4" selection-end-line="321" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#36#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/customer/class/customer-class-manager.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-225">
-          <caret line="77" column="76" lean-forward="false" selection-start-line="77" selection-start-column="76" selection-end-line="77" selection-end-column="76" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -718,26 +628,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="77" lean-forward="false" selection-start-line="8" selection-start-column="77" selection-end-line="8" selection-end-column="77" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="31" column="26" lean-forward="false" selection-start-line="27" selection-start-column="20" selection-end-line="31" selection-end-column="26" />
-          <folding>
-            <element signature="e#4876#4895#0#HTML" expanded="true" />
-            <element signature="e#6461#7674#0#HTML" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="55" column="48" lean-forward="false" selection-start-line="55" selection-start-column="48" selection-end-line="55" selection-end-column="206" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -745,69 +635,142 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="196">
           <caret line="190" column="33" lean-forward="true" selection-start-line="190" selection-start-column="33" selection-end-line="190" selection-end-column="33" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/master.html">
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify-complete.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-14">
-          <caret line="230" column="88" lean-forward="false" selection-start-line="230" selection-start-column="88" selection-end-line="230" selection-end-column="88" />
-          <folding />
+        <state relative-caret-position="300">
+          <caret line="20" column="54" lean-forward="false" selection-start-line="20" selection-start-column="54" selection-end-line="20" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/dispatch/record/add/from-add-dispatch-choose-goods.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="135" column="62" lean-forward="false" selection-start-line="135" selection-start-column="62" selection-end-line="135" selection-end-column="62" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#li#2;n#ul#0;n#div#0;n#div#1;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#7803#9084#0#HTML" expanded="false" />
-          </folding>
+        <state relative-caret-position="385">
+          <caret line="100" column="82" lean-forward="false" selection-start-line="100" selection-start-column="80" selection-end-line="100" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="84" column="36" lean-forward="true" selection-start-line="66" selection-start-column="24" selection-end-line="84" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Python/3.6/lib/python/site-packages/django/utils/translation/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/templates/customer/user/customer-search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="39" column="73" lean-forward="true" selection-start-line="39" selection-start-column="73" selection-end-line="39" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/user/customer-search-result.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2165">
+          <caret line="146" column="52" lean-forward="false" selection-start-line="146" selection-start-column="52" selection-end-line="146" selection-end-column="52" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/LogisticsERP/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1289">
-          <caret line="0" column="32" lean-forward="false" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
+        <state relative-caret-position="389">
+          <caret line="82" column="60" lean-forward="false" selection-start-line="82" selection-start-column="45" selection-end-line="82" selection-end-column="60" />
           <folding>
             <element signature="e#33#89#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html">
+    <entry file="file://$PROJECT_DIR$/templates/customer/user/customer-manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="117" column="57" lean-forward="false" selection-start-line="117" selection-start-column="57" selection-end-line="117" selection-end-column="57" />
-          <folding />
+        <state relative-caret-position="105">
+          <caret line="127" column="51" lean-forward="false" selection-start-line="127" selection-start-column="51" selection-end-line="127" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-modify.html">
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/manage/dispatch-order-manager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="61" lean-forward="false" selection-start-line="15" selection-start-column="61" selection-end-line="15" selection-end-column="61" />
-          <folding />
+        <state relative-caret-position="133">
+          <caret line="150" column="38" lean-forward="false" selection-start-line="150" selection-start-column="38" selection-end-line="150" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/record/draft/dispatch-order-draft.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="124" column="40" lean-forward="false" selection-start-line="124" selection-start-column="40" selection-end-line="124" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/dispatch/driver/driver-manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1905">
+          <caret line="127" column="38" lean-forward="false" selection-start-line="127" selection-start-column="38" selection-end-line="127" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/master.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="511">
+          <caret line="227" column="29" lean-forward="false" selection-start-line="227" selection-start-column="29" selection-end-line="227" selection-end-column="41" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Customers/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="92" column="68" lean-forward="false" selection-start-line="92" selection-start-column="62" selection-end-line="92" selection-end-column="68" />
-          <folding />
+        <state relative-caret-position="350">
+          <caret line="208" column="47" lean-forward="false" selection-start-line="208" selection-start-column="47" selection-end-line="208" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/customer/class/customer-class-manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="57" column="28" lean-forward="true" selection-start-line="57" selection-start-column="28" selection-end-line="75" selection-end-column="33" />
+          <folding>
+            <element signature="e#3262#4457#0#HTML" expanded="false" />
+            <element signature="e#5983#7353#0#HTML" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/order/audit/trackorder-audit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding>
+            <element signature="e#4153#5348#0#HTML" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Dispatch/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="426" column="8" lean-forward="false" selection-start-line="426" selection-start-column="8" selection-end-line="426" selection-end-column="8" />
+        <state relative-caret-position="445">
+          <caret line="109" column="85" lean-forward="true" selection-start-line="107" selection-start-column="83" selection-end-line="109" selection-end-column="85" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ShipmentOrder/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="548">
+          <caret line="603" column="74" lean-forward="false" selection-start-line="603" selection-start-column="74" selection-end-line="603" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/order/manage/trackorder-manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-929">
+          <caret line="161" column="33" lean-forward="true" selection-start-line="143" selection-start-column="28" selection-end-line="161" selection-end-column="33" />
+          <folding>
+            <element signature="e#6625#7820#0#HTML" expanded="false" />
           </folding>
         </state>
       </provider>

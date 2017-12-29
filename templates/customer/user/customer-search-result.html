@@ -71,39 +71,25 @@
                                 </tbody>
                             </table>
                             <!--分页-->
-                            <nav >
-                                <div class="am-fr">
-                                    <ul class="am-pagination tpl-pagination">
-                                        <li>
-                                        {% if customer.has_previous %}
-                                            <a href="?page={{ customer.previous_page_number }}&keyword={{ keyword }}&customer_class={{ customer_class }}&&payable={{ payable }}" class="active">&laquo;</a>
-                                        {% endif %}
-                                        {% if not customer.has_previous %}
-                                            <a href="" >&laquo;</a>
-                                        {% endif %}
-                                        </li>
-                                        <li>
-                                            {% for i in customer.paginator.page_range %}
-                                                <li {% if customer.number == i %}class="am-active"{% endif %}>
-                                                    <a href="?page={{ i }}&keyword={{ keyword }}&customer_class={{ customer_class }}&&payable={{ payable }}" >{{ i }}
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
-                                        </li>
-                                        <li>
-                                            {% if customer.has_next %}
-                                                <a href="?page={{ customer.next_page_number }}&keyword={{ keyword }}&customer_class={{ customer_class }}&&payable={{ payable }}">&raquo;</a>
-                                            {% endif %}
-                                            {% if not customer.has_next %}
-                                                <a href="" >&raquo;</a>
-                                            {% endif %}
-                                        </li>
-                                        <li>
-                                            第{{ customer.number }}页，共{{ customer.paginator.num_pages }}页
-                                        </li>
-                                    </ul>
-                                </div>
-                            </nav>
+                            <ul class="am-pagination am-pagination-centered">
+                    {% if allPage != 0 %}
+                            <!-- 如果当前是第一页，就不显示【上一页】链接 -->
+                            {% ifnotequal curPage 1 %}
+                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&query=" onclick="getLink(this)">
+                                上一页
+                            </a></li>
+                            {% endifnotequal %}
+                            第{{ curPage }}/{{ allPage }}页
+                            <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
+                            {% ifnotequal curPage allPage %}
+                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&query=" onclick="getLink(this)">
+                                下一页
+                            </a></li>
+                            {% endifnotequal %}
+                            <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
+                            <li><a onclick="pageRedirect()">Go</a></li>
+                    {% endif %}
+                    </ul>
                             <!--ending 分页-->
                             <hr>
                     </div>
@@ -125,6 +111,43 @@
             var url_mask = "{% url 'track_order_confirm_delete' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
+        function pageRedirect(){
+            var max = {{ allPage }}
+            var page = document.getElementById("btn-redirect").value;
+            var url_mask = "{% url 'customer_search_advanced_result' %}";
+            if (page == ""){
+                return;
+            }
+            page = parseInt(page);
+            if (page > max){
+                page = max;
+            }
 
+            if(page <= 0){
+                window.location.replace(url_mask);
+                return;
+            }
+            else if(page == max){
+                url_mask = "{% url 'customer_search_advanced_result' %}" +
+                           "?curPage=" + (max - 1).toString() +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&customer_class=" + "{{ class }}" +
+                           "&&keyword=" + "{{ keyword }}" +
+                           "&&payable=" + "{{ payable }}" +
+                           "&&query=" + {{ query }};
+
+            }
+            else{
+                url_mask = "{% url 'customer_search_advanced_result' %}" +
+                           "?curPage=" + (page - 1).toString() +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&customer_class=" + "{{ class }}" +
+                           "&&keyword=" + "{{ keyword }}" +
+                           "&&payable=" + "{{ payable }}" +
+                           "&&query=" + {{ query }};
+            }
+            window.location.replace(url_mask);
+            return;
+        }
     </script>
 {% endblock %}
