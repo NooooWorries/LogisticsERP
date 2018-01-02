@@ -452,3 +452,74 @@ def dispatch_order_modify(request, order_id):
                                                                                  'curPage': curPage})
 
 
+# 管理出车单 出车单高级搜索
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def dispatch_order_search_advanced(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    return render(request, "dispatch/record/search/dispatch-order-search.html")
+
+
+# 管理出车单 订单高级搜索结果
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def dispatch_order_search_advanced_result(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    keyword = request.GET.get('keyword')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    status = request.GET.get('status')
+    if start_date is "": start_date = "1970-1-1"
+    if end_date is "": end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    if status is not "":
+        status = int(request.GET.get('status'))
+        result = DispatchRecord.objects.filter(
+            Q(driver__name__icontains=keyword) |
+            Q(vehicle_number__icontains=keyword) |
+            Q(origin__icontains=keyword) |
+            Q(destination__icontains=keyword) |
+            Q(comments__icontains=keyword),
+            Q(dispatch_date__range=(start_date, end_date)),
+            Q(status__exact=status)
+        )
+        result_count = result.count()
+    else:
+        result = DispatchRecord.objects.filter(
+            Q(driver__name__icontains=keyword) |
+            Q(vehicle_number__icontains=keyword) |
+            Q(origin__icontains=keyword) |
+            Q(destination__icontains=keyword) |
+            Q(comments__icontains=keyword),
+            Q(dispatch_date__range=(start_date, end_date))
+        )
+        result_count = result.count()
+
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    order = result[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = result_count
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/record/search/dispatch-order-search-result.html", {'order': order,
+                                                                          'keyword': keyword,
+                                                                          'start_date': start_date,
+                                                                          'end_date': end_date,
+                                                                          'status': status,
+                                                                          'allPage': allPage,
+                                                                          'curPage': curPage})

@@ -1,5 +1,67 @@
 {% extends 'master.html' %}
 {% block body %}
+    <style>
+        .popWindow {
+                background-color:#FFFFFF;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                filter: alpha(opacity=90);
+                opacity: 0.9;
+                z-index: 1;
+                position: absolute;
+
+            }
+        .maskLayer {
+            background-color:#FFFFFF;
+            width: 200px;
+            height: 30px;
+            line-height: 30px;
+            left: 45%;
+            top: 10%;
+            color:#000000;
+            z-index: 2;
+            position: absolute;
+            text-align:center;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            margin: 100px auto;
+        }
+        double-bounce1, .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #67CF22;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-animation: bounce 2.0s infinite ease-in-out;
+            animation: bounce 2.0s infinite ease-in-out;
+        }
+        .double-bounce2 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+}
+        @-webkit-keyframes bounce {
+            0%, 100% { -webkit-transform: scale(0.0) }
+            50% { -webkit-transform: scale(1.0) }
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0);
+            }
+            50% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+            }
+        }
+    </style>
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
                 运单高级搜索结果
@@ -45,12 +107,12 @@
                                 <thead>
                                 <tr>
                                     <th class="table-id">ID</th>
-                                    <th class="table-title">发件人</th>
-                                    <th class="table-type">收件人</th>
-                                    <th class="table-author am-hide-sm-only">收件地址</th>
-                                    <th class="table-date am-hide-sm-only">创建日期</th>
-                                    <th class="table-date am-hide-sm-only">经办</th>
-                                    <th class="table-date am-hide-sm-only">状态</th>
+                                    <th class="table-title">司机</th>
+                                    <th class="table-type">车牌号</th>
+                                    <th class="table-type">发车日期</th>
+                                    <th class="table-type">发出地</th>
+                                    <th class="table-set">到达地</th>
+                                    <th class="table-set">状态</th>
                                     <th class="table-set">操作</th>
                                 </tr>
                                 </thead>
@@ -58,23 +120,18 @@
                                 {% for item in order %}
                                 <tr>
                                     <td>{{ item.id }}</td>
-                                    <td>{{ item.sender }}</td>
-                                    <td>{{ item.receiver }}</td>
-                                    <td>{{ item.to_address }}</td>
-                                    <td>{{ item.create_date }}</td>
-                                    <td>{{ item.handle.username }}</td>
+                                    <td>{{ item.driver.name}}</td>
+                                    <td>{{ item.vehicle_number }}</td>
+                                    <td>{{ item.dispatch_date }}</td>
+                                    <td>{{ item.origin }}</td>
+                                    <td>{{ item.destination }}</td>
                                     <td>
                                         {% if item.status == 0 %}
-                                            未提交
-                                        {% endif %}
-                                        {% if item.status == 1 %}
-                                            待审核
-                                        {% endif %}
-                                        {% if item.status == 2 %}
-                                            审核通过
-                                        {% endif %}
-                                        {% if item.status == 3 %}
-                                            送达
+                                            草稿
+                                        {% elif item.status == 1 %}
+                                            已出车
+                                        {% elif item.status == 2 %}
+                                            已送达
                                         {% endif %}
                                     </td>
                                     <td>
@@ -82,7 +139,12 @@
                                             <div class="am-btn-group am-btn-group-xs">
                                                 <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
                                                 <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% if item.status == 0 %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% endif %}
+                                                {% if item.status != 0 %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-warning btn-print" id="{{ item.id }}"><span class="am-icon-print"></span> 打印出车单</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </td>
@@ -95,14 +157,14 @@
                     {% if allPage != 0 %}
                             <!-- 如果当前是第一页，就不显示【上一页】链接 -->
                             {% ifnotequal curPage 1 %}
-                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&query=">
+                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&keyword={{ keyword }}&&start_date={{ start_date }}&&end_date={{ end_date }}&&status={{ status }}">
                                 上一页
                             </a></li>
                             {% endifnotequal %}
                             第{{ curPage }}/{{ allPage }}页
                             <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
                             {% ifnotequal curPage allPage %}
-                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&query=">
+                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&keyword={{ keyword }}&&start_date={{ start_date }}&&end_date={{ end_date }}&&status={{ status }}">
                                 下一页
                             </a></li>
                             {% endifnotequal %}
@@ -117,24 +179,43 @@
             </div>
         </div>
     </div>
+    <div id="popWindow" class="popWindow" style="display: none;">
+    </div>
+    </div>
+    <div id="maskLayer" class="maskLayer" style="display: none;">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+        正在生成中，请稍候...... <br />
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.btn-check', function () {
-            var url_mask = "{% url 'track_order_detail' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'dispatch_order_detail' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-modify', function () {
-            var url_mask = "{% url 'track_order_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'dispatch_order_modify' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-delete', function () {
-            var url_mask = "{% url 'track_order_confirm_delete' order_id=12345 %}".replace(/12345/, this.id.toString());
+            var url_mask = "{% url 'dispatch_order_delete' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
+        $(document).on('click', '.btn-print', function () {
+            showDiv();
+            var url_mask = "{% url 'generate_dispatch_pdf' order_id=12345 %}".replace(/12345/, this.id.toString());
+            window.location.replace(url_mask);
+        });
+        function showDiv() {
+                document.getElementById('popWindow').style.display = 'block';
+                document.getElementById('maskLayer').style.display = 'block';
+        }
         function pageRedirect(){
             var max = {{ allPage }}
             var page = document.getElementById("btn-redirect").value;
-            var url_mask = "{% url 'track_order_search_advanced_result' %}" +
+            var url_mask = "{% url 'dispatch_order_search_advanced_result' %}" +
                            "?curPage=0" +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
@@ -154,7 +235,7 @@
                 return;
             }
             else if(page == max){
-                url_mask = "{% url 'track_order_search_advanced_result' %}" +
+                url_mask = "{% url 'dispatch_order_search_advanced_result' %}" +
                            "?curPage=" + (max - 1).toString() +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
@@ -164,8 +245,8 @@
 
             }
             else{
-                url_mask = "{% url 'track_order_search_advanced_result' %}" +
-                           "?curPage=" + (max - 1).toString() +
+                url_mask = "{% url 'dispatch_order_search_advanced_result' %}" +
+                           "?curPage=" + (page - 1).toString() +
                            "&allPage=" + max.toString() +
                            "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
                            "&&start_date=" + "{{ start_date }}"  +

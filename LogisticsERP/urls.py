@@ -5,6 +5,7 @@ from LogisticsERP import views as main_view
 from ShipmentOrder import views as order_view
 from Customers import views as customer_view
 from Dispatch import views as dispatch_view
+from Export import views as export_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
@@ -103,13 +104,34 @@ urlpatterns = [
 
     # manage dispatch record
     url(r'^dispatch/order/$', dispatch_view.manage_dispatch_order, name="manage_dispatch_order"),
-    url(r'^dispatch/order/search/$', dispatch_view.dispatch_order_search, name="dispatch_order_search"),
+
     url(r'^dispatch/order/detail/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_detail, name="dispatch_order_detail"),
     url(r'^dispatch/order/modify/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_modify, name="dispatch_order_modify"),
     url(r'^dispatch/order/delete/(?P<order_id>[0-9]+)/$', dispatch_view.dispatch_order_delete, name="dispatch_order_delete"),
 
     # dispatch record draft
     url(r'^dispatch/order/draft/$', dispatch_view.draft_dispatch_order, name="draft_dispatch_order"),
+
+    # seaech
+    url(r'^dispatch/order/search/$', dispatch_view.dispatch_order_search, name="dispatch_order_search"),
+    url(r'^dispatch/order/search/advanced/$', dispatch_view.dispatch_order_search_advanced, name="dispatch_order_search_advanced"),
+    url(r'^dispatch/order/search/advanced/result/$', dispatch_view.dispatch_order_search_advanced_result, name="dispatch_order_search_advanced_result"),
+
+
+    # EXPORT DATA SHEET PAGES
+    # export shipment order
+    url(r'^export/order/$', export_view.export_order, name="export_order"),
+    url(r'^export/order/result/$', export_view.export_order_result, name="export_order_result"),
+
+    # export customer
+    url(r'^export/customer/$', export_view.export_customer, name="export_customer"),
+    url(r'^export/customer/result/$', export_view.export_customer_result, name="export_customer_result"),
+
+
+    # export dispatch order
+    url(r'^export/dispatch/$', export_view.export_dispatch_order, name="export_dispatch_order"),
+    url(r'^export/dispatch/result/$', export_view.export_dispatch_order_result, name="export_dispatch_order_result"),
+
 ]
 
 # customized error page

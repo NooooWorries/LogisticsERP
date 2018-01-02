@@ -162,7 +162,7 @@
                         <span>订单管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
-                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
+                    <ul class="tpl-left-nav-sub-menu" style="">
                         <li>
                             <a href="{% url 'add_order_stage_one' %}">
                                 <i class="am-icon-angle-right"></i>
@@ -192,13 +192,14 @@
                             </a>
                         </li>
                     </ul>
+                </li>
                 <li class="tpl-left-nav-item">
                     <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
                         <i class="am-icon-user"></i>
                         <span>客户管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
-                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
+                    <ul class="tpl-left-nav-sub-menu" style="">
                         <li>
                             <a href="{% url 'add_customer_class' %}">
                                 <i class="am-icon-angle-right"></i>
@@ -221,6 +222,7 @@
                                 <i class="am-icon-angle-right"></i>
                                 <span>客户高级搜索</span>
                             </a>
+
                         </li>
                     </ul>
                 </li>
@@ -230,7 +232,7 @@
                         <span>出车</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
-                    <ul class="tpl-left-nav-sub-menu" style="display: block;">
+                    <ul class="tpl-left-nav-sub-menu" style="">
                         <li>
                             <a href="{% url 'add_driver' %}">
                                 <i class="am-icon-angle-right"></i>
@@ -252,9 +254,85 @@
                                 <i class="am-icon-angle-right"></i>
                                 <span>管理出车记录</span>
                             </a>
-                            <a href="{% url 'manage_dispatch_order' %}">
+                            <a href="{% url 'dispatch_order_search_advanced' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>出车记录高级搜索</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-money"></i>
+                        <span>财务</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'add_driver' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>财务报表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-database"></i>
+                        <span>数据导出</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'export_order' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>导出订单记录</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'export_customer' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>导出客户</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'export_dispatch_order' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>导出出车记录</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-area-chart"></i>
+                        <span>报表</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'add_driver' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>财务报表</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-dashboard"></i>
+                        <span>设置</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'add_driver' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>个人设置</span>
                             </a>
                         </li>
                     </ul>

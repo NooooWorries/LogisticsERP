@@ -1,5 +1,67 @@
 {% extends 'master.html' %}
 {% block body %}
+    <style>
+        .popWindow {
+                background-color:#FFFFFF;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                filter: alpha(opacity=90);
+                opacity: 0.9;
+                z-index: 1;
+                position: absolute;
+
+            }
+        .maskLayer {
+            background-color:#FFFFFF;
+            width: 200px;
+            height: 30px;
+            line-height: 30px;
+            left: 45%;
+            top: 10%;
+            color:#000000;
+            z-index: 2;
+            position: absolute;
+            text-align:center;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            margin: 100px auto;
+        }
+        double-bounce1, .double-bounce2 {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #67CF22;
+            opacity: 0.6;
+            position: absolute;
+            top: 0;
+            left: 0;
+            -webkit-animation: bounce 2.0s infinite ease-in-out;
+            animation: bounce 2.0s infinite ease-in-out;
+        }
+        .double-bounce2 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+}
+        @-webkit-keyframes bounce {
+            0%, 100% { -webkit-transform: scale(0.0) }
+            50% { -webkit-transform: scale(1.0) }
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0);
+            }
+            50% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0);
+            }
+        }
+    </style>
 
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
@@ -109,6 +171,16 @@
             </div>
         </div>
     </div>
+    <div id="popWindow" class="popWindow" style="display: none;">
+    </div>
+    </div>
+    <div id="maskLayer" class="maskLayer" style="display: none;">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+        正在生成中，请稍候...... <br />
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
 
@@ -125,6 +197,7 @@
             window.location.replace(url_mask);
         });
         $(document).on('click', '.btn-print', function () {
+            showDiv();
             var url_mask = "{% url 'generate_dispatch_pdf' order_id=12345 %}".replace(/12345/, this.id.toString());
             window.location.replace(url_mask);
         });
@@ -142,6 +215,10 @@
         }
         function getLink(link){
             link.href = link.href + localStorage.getItem("txtValue")
+        }
+        function showDiv() {
+                document.getElementById('popWindow').style.display = 'block';
+                document.getElementById('maskLayer').style.display = 'block';
         }
 
         function pageRedirect(){
