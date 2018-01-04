@@ -22,21 +22,18 @@
 
                             {% csrf_token %}
                             <form class="am-form am-form-horizontal" action="/export/dispatch/result/">
-
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">开始日期</label>
                                     <div class="am-u-sm-9">
                                         <input type="text" name="start_date" id="user-phone" placeholder="发车时间区间（起）" data-am-datepicker readonly>
                                     </div>
                                 </div>
-
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">截止日期</label>
                                     <div class="am-u-sm-9">
                                         <input type="text" name="end_date" id="user-phone" placeholder="发车时间区间（止）" data-am-datepicker readonly>
                                     </div>
                                 </div>
-
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">发车单状态</label>
                                     <div class="am-u-sm-9">
@@ -50,7 +47,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="am-form-group">
                                     <div class="am-u-sm-9 am-u-sm-push-3">
                                         <button type="submit" class="am-btn am-btn-primary">下载</button>
@@ -60,7 +56,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 {% endblock %}

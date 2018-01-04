@@ -21,7 +21,6 @@ def xls_to_response(xls, fname):
 @login_required(login_url='/error/not-logged-in/')
 def export_order(request):
     request.session.set_expiry(request.session.get_expiry_age())
-
     return render(request, "export/export-order.html")
 
 

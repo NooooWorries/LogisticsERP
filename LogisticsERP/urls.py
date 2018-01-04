@@ -6,6 +6,7 @@ from ShipmentOrder import views as order_view
 from Customers import views as customer_view
 from Dispatch import views as dispatch_view
 from Export import views as export_view
+from Diagram import views as diagram_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
@@ -112,7 +113,7 @@ urlpatterns = [
     # dispatch record draft
     url(r'^dispatch/order/draft/$', dispatch_view.draft_dispatch_order, name="draft_dispatch_order"),
 
-    # seaech
+    # search
     url(r'^dispatch/order/search/$', dispatch_view.dispatch_order_search, name="dispatch_order_search"),
     url(r'^dispatch/order/search/advanced/$', dispatch_view.dispatch_order_search_advanced, name="dispatch_order_search_advanced"),
     url(r'^dispatch/order/search/advanced/result/$', dispatch_view.dispatch_order_search_advanced_result, name="dispatch_order_search_advanced_result"),
@@ -131,6 +132,14 @@ urlpatterns = [
     # export dispatch order
     url(r'^export/dispatch/$', export_view.export_dispatch_order, name="export_dispatch_order"),
     url(r'^export/dispatch/result/$', export_view.export_dispatch_order_result, name="export_dispatch_order_result"),
+
+
+    # DIAGRAM PAGES
+    # shipment order
+    url(r'^diagram/order/$', diagram_view.order_diagram, name="order_diagram"),
+    url(r'^diagram/order/weekly/$', diagram_view.ajax_order_weekly, name="ajax_order_weekly"),
+    url(r'^diagram/order/monthly/$', diagram_view.ajax_order_monthly, name="ajax_order_monthly"),
+    url(r'^diagram/order/yearly/$', diagram_view.ajax_order_yearly, name="ajax_order_yearly"),
 
 ]
 
