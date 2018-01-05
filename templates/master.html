@@ -263,6 +263,21 @@
                 </li>
                 <li class="tpl-left-nav-item">
                     <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-globe"></i>
+                        <span>口岸配车</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'add_driver' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>配车</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
                         <i class="am-icon-money"></i>
                         <span>财务</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
@@ -318,6 +333,14 @@
                             <a href="{% url 'order_diagram' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>运送订单数量</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="tpl-left-nav-sub-menu" style="">
+                        <li>
+                            <a href="{% url 'dispatch_order_diagram' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>出车单数量</span>
                             </a>
                         </li>
                     </ul>

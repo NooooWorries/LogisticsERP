@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'Customers',
     'Account',
     'Settings',
-    'Dispatch'
+    'Dispatch',
+    'Diagram'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -73,8 +74,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'LogisticsERP',
         'USER': 'root',
-        'PASSWORD': 'Cheng2277980',
-        'HOST': 'rm-wz9mhr726u64z4sumfo.mysql.rds.aliyuncs.com',
+        'PASSWORD': 'cheng2277980',
+        'HOST': 'localhost',
         'PORT': '3306',
         'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'rds', 'mysql-ssl-ca-cert.pem')}
     }

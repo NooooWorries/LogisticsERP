@@ -19,7 +19,7 @@ from LogisticsERP import settings
 import os
 from xhtml2pdf.default import DEFAULT_FONT
 from barcode.writer import ImageWriter
-from ShipmentOrder.operation import calculate_freight, calculate_density, rearrange_pack_number
+from ShipmentOrder.utils import calculate_freight, calculate_density, rearrange_pack_number
 
 
 # 添加订单 第一步 基本信息

@@ -140,6 +140,14 @@ urlpatterns = [
     url(r'^diagram/order/weekly/$', diagram_view.ajax_order_weekly, name="ajax_order_weekly"),
     url(r'^diagram/order/monthly/$', diagram_view.ajax_order_monthly, name="ajax_order_monthly"),
     url(r'^diagram/order/yearly/$', diagram_view.ajax_order_yearly, name="ajax_order_yearly"),
+    url(r'^diagram/order/customize/$', diagram_view.ajax_order_customize, name="ajax_order_customize"),
+
+    # dispatch record
+    url(r'^diagram/dispatch/$', diagram_view.dispatch_order_diagram, name="dispatch_order_diagram"),
+    url(r'^diagram/dispatch/weekly/$', diagram_view.ajax_dispatch_order_weekly, name="ajax_dispatch_order_weekly"),
+    url(r'^diagram/dispatch/monthly/$', diagram_view.ajax_dispatch_order_monthly, name="ajax_dispatch_order_monthly"),
+    url(r'^diagram/dispatch/yearly/$', diagram_view.ajax_dispatch_order_yearly, name="ajax_dispatch_order_yearly"),
+    url(r'^diagram/dispatch/customize/$', diagram_view.ajax_dispatch_order_customize, name="ajax_dispatch_order_customize"),
 
 ]
 

@@ -62,13 +62,13 @@
         <ol class="am-breadcrumb">
             <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
             <li>报表</li>
-            <li>运送订单报表</li>
+            <li>出车报表</li>
         </ol>
         <div class="tpl-portlet">
             <div class="tpl-portlet-title">
                 <div class="tpl-caption font-green ">
                     <i class="am-icon-cloud-download"></i>
-                    <span>运送订单报表</span>
+                    <span>出车报表</span>
                 </div>
                 <div class="actions">
                     <ul class="actions-btn" id="choose-type">
@@ -117,7 +117,7 @@
 
         myChart.setOption( {
                         title:{
-                            text: '运送订单数量'
+                            text: '出车单数量'
                         },
                         tooltip:{
                             trigger: 'axis',
@@ -129,7 +129,7 @@
                             }
                             },
                         legend: {
-                            data:['草稿箱', '待审核', '已审核', '已完成']
+                            data:['草稿箱', '已出车', '已送达']
                         },
                         toolbox: {
                             feature: {
@@ -167,26 +167,20 @@
                                 data: []
                             },
                             {
-                                name: '待审核',
+                                name: '已出车',
                                 type: 'line',
                                 stack: '总量',
                                 areaStyle: {normal: {}},
                                 data: []
                             },
                             {
-                                name: '已审核',
+                                name: '已送达',
                                 type: 'line',
                                 stack: '总量',
                                 areaStyle: {normal: {}},
                                 data: []
                             },
-                            {
-                                name: '已完成',
-                                type: 'line',
-                                stack: '总量',
-                                areaStyle: {normal: {}},
-                                data: []
-                            },
+
                         ]
                     });
 
@@ -195,13 +189,13 @@
                 cache: false,
                 type: "GET",
                 dataType: "json",
-                url: "{% url 'ajax_order_weekly' %}",
+                url: "{% url 'ajax_dispatch_order_weekly' %}",
                 data: $('#id_formGood').serialize(),
                 async: true,
                 success: function(data) {
                     myChart.setOption({
                         title:{
-                            text: '运送订单数量 - 过去一周',
+                            text: '出车单数量 - 过去一周',
                             subtext: "从 " + data.start + " 到 " + data.end
                         },
                         xAxis: {
@@ -213,16 +207,12 @@
                                 data: data.draft
                             },
                             {
-                                name: '待审核',
-                                data: data.non_audit
+                                name: '已出车',
+                                data: data.dispatched
                             },
                             {
-                                name: '已审核',
+                                name: '已送达',
                                 data: data.audited
-                            },
-                            {
-                                name: '已完成',
-                                data: data.finsihed
                             },
                         ]
                     });
@@ -238,13 +228,13 @@
                 cache: false,
                 type: "GET",
                 dataType: "json",
-                url: "{% url 'ajax_order_monthly' %}",
+                url: "{% url 'ajax_dispatch_order_monthly' %}",
                 data: $('#id_formGood').serialize(),
                 async: true,
                 success: function(data) {
                     myChart.setOption({
                         title:{
-                            text: '运送订单数量 - 过去一月',
+                            text: '出车单数量 - 过去一月',
                             subtext: "从 " + data.start + " 到 " + data.end
                         },
                         xAxis: {
@@ -256,16 +246,12 @@
                                 data: data.draft
                             },
                             {
-                                name: '待审核',
-                                data: data.non_audit
+                                name: '已出车',
+                                data: data.dispatched
                             },
                             {
-                                name: '已审核',
+                                name: '已送达',
                                 data: data.audited
-                            },
-                            {
-                                name: '已完成',
-                                data: data.finsihed
                             },
                         ]
                     });
@@ -280,13 +266,13 @@
                 cache: false,
                 type: "GET",
                 dataType: "json",
-                url: "{% url 'ajax_order_yearly' %}",
+                url: "{% url 'ajax_dispatch_order_yearly' %}",
                 data: $('#id_formGood').serialize(),
                 async: true,
                 success: function(data) {
                     myChart.setOption({
                         title:{
-                            text: '运送订单数量 - 过去一年',
+                            text: '出车单数量 - 过去一年',
                             subtext: "从 " + data.start + " 到 " + data.end
                         },
                         xAxis: {
@@ -298,16 +284,12 @@
                                 data: data.draft
                             },
                             {
-                                name: '待审核',
-                                data: data.non_audit
+                                name: '已出车',
+                                data: data.dispatched
                             },
                             {
-                                name: '已审核',
+                                name: '已送达',
                                 data: data.audited
-                            },
-                            {
-                                name: '已完成',
-                                data: data.finsihed
                             },
                         ]
                     });
@@ -323,13 +305,13 @@
             $.ajax({
                 cache: false,
                 type: "GET",
-                url: "{% url 'ajax_order_customize' %}" + "?start_date="+start_date+"&end_date="+end_date,
+                url: "{% url 'ajax_dispatch_order_customize' %}" + "?start_date="+start_date+"&end_date="+end_date,
                 dataType: "json",
                 async: true,
                 success: function(data) {
                     myChart.setOption({
                         title:{
-                            text: '运送订单数量 - 自定义',
+                            text: '出车单数量 - 自定义',
                             subtext: "从 " + data.start + " 到 " + data.end
                         },
                         xAxis: {
@@ -341,16 +323,12 @@
                                 data: data.draft
                             },
                             {
-                                name: '待审核',
-                                data: data.non_audit
+                                name: '已出车',
+                                data: data.dispatched
                             },
                             {
-                                name: '已审核',
+                                name: '已送达',
                                 data: data.audited
-                            },
-                            {
-                                name: '已完成',
-                                data: data.finsihed
                             },
                         ]
                     });
@@ -358,6 +336,7 @@
             });
             return false;
         })
+
 
         $(function() {
             //----- OPEN
@@ -372,10 +351,8 @@
             $('[data-popup-close]').on('click', function(e)  {
                 var targeted_popup_class = jQuery(this).attr('data-popup-close');
                 $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
-
                 e.preventDefault();
             });
         });
     </script>
-
 {% endblock %}
