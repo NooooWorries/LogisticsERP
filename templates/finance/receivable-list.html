@@ -1,0 +1,115 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            财务
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>财务</li>
+            <li><a href="{% url 'receivable_list' %}">收款</a></li>
+            <li>第一步：选择订单</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 收款 第一步：选择订单
+                </div>
+            </div>
+            <div class="tpl-block ">
+                <div class="am-g tpl-amazeui-form">
+                    <div class="am-u-sm-12 am-u-md-9">
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                                <thead>
+                                <tr>
+                                    <th class="table-id">订单ID</th>
+                                    <th class="table-title">发件人</th>
+                                    <th class="table-type">收件人</th>
+                                    <th class="table-date am-hide-sm-only">创建日期</th>
+                                    <th class="table-date am-hide-sm-only">总价</th>
+                                    <th class="table-date am-hide-sm-only">已支付</th>
+                                    <th>待支付</th>
+                                    <th>操作</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in order %}
+                                <tr>
+                                    <td><a href="{% url 'track_order_detail' item.id %}">{{ item.id }}</a></td>
+                                    <td>{{ item.sender }}</td>
+                                    <td>{{ item.receiver }}</td>
+                                    <td>{{ item.create_date }}</td>
+                                    <td>{{ item.totalPrice }} 元</td>
+                                    <td>{{ item.paid_price }} 元</td>
+                                    <td>{{ item.payable }} 元</td>
+                                    <td><button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-pay" id="{{ item.id }}"><span class="am-icon-money"></span> 收款</button></td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                        </table>
+                        <!--分页-->
+                        <ul class="am-pagination am-pagination-centered">
+                            {% if allPage != 0 %}
+                            <!-- 如果当前是第一页，就不显示【上一页】链接 -->
+                            {% ifnotequal curPage 1 %}
+                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&query=">
+                                上一页
+                            </a></li>
+                            {% endifnotequal %}
+                            第{{ curPage }}/{{ allPage }}页
+                            <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
+                            {% ifnotequal curPage allPage %}
+                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&query=">
+                                下一页
+                            </a></li>
+                            {% endifnotequal %}
+                            <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
+                            <li><a onclick="pageRedirect()">Go</a></li>
+                            {% endif %}
+                            </ul>
+                            <!--ending 分页-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        function pageRedirect(){
+            var max = {{ allPage }}
+            var page = document.getElementById("btn-redirect").value;
+            var url_mask = "{% url 'receivable_list' %}" +
+                           "?curPage=0" +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
+            console.log(url_mask);
+            if (page == ""){
+                return;
+            }
+            page = parseInt(page);
+            if (page > max){
+                page = max;
+            }
+
+            if(page <= 0){
+                window.location.replace(url_mask);
+                return;
+            }
+            else if(page == max){
+                url_mask = "{% url 'receivable_list' %}" +
+                           "?curPage=" + (max - 1).toString() +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
+
+            }
+            else{
+                url_mask = "{% url 'receivable_list' %}" +
+                           "?curPage=" + (page - 1).toString() +
+                           "&allPage=" + max.toString() +
+                           "&&pageType=pageDown&&query=" + + localStorage.getItem("txtValue");
+            }
+            window.location.replace(url_mask);
+        }
+    </script>
+{% endblock %}

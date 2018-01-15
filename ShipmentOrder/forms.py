@@ -51,6 +51,11 @@ class OrderCreationOneForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'placeholder': '输入运送模式'}),
                            error_messages={'required': '此为必填项目'}
                            )
+    market = forms.CharField(required=True,
+                             label="市场",
+                             widget=forms.TextInput(attrs={'placeholder': '输入市场'}),
+                             error_messages={'required': '此为必填项目'}
+                             )
     comments = forms.CharField(required=False,
                                label="备注",
                                widget=forms.Textarea(attrs={'placeholder': '输入订单备注'})
@@ -59,7 +64,7 @@ class OrderCreationOneForm(forms.ModelForm):
     class Meta:
         model = ShipmentOrder
         fields = ("customer", "sender", "from_address", "sender_contact", "receiver", "to_address",
-                  "receiver_contact", "mode", "comments",)
+                  "receiver_contact", "mode", "market", "comments")
 
     def save(self, commit=True):
         order_form = super(OrderCreationOneForm, self).save(commit=False)
@@ -72,6 +77,7 @@ class OrderCreationOneForm(forms.ModelForm):
         order_form.receiver_contact = self.cleaned_data["receiver_contact"]
         order_form.mode = self.cleaned_data["mode"]
         order_form.comments = self.cleaned_data["comments"]
+        order_form.market = self.cleaned_data["market"]
         if commit:
             order_form.save()
         return order_form
@@ -186,6 +192,11 @@ class OrderModityForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'placeholder': '输入运送模式'}),
                            error_messages={'required': '此为必填项目'}
                            )
+    market = forms.CharField(required=True,
+                             label="市场",
+                             widget=forms.TextInput(attrs={'placeholder': '输入市场'}),
+                             error_messages={'required': '此为必填项目'}
+                             )
     comments = forms.CharField(required=False,
                                label="备注",
                                widget=forms.Textarea(attrs={'placeholder': '输入订单备注'})
@@ -216,7 +227,7 @@ class OrderModityForm(forms.ModelForm):
     class Meta:
         model = ShipmentOrder
         fields = ("sender", "from_address", "sender_contact", "receiver", "to_address",
-                  "receiver_contact", "mode", "comments", "packingFee", "claimed_value", "insurance_rate", "packingFee",
+                  "receiver_contact", "mode", "market", "comments", "packingFee", "claimed_value", "insurance_rate", "packingFee",
                   "claimed_value", "insurance_rate", "paymentOnAccountFreight", "volume")
 
     def save(self, commit=True, insurance=0, freight=0):
@@ -228,6 +239,7 @@ class OrderModityForm(forms.ModelForm):
         order_form.to_address = self.cleaned_data["to_address"]
         order_form.receiver_contact = self.cleaned_data["receiver_contact"]
         order_form.mode = self.cleaned_data["mode"]
+        order_form.market = self.cleaned_data["market"]
         order_form.comments = self.cleaned_data["comments"]
         order_form.packingFee = self.cleaned_data["packingFee"]
         order_form.paymentOnAccountFreight = self.cleaned_data["paymentOnAccountFreight"]
@@ -239,7 +251,6 @@ class OrderModityForm(forms.ModelForm):
         if commit:
             order_form.save()
         return order_form
-
 
 
 

@@ -25,6 +25,7 @@ class ShipmentOrder(models.Model):
     freight = models.FloatField(default=0, verbose_name='运费')
     packingFee = models.FloatField(default=0, verbose_name='包装费')
     totalPrice = models.FloatField(default=0, verbose_name='总价')
+    paid_price = models.FloatField(null=False, default=0, verbose_name="已支付款项")
 
     # 其他
     mode = models.CharField(null=False, verbose_name='运输方式', max_length=256)

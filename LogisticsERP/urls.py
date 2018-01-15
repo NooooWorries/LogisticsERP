@@ -7,6 +7,7 @@ from Customers import views as customer_view
 from Dispatch import views as dispatch_view
 from Export import views as export_view
 from Diagram import views as diagram_view
+from Finance import views as finance_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
 
@@ -148,6 +149,10 @@ urlpatterns = [
     url(r'^diagram/dispatch/monthly/$', diagram_view.ajax_dispatch_order_monthly, name="ajax_dispatch_order_monthly"),
     url(r'^diagram/dispatch/yearly/$', diagram_view.ajax_dispatch_order_yearly, name="ajax_dispatch_order_yearly"),
     url(r'^diagram/dispatch/customize/$', diagram_view.ajax_dispatch_order_customize, name="ajax_dispatch_order_customize"),
+
+
+    # FINANCE PAGES
+    url(r'^finance/receivable/$', finance_view.receivable_list, name="receivable_list"),
 
 ]
 
