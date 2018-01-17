@@ -134,6 +134,10 @@ urlpatterns = [
     url(r'^export/dispatch/$', export_view.export_dispatch_order, name="export_dispatch_order"),
     url(r'^export/dispatch/result/$', export_view.export_dispatch_order_result, name="export_dispatch_order_result"),
 
+    # export payment order
+    url(r'^export/finance/$', export_view.export_payment_order, name="export_payment_order"),
+    url(r'^export/finance/result/$', export_view.export_payment_order_result, name="export_payment_order_result"),
+
 
     # DIAGRAM PAGES
     # shipment order
@@ -150,12 +154,34 @@ urlpatterns = [
     url(r'^diagram/dispatch/yearly/$', diagram_view.ajax_dispatch_order_yearly, name="ajax_dispatch_order_yearly"),
     url(r'^diagram/dispatch/customize/$', diagram_view.ajax_dispatch_order_customize, name="ajax_dispatch_order_customize"),
 
+    # payment record
+    url(r'^diagram/finance/$', diagram_view.payment_order_diagram, name="payment_order_diagram"),
+    url(r'^diagram/finance/weekly/$', diagram_view.ajax_payment_order_weekly, name="ajax_payment_order_weekly"),
+    url(r'^diagram/finance/monthly/$', diagram_view.ajax_payment_order_monthly, name="ajax_payment_order_monthly"),
+    url(r'^diagram/finance/yearly/$', diagram_view.ajax_payment_order_yearly, name="ajax_payment_order_yearly"),
+    url(r'^diagram/finance/customize/$', diagram_view.ajax_payment_order_customize, name="ajax_payment_order_customize"),
+
 
     # FINANCE PAGES
+    # add payment record
     url(r'^finance/receivable/$', finance_view.receivable_list, name="receivable_list"),
+    url(r'^finance/receivable/pay/(?P<order_id>[0-9]+)/$', finance_view.make_payment, name="make_payment"),
+
+    # manage
+    url(r'^finance/manage/$', finance_view.manage_payment_record, name="manage_payment_record"),
+    url(r'^finance/manage/(?P<order_id>[0-9]+)/detail$', finance_view.payment_record_detail, name="payment_record_detail"),
+
+    # search
+    url(r'^finance/search/$', finance_view.payment_order_search, name="payment_order_search"),
+    url(r'^finance/search/advanced/$', finance_view.payment_order_search_advanced, name="payment_order_search_advanced"),
+    url(r'^finance/search/advanced/result/$', finance_view.payment_order_search_advanced_result, name="payment_order_search_advanced_result"),
 
 ]
 
 # customized error page
 handler404 = main_view.error_404
 handler500 = main_view.error_500
+
+# change title of admin site
+admin.site.site_header = '物流管理系统 - 超级管理员后台'
+admin.site.site_title = '物流管理系统'

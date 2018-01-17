@@ -151,6 +151,8 @@ class OrderCreationThreeForm(forms.ModelForm):
         order_form.packingFee = self.cleaned_data["packingFee"]
         order_form.paymentOnAccountFreight = self.cleaned_data["paymentOnAccountFreight"]
         order_form.volume = self.cleaned_data["volume"]
+        order_form.claimed_value = self.cleaned_data["volume"]
+        order_form.insurance_rate = self.cleaned_data["insurance_rate"]
         if commit:
             order_form.save()
         return order_form
@@ -251,6 +253,3 @@ class OrderModityForm(forms.ModelForm):
         if commit:
             order_form.save()
         return order_form
-
-
-

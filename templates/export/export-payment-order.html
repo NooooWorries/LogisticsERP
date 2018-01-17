@@ -1,0 +1,48 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+            <div class="tpl-content-page-title">
+                数据导出
+            </div>
+            <ol class="am-breadcrumb">
+                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+                <li>数据导出</li>
+                <li>导出收款记录</li>
+            </ol>
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">
+                        <span class="am-icon-code"></span> 导出收款记录
+                    </div>
+                </div>
+                <div class="tpl-block ">
+
+                    <div class="am-g tpl-amazeui-form">
+                        <div class="am-u-sm-12 am-u-md-9">
+
+                            {% csrf_token %}
+                            <form class="am-form am-form-horizontal" action="/export/finance/result/">
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">开始日期</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" name="start_date" id="user-phone" placeholder="发车时间区间（起）" data-am-datepicker readonly>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">截止日期</label>
+                                    <div class="am-u-sm-9">
+                                        <input type="text" name="end_date" id="user-phone" placeholder="发车时间区间（止）" data-am-datepicker readonly>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <button type="submit" class="am-btn am-btn-primary">下载</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

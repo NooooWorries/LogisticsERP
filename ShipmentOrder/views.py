@@ -33,7 +33,6 @@ def add_order_stage_one(request):
             order.create_date = datetime.datetime.now().strftime("%Y-%m-%d")
             order.handle = request.user
             order.save()
-            request.session['draft'] = request.session['draft'] + 1
             request.session['order'] = order.id
             return add_order_stage_two(request, order)
     else:
@@ -135,7 +134,10 @@ def add_order_stage_three_redirect(request):
             order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(request.POST.get("insurance_rate")) / 100
             order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
                                         order_instance.paymentOnAccountFreight + order_instance.packingFee
+            order_instance.payable = order_instance.totalPrice
             order_instance.volume = form.cleaned_data["volume"]
+            order_instance.claimed_value = form.cleaned_data["claimed_value"]
+            order_instance.insurance_rate = form.cleaned_data["insurance_rate"]
 
             # 计算密度
             good_instance = Goods.objects.filter(shipment_order_id_id=order)
@@ -174,7 +176,6 @@ def add_order_audit(request):
     if goods_instance.count() >= 1:
         order_instance.status = 1
         order_instance.save()
-        request.session['draft'] = request.session['draft'] - 1
         message = "您的订单已经交由审核"
     else:
         message = "无法提交审核，原因：没有货物。请前往草稿箱修改订单"
@@ -564,6 +565,7 @@ def track_order_draft_modify(request, order_id):
             request.POST.get("insurance_rate")) / 100
         order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
                                     order_instance.paymentOnAccountFreight + order_instance.packingFee
+        order_instance.payable = order_instance.totalPrice - order_instance.paid_price
         order_instance.save()
         return render(request, "order/draft/trackorder-draft-modify-complete.html")
     return render(request, "order/draft/trackorder-draft-modify.html", {'form': order_form,
@@ -691,6 +693,8 @@ def track_order_audit_modify(request, order_id):
             request.POST.get("insurance_rate")) / 100
         order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
                                     order_instance.paymentOnAccountFreight + order_instance.packingFee
+        order_instance.payable = order_instance.totalPrice - order_instance.paid_price
+        order_instance.save()
         # 计算密度
         calculate_density(order_instance, goods_instance)
         order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)

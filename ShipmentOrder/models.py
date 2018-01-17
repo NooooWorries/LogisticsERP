@@ -26,6 +26,7 @@ class ShipmentOrder(models.Model):
     packingFee = models.FloatField(default=0, verbose_name='包装费')
     totalPrice = models.FloatField(default=0, verbose_name='总价')
     paid_price = models.FloatField(null=False, default=0, verbose_name="已支付款项")
+    payable = models.FloatField(null=False, default=0, verbose_name="应付款项")
 
     # 其他
     mode = models.CharField(null=False, verbose_name='运输方式', max_length=256)
@@ -36,6 +37,9 @@ class ShipmentOrder(models.Model):
     handle = models.ForeignKey(User, null=False, verbose_name='经办')
     market = models.CharField(verbose_name='市场', max_length=200, null=True)
     status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0:未提交， 1:待审核， 2:审核通过， 3:已完成
+
+    class Meta:
+        verbose_name = "运送订单"
 
 
 class Goods(models.Model):
@@ -60,4 +64,5 @@ class Goods(models.Model):
     status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0：入库，1：装车，2：口岸，3：到达
     dispatch = models.ForeignKey(dispatch_model.DispatchRecord, on_delete=models.SET_NULL, null=True)
 
-    
+    class Meta:
+        verbose_name = "货物"

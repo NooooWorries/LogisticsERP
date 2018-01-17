@@ -111,5 +111,10 @@
             }
             window.location.replace(url_mask);
         }
+
+        $(document).on('click', '.btn-pay', function () {
+            var url_mask = "{% url 'make_payment' order_id=12345 %}".replace(/12345/, this.id.toString());
+            window.location.replace(url_mask);
+        });
     </script>
 {% endblock %}

@@ -2,26 +2,33 @@
 {% block body %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-            菜单
+            首页
         </div>
         <ol class="am-breadcrumb">
             <li><a href="#" class="am-icon-home">首页</a></li>
-            <li><a href="#">分类</a></li>
-            <li class="am-active">内容</li>
         </ol>
 
 
-        <div class="row">
+        <div class="tpl-content-scope">
+            <div class="note note-info">
+                <h3>管理流程
+                    <span class="close" data-close="note"></span>
+                </h3>
+
+                <p><span class="label label-info">您的角色:</span>
+                </p>
+            </div>
+            <div class="row">
             <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
                 <div class="dashboard-stat blue">
                     <div class="visual">
-                        <i class="am-icon-comments-o"></i>
+                        <i class="am-icon-wpforms"></i>
                     </div>
                     <div class="details">
-                        <div class="number"> 0 </div>
-                        <div class="desc"> 待审核订单 </div>
+                        <div class="number"> {{ shipment_order_count }} </div>
+                        <div class="desc"> 前七天订单数量 </div>
                     </div>
-                    <a class="more" href="#"> 查看更多
+                    <a class="more" href="{% url 'order_diagram' %}"> 查看更多
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
@@ -29,13 +36,13 @@
             <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
                 <div class="dashboard-stat red">
                     <div class="visual">
-                        <i class="am-icon-bar-chart-o"></i>
+                        <i class="am-icon-truck"></i>
                     </div>
                     <div class="details">
-                        <div class="number"> 0 </div>
-                        <div class="desc"> 已审核订单 </div>
+                        <div class="number"> {{ dispatch_order_count }} </div>
+                        <div class="desc"> 前七天出车单数量 </div>
                     </div>
-                    <a class="more" href="#"> 查看更多
+                    <a class="more" href="{% url 'dispatch_order_diagram' %}"> 查看更多
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
@@ -46,10 +53,10 @@
                         <i class="am-icon-bar-chart-o"></i>
                     </div>
                     <div class="details">
-                        <div class="number"> 0 </div>
-                        <div class="desc"> 已出车订单 </div>
+                        <div class="number"> {{ payment_order_count }} </div>
+                        <div class="desc"> 前七天收款单数量 </div>
                     </div>
-                    <a class="more" href="#"> 查看更多
+                    <a class="more" href="{% url 'payment_order_diagram' %}"> 查看更多
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
@@ -57,18 +64,20 @@
             <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
                 <div class="dashboard-stat purple">
                     <div class="visual">
-                        <i class="am-icon-comments-o"></i>
+                        <i class="am-icon-money"></i>
                     </div>
                     <div class="details">
-                        <div class="number"> 0 </div>
-                        <div class="desc"> 已送达订单 </div>
+                        <div class="number"> ¥{{ payment_amount }} </div>
+                        <div class="desc"> 前七天收到款项 </div>
                     </div>
-                    <a class="more" href="#"> 查看更多
+                    <a class="more" href="{% url 'payment_order_diagram' %}"> 查看更多
                         <i class="m-icon-swapright m-icon-white"></i>
                     </a>
                 </div>
             </div>
         </div>
+        </div>
+
     </div>
 
 {% endblock %}

@@ -1,0 +1,326 @@
+{% extends 'master.html' %}
+{% block body %}
+    <style>
+       /* Outer */
+.popup {
+    width:100%;
+    height:100%;
+    display:none;
+    position:fixed;
+    top:0px;
+    left:0px;
+    background:rgba(0,0,0,0.75);
+}
+
+/* Inner */
+.popup-inner {
+    max-width:700px;
+    width:90%;
+    padding:40px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    -webkit-transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%);
+    box-shadow:0px 2px 6px rgba(0,0,0,1);
+    border-radius:3px;
+    background:#fff;
+}
+
+/* Close Button */
+.popup-close {
+    width:30px;
+    height:30px;
+    padding-top:4px;
+    display:inline-block;
+    position:absolute;
+    top:0px;
+    right:0px;
+    transition:ease 0.25s all;
+    -webkit-transform:translate(50%, -50%);
+    transform:translate(50%, -50%);
+    border-radius:1000px;
+    background:rgba(0,0,0,0.8);
+    font-family:Arial, Sans-Serif;
+    font-size:20px;
+    text-align:center;
+    line-height:100%;
+    color:#fff;
+}
+
+.popup-close:hover {
+    -webkit-transform:translate(50%, -50%) rotate(180deg);
+    transform:translate(50%, -50%) rotate(180deg);
+    background:rgba(0,0,0,1);
+    text-decoration:none;
+}
+    </style>
+    <div class="tpl-content-wrapper">
+         <div class="tpl-content-page-title">
+             报表
+         </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>报表</li>
+            <li>收款记录报表</li>
+        </ol>
+        <div class="tpl-portlet">
+            <div class="tpl-portlet-title">
+                <div class="tpl-caption font-green ">
+                    <i class="am-icon-cloud-download"></i>
+                    <span>收款记录报表</span>
+                </div>
+                <div class="actions">
+                    <ul class="actions-btn" id="choose-type">
+                        <li class="red" id="past-week">过去一周</li>
+                        <li class="green" id="past-month">过去一月</li>
+                        <li class="blue" id="past-year">过去一年</li>
+                        <li class="purple" id="custom-period" data-popup-open="popup-1">自定周期</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="main" style="width: 100%; height: 400%;"></div>
+        </div>
+    </div>
+    <div class="popup" data-popup="popup-1">
+        <div class="popup-inner">
+            <h2>自定义图表生成</h2>
+            <form class="am-form am-form-horizontal" id="id_formGood">
+                <div class="am-form-group">
+                    <label for="user-name" class="am-u-sm-3 am-form-label">开始日期</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="start_date" id="start_date" placeholder="收款时间区间（起）" data-am-datepicker readonly>
+                    </div>
+                </div>
+
+                <div class="am-form-group">
+                    <label for="user-name" class="am-u-sm-3 am-form-label">截止日期</label>
+                    <div class="am-u-sm-9">
+                        <input type="text" name="end_date" id="end_date" placeholder="收款时间区间（止）" data-am-datepicker readonly>
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <div class="am-u-sm-9 am-u-sm-push-3"><button class="am-btn am-btn-primary" data-popup-close="popup-1" id="customer-submit">生成</button>
+                    </div>
+                </div>
+            </form>
+
+            <a class="popup-close" data-popup-close="popup-1" href="#">x</a>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        myChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {},
+                    dataView: {},
+                    magicType: {},
+                    dataZoom: {},
+                    restore: {}
+                }
+            },
+            legend: {
+                data:['收款总额','收款单数']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: [],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                     axisLabel: {
+                        formatter: '{value} 元'
+                    }
+                },
+                {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} 单'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name:'收款总额',
+                    type:'bar',
+                    data:[]
+                },
+                {
+                    name:'收款单数',
+                    type:'line',
+                    yAxisIndex: 1,
+                    data:[]
+                }
+            ]
+        });
+
+        $('#past-week').click(function () {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: "{% url 'ajax_payment_order_weekly' %}",
+                data: $('#id_formGood').serialize(),
+                async: true,
+                success: function(data) {
+                    myChart.setOption({
+                        title:{
+                            text: '收款记录统计 - 过去一周',
+                            subtext: "从 " + data.start + " 到 " + data.end
+                        },
+                        xAxis: {
+                            data: data.time
+                        },
+                        series: [
+                            {
+                                name: '收款总额',
+                                data: data.amount
+                            },
+                            {
+                                name: '收款单数',
+                                data: data.count
+                            },
+                        ]
+                    });
+                }
+            });
+        })
+
+        $('#past-month').click(function () {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: "{% url 'ajax_payment_order_monthly' %}",
+                data: $('#id_formGood').serialize(),
+                async: true,
+                success: function(data) {
+                    myChart.setOption({
+                        title:{
+                            text: '收款记录统计 - 过去一月',
+                            subtext: "从 " + data.start + " 到 " + data.end
+                        },
+                        xAxis: {
+                            data: data.time
+                        },
+                        series: [
+                            {
+                                name: '收款总额',
+                                data: data.amount
+                            },
+                            {
+                                name: '收款单数',
+                                data: data.count
+                            },
+                        ]
+                    });
+                }
+            });
+        })
+
+        $('#past-year').click(function () {
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: "{% url 'ajax_payment_order_yearly' %}",
+                data: $('#id_formGood').serialize(),
+                async: true,
+                success: function(data) {
+                    myChart.setOption({
+                        title:{
+                            text: '收款记录统计 - 过去一年',
+                            subtext: "从 " + data.start + " 到 " + data.end
+                        },
+                        xAxis: {
+                            data: data.time
+                        },
+                        series: [
+                            {
+                                name: '收款总额',
+                                data: data.amount
+                            },
+                            {
+                                name: '收款单数',
+                                data: data.count
+                            },
+                        ]
+                    });
+                }
+            });
+        })
+
+        $('#customer-submit').click(function () {
+            var start_date = $('#start_date').val();
+            var end_date = $('#end_date').val();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "{% url 'ajax_payment_order_customize' %}" + "?start_date="+start_date+"&end_date="+end_date,
+                dataType: "json",
+                async: true,
+                success: function(data) {
+                    myChart.setOption({
+                        title:{
+                            text: '收款记录统计 - 自定义',
+                            subtext: "从 " + data.start + " 到 " + data.end
+                        },
+                        xAxis: {
+                            data: data.time
+                        },
+                        series: [
+                            {
+                                name: '收款总额',
+                                data: data.amount
+                            },
+                            {
+                                name: '收款单数',
+                                data: data.count
+                            },
+                        ]
+                    });
+                }
+            });
+            return false;
+        })
+
+
+        $(function() {
+            //----- OPEN
+            $('[data-popup-open]').on('click', function(e)  {
+                var targeted_popup_class = jQuery(this).attr('data-popup-open');
+                $('[data-popup="' + targeted_popup_class + '"]').fadeIn(350);
+
+                e.preventDefault();
+            });
+
+            //----- CLOSE
+            $('[data-popup-close]').on('click', function(e)  {
+                var targeted_popup_class = jQuery(this).attr('data-popup-close');
+                $('[data-popup="' + targeted_popup_class + '"]').fadeOut(350);
+                e.preventDefault();
+            });
+        });
+    </script>
+{% endblock %}

@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from ShipmentOrder.models import ShipmentOrder
 from Customers.models import Customer, CustomerClass
 from Dispatch.models import DispatchRecord
+from Finance.models import PaymentOrder
 from django.db.models import Q
 import datetime
 from xlwt import *
@@ -197,3 +198,56 @@ def export_dispatch_order_result(request):
         worksheet.write(excel_row, 7, status)
         excel_row += 1
     return xls_to_response(workbook, "dispatch_record.xls")
+
+
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def export_payment_order(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    return render(request, "export/export-payment-order.html")
+
+
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def export_payment_order_result(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    # 过滤器
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    if start_date is "": start_date = "1970-1-1"
+    if end_date is "": end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    # 查询所有匹配项
+    result = PaymentOrder.objects.filter(Q(payment_date__range=(start_date, end_date)))
+    # 生成excel文件
+    workbook = Workbook(encoding="utf-8")
+    worksheet = workbook.add_sheet(u"收款记录")
+    worksheet.write(0, 0, "收款记录ID")
+    worksheet.write(0, 1, "付款日期")
+    worksheet.write(0, 2, "付款金额")
+    worksheet.write(0, 3, "经办")
+    worksheet.write(0, 4, "备注")
+    worksheet.write(0, 5, "订单ID")
+    worksheet.write(0, 6, "发货人")
+    worksheet.write(0, 7, "发出地址")
+    worksheet.write(0, 8, "发货人联系方式")
+    worksheet.write(0, 9, "收货人")
+    worksheet.write(0, 10, "收货地址")
+    worksheet.write(0, 11, "收货人联系方式")
+    worksheet.write(0, 12, "总价")
+    excel_row = 1
+    for item in result:
+        worksheet.write(excel_row, 0, item.id)
+        worksheet.write(excel_row, 1, item.payment_date)
+        worksheet.write(excel_row, 2, item.amount)
+        worksheet.write(excel_row, 3, item.handle.username)
+        worksheet.write(excel_row, 4, item.comments)
+        worksheet.write(excel_row, 5, item.shipment_order.id)
+        worksheet.write(excel_row, 6, item.shipment_order.sender)
+        worksheet.write(excel_row, 7, item.shipment_order.from_address)
+        worksheet.write(excel_row, 8, item.shipment_order.sender_contact)
+        worksheet.write(excel_row, 9, item.shipment_order.receiver)
+        worksheet.write(excel_row, 10, item.shipment_order.to_address)
+        worksheet.write(excel_row, 11, item.shipment_order.receiver_contact)
+        worksheet.write(excel_row, 12, item.shipment_order.totalPrice)
+        excel_row += 1
+    return xls_to_response(workbook, "payment_record.xls")

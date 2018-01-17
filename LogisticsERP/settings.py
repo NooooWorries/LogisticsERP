@@ -29,9 +29,9 @@ INSTALLED_APPS = [
     'ShipmentOrder',
     'Customers',
     'Account',
-    'Settings',
     'Dispatch',
-    'Diagram'
+    'Diagram',
+    'Finance'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -104,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'UTC'
 
@@ -136,4 +136,4 @@ SESSION_COOKIE_AGE = 3600
 # 每个页面显示条目数量
 ONE_PAGE_OF_DATA = 10
 
-# 
+

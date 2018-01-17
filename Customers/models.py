@@ -5,6 +5,8 @@ from django.db import models
 class CustomerClass(models.Model):
     class_name = models.CharField(null=False, verbose_name='类名', max_length=256)
     comments = models.CharField(null=False, verbose_name='备注', max_length=256)
+    class Meta:
+        verbose_name = '客户组'
 
 
 class Customer(models.Model):
@@ -17,3 +19,8 @@ class Customer(models.Model):
     address = models.CharField(null=False, verbose_name='地址', max_length=256)
     comments = models.CharField(verbose_name='备注', max_length=18)
     payable = models.FloatField(default=0, verbose_name='应收余额')
+
+    class Meta:
+        verbose_name = '客户'
+
+

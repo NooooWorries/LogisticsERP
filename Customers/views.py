@@ -296,8 +296,7 @@ def customer_delete(request, customer_id):
 @login_required(login_url='/error/not-logged-in/')
 def customer_search_advanced(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    customer_class = CustomerClass.objects.all()
-    return render(request, "customer/user/customer-search.html", {"customer_class": customer_class})
+    return render(request, "customer/user/customer-search.html")
 
 
 # 管理客户 高级搜索 结果
@@ -335,7 +334,7 @@ def customer_search_advanced_result(request):
             Q(identity_number__icontains=keyword) |
             Q(address__icontains=keyword) |
             Q(comments__icontains=keyword),
-            payable__gte=payable
+            Q(payable__gte=payable)
         )
         result_count = result.count()
     try:
