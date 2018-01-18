@@ -17,6 +17,7 @@ import os
 from xhtml2pdf.default import DEFAULT_FONT
 import datetime
 
+
 # 添加司机
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')

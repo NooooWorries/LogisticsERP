@@ -1,5 +1,11 @@
 from django import forms
 from Dispatch.models import Driver, DispatchRecord
+from django.contrib.auth.models import User
+
+
+class DriverAccountChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.username + " ," + obj.last_name + obj.first_name
 
 
 class DriverCreationForm(forms.ModelForm):
@@ -8,7 +14,14 @@ class DriverCreationForm(forms.ModelForm):
                            widget=forms.TextInput(attrs={'placeholder': '输入司机姓名'}),
                            error_messages={'required': '此为必填项目'}
                            )
+    query_list = User.objects.filter(userprofile__role__exact=3)
+    account = DriverAccountChoiceField(queryset=query_list,
+                                       required=True,
+                                       widget=forms.Select(),
+                                       label="司机账户",
+                                       )
     identity_number = forms.CharField(
+                           required=False,
                            label="身份证号",
                            widget=forms.TextInput(attrs={'placeholder': '输入身份证号（非必须）'}),
                            )
@@ -29,11 +42,12 @@ class DriverCreationForm(forms.ModelForm):
 
     class Meta:
         model = Driver
-        fields = ('name', 'identity_number', 'birthday', 'license', 'comments')
+        fields = ('name', 'account', 'identity_number', 'birthday', 'license', 'comments')
 
     def save(self, commit=True):
         driver_form = super(DriverCreationForm, self).save(commit=False)
         driver_form.name = self.cleaned_data["name"]
+        driver_form.account = self.cleaned_data["account"]
         driver_form.identity_number = self.cleaned_data["identity_number"]
         driver_form.birthday = self.cleaned_data["birthday"]
         driver_form.license = self.cleaned_data["license"]

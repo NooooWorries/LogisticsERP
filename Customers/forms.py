@@ -95,5 +95,3 @@ class CustomerCreationForm(forms.ModelForm):
         if commit:
             customer_form.save()
         return customer_form
-
-

@@ -8,8 +8,10 @@ from Dispatch import views as dispatch_view
 from Export import views as export_view
 from Diagram import views as diagram_view
 from Finance import views as finance_view
+from Account import views as account_view
 from django.contrib.auth import views as auth_views
 from LogisticsERP import settings
+from Account.forms import LoginForm
 
 
 urlpatterns = [
@@ -20,8 +22,8 @@ urlpatterns = [
     url(r'^index/$', main_view.index, name="load_index"),
 
     # ACCOUNT PAGES
-    url(r'^login/$', auth_views.login, name='login'),
-    url(r'^logout/$',auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
+    url(r'^login/$', auth_views.login, name='login', kwargs={"authentication_form": LoginForm}),
+    url(r'^logout/$', auth_views.logout, {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 
     # ERROR PAGES
     url(r'^error/not-logged-in/$', main_view.error_not_logged_in, name="not_logged_in"),
@@ -41,6 +43,7 @@ urlpatterns = [
     url(r'^order/track/$', order_view.track_order_manager, name="track_order_manager"),
     url(r'^order/track/detail/(?P<order_id>[0-9]+)/$', order_view.track_order_detail, name="track_order_detail"),
     url(r'^order/track/modify/(?P<order_id>[0-9]+)/$', order_view.track_order_modify, name="track_order_modify"),
+    url(r'^order/track/modify/2/(?P<order_id>[0-9]+)/$', order_view.track_order_modify_2, name="track_order_modify_2"),
     url(r'^order/track/delete/(?P<order_id>[0-9]+)/$', order_view.track_order_confirm_delete, name="track_order_confirm_delete"),
     url(r'^order/track/delete/(?P<order_id>[0-9]+)/complete/$', order_view.track_order_delete, name="track_order_delete"),
     url(r'^order/track/modify/add_good/$', order_view.ajax_add_goods_manage, name="add_goods_manage"),
@@ -54,6 +57,7 @@ urlpatterns = [
     # audit
     url(r'^order/track/audit/$', order_view.track_order_audit, name="track_order_audit"),
     url(r'^order/track/audit/(?P<order_id>[0-9]+)/$', order_view.track_order_audit_modify, name="track_order_audit_modify"),
+    url(r'^order/track/audit/2/(?P<order_id>[0-9]+)/$', order_view.track_order_audit_modify_2, name="track_order_audit_modify_2"),
     url(r'^order/track/audit/(?P<order_id>[0-9]+)/submit/$', order_view.track_order_audit_finalize, name="track_order_audit_finalize"),
     url(r'^pdf/(?P<order_id>[0-9]+)/$', order_view.generate_PDF, name="pdf"),
 
@@ -175,6 +179,11 @@ urlpatterns = [
     url(r'^finance/search/$', finance_view.payment_order_search, name="payment_order_search"),
     url(r'^finance/search/advanced/$', finance_view.payment_order_search_advanced, name="payment_order_search_advanced"),
     url(r'^finance/search/advanced/result/$', finance_view.payment_order_search_advanced_result, name="payment_order_search_advanced_result"),
+
+
+    # SYSTEM MANAGEMENT PAGES
+    # add account
+    url(r'^system/user/$', account_view.add_account, name="add_account"),
 
 ]
 

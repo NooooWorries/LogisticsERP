@@ -225,35 +225,44 @@ def track_order_detail(request, order_id):
     return render(request, "order/manage/trackorder-detail.html", {'order': order, 'good': good})
 
 
-
 # 查询订单 编辑页
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
 def track_order_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
     request.session['order_manage'] = order_id
-    order_instance = get_object_or_404(ShipmentOrder, id=order_id)
-    order_form = OrderModityForm(request.POST or None, instance=order_instance)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     goods_form = OrderCreationTwoForm(request.POST or None)
 
-    if order_form.is_valid():
-        goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        sum_freight = 0
-        for item in goods_instance:
-            sum_freight += item.freight
-        order_instance.freight = sum_freight
-        order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
-            request.POST.get("insurance_rate")) / 100
-        order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
-                                    order_instance.paymentOnAccountFreight + order_instance.packingFee
-        # 计算密度
-        good_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-        calculate_density(order_instance, good_instance)
-        order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
-        return render(request, "order/manage/trackorder-modify-complete.html")
-    return render(request, "order/manage/trackorder-modify.html", {'form': order_form,
-                                                                   'good_form': goods_form,
+    return render(request, "order/manage/trackorder-modify.html", {'good_form': goods_form,
+                                                                   'good_instance': goods_instance,
+                                                                   'order': order_id})
+
+
+# 查询订单 编辑页 2
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_modify_2(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    order_instance = get_object_or_404(ShipmentOrder, id=order_id)
+    order_form = OrderModityForm(request.POST or None, instance=order_instance)
+    goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+    if request.method == 'POST':
+        if order_form.is_valid():
+            sum_freight = 0
+            for item in goods_instance:
+                sum_freight += item.freight
+            order_instance.freight = sum_freight
+            order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
+                request.POST.get("insurance_rate")) / 100
+            order_instance.totalPrice = float(order_instance.freight) + float(order_instance.insurance_fee) - \
+                                        order_instance.paymentOnAccountFreight + order_instance.packingFee
+            # 计算密度
+            good_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+            calculate_density(order_instance, good_instance)
+            order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
+            return render(request, 'order/manage/trackorder-modify-complete.html')
+    return render(request, "order/manage/trackorder-modify-2.html", {'form': order_form,
                                                                    'good_instance': goods_instance,
                                                                    'order': order_id})
 
@@ -681,13 +690,22 @@ def track_order_audit_search(request):
 def track_order_audit_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
     request.session['order_manage'] = order_id
+    goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
+    goods_form = OrderCreationTwoForm(request.POST or None)
+    return render(request, "order/audit/trackorder-audit-modify.html", {'good_form': goods_form,
+                                                                        'good_instance': goods_instance,
+                                                                        'order': order_id})
+
+# 管理订单 审核订单 编辑 2
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def track_order_audit_modify_2(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
-    goods_form = OrderCreationTwoForm(request.POST or None)
-
     if order_form.is_valid():
-        goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
         calculate_freight(order_instance, goods_instance)
         order_instance.insurance_fee = float(request.POST.get("claimed_value")) * float(
             request.POST.get("insurance_rate")) / 100
@@ -699,10 +717,9 @@ def track_order_audit_modify(request, order_id):
         calculate_density(order_instance, goods_instance)
         order_form.save(freight=order_instance.freight, insurance=order_instance.insurance_fee)
         return render(request, "order/audit/trackorder-audit-modify-complete.html")
-    return render(request, "order/audit/trackorder-audit-modify.html", {'form': order_form,
-                                                                        'good_form': goods_form,
-                                                                        'good_instance': goods_instance,
-                                                                        'order': order_id})
+    return render(request, "order/audit/trackorder-audit-modify-2.html", {'form': order_form,
+                                                                          'good_instance': goods_instance,
+                                                                          'order': order_id})
 
 
 # 生成订单pdf

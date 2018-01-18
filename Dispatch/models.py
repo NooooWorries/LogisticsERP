@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Driver(models.Model):
@@ -7,6 +8,7 @@ class Driver(models.Model):
     birthday = models.DateField(verbose_name='出生日期', null=False)
     license = models.CharField(null=False, verbose_name='驾照号', max_length=256)
     comments = models.CharField(null=True, verbose_name='备注', max_length=800)
+    account = models.ForeignKey(User, null=False, verbose_name='司机账户')
 
     class Meta:
         verbose_name = "司机"

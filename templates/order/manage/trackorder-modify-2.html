@@ -1,0 +1,149 @@
+{% extends 'master.html' %}
+{% block body %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+                修改订单
+            </div>
+        <ol class="am-breadcrumb">
+                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+                <li>运送订单</li>
+                <li><a href="{% url 'track_order_manager' %}">管理订单</a></li>
+                <li class="am-active">修改订单</li>
+                <li>订单{{ order }}</li>
+        </ol>
+        <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption font-green bold">
+                        <span class="am-icon-code"></span> 修改订单
+                    </div>
+                </div>
+                <div class="tpl-block ">
+
+                    <div class="am-g tpl-amazeui-form">
+                        <div class="am-u-sm-12 am-u-md-9">
+                            {% csrf_token %}
+                            <form class="am-form am-form-horizontal" method="post">
+
+                                <h3>订单信息</h3>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.sender.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.sender }}
+                                        <small>{{ form.sender.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.from_address.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.from_address }}
+                                        <small>{{ form.from_address.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.sender_contact.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.sender_contact }}
+                                        <small>{{ form.sender_contact.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.receiver.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.receiver }}
+                                        <small>{{ form.receiver.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.to_address.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.to_address }}
+                                        <small>{{ form.to_address.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.receiver_contact.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.receiver_contact }}
+                                        <small>{{ form.receiver_contact.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.mode.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.mode }}
+                                        <small>{{ form.mode.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.market.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.market }}
+                                        <small>{{ form.market.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.comments.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.comments }}
+                                        <small>{{ form.comments.errors }}</small>
+                                    </div>
+                                </div>
+
+                                <h3>报价</h3>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.collectFee.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.collectFee }}
+                                        <small>{{ form.collectFee.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.packingFee.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.packingFee }}
+                                        <small>{{ form.packingFee.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.claimed_value.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.claimed_value }}
+                                        <small>{{ form.claimed_value.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.insurance_rate.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.insurance_rate }}
+                                        <small>{{ form.insurance_rate.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.paymentOnAccountFreight.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.paymentOnAccountFreight }}
+                                        <small>{{ form.paymentOnAccountFreight.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ form.volume.label }}</label>
+                                    <div class="am-u-sm-9">
+                                        {{ form.volume }}
+                                        <small>{{ form.volume.errors }}</small>
+                                    </div>
+                                </div>
+
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <button type="submit" class="am-btn am-btn-primary" name="modify_form">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+{% endblock %}

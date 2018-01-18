@@ -13,7 +13,6 @@ class PaymentOrderAdmin(admin.ModelAdmin):
                      'shipment_order__from_address', 'shipment_order__comments')
     list_filter = ('payment_date',)
 
-
     def get_shipment_id(self, obj):
         return obj.shipment_order.id
     get_shipment_id.short_description = '订单ID'
