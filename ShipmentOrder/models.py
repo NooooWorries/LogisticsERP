@@ -61,7 +61,7 @@ class Goods(models.Model):
     receive_date = models.DateField(verbose_name='到达日期', null=True)
 
     # 出车
-    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0：入库，1：装车，2：口岸，3：到达
+    status = models.IntegerField(null=False, default=0, verbose_name="状态")  # 0：入库，1：装车，2：到达
     dispatch = models.ForeignKey(dispatch_model.DispatchRecord, on_delete=models.SET_NULL, null=True)
 
     class Meta:

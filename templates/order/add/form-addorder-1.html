@@ -20,47 +20,47 @@
                     <div class="am-u-sm-12 am-u-md-9">
                         {% csrf_token %}
                         <form class="am-form am-form-horizontal" method="post">
-                        <div class="am-form-group">
-                            {% for item in form %}
+                            <div class="am-form-group">
+                                {% for item in form %}
+                                    <div class="am-form-group">
+                                        <label for="user-name" class="am-u-sm-3 am-form-label">{{ item.label }}</label>
+                                        <div class="am-u-sm-9">
+                                            {{ item }}
+                                            <small>{{ item.errors }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
                                 <div class="am-form-group">
-                                    <label for="user-name" class="am-u-sm-3 am-form-label">{{ item.label }}</label>
-                                    <div class="am-u-sm-9">
-                                        {{ item }}
-                                        <small>{{ item.errors }}</small>
+                                    <div class="am-u-sm-9 am-u-sm-push-3">
+                                        <button type="submit" class="am-btn am-btn-primary">生成订单，下一步</button>
                                     </div>
                                 </div>
-                            {% endfor %}
-                            <div class="am-form-group">
-                                <div class="am-u-sm-9 am-u-sm-push-3">
-                                    <button type="submit" class="am-btn am-btn-primary">生成订单，下一步</button>
-                                </div>
                             </div>
-                        </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
 
         $('select').on('change', function() {
-             var url_mask = "{% url 'add_order_select_customer' customer_id=12345 %}".replace(/12345/, this.value.toString());
-             $.ajax({
-                 cache: false,
-                 type: "GET",
-                 dataType: "json",
-                 url: url_mask,
-                 async: true,
-                 success: function(data) {
-                     var json = jQuery.parseJSON(data);
-                     $('[name="receiver"]').val(json[0].fields.contact_person)
-                     $('[name="to_address"]').val(json[0].fields.address)
-                     $('[name="receiver_contact"]').val(json[0].fields.contact_number)
-                 }
-             });
-             return false;
+            var url_mask = "{% url 'add_order_select_customer' customer_id=12345 %}".replace(/12345/, this.value.toString());
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: url_mask,
+                async: true,
+                success: function(data) {
+                    var json = jQuery.parseJSON(data);
+                    $('[name="receiver"]').val(json[0].fields.contact_person)
+                    $('[name="to_address"]').val(json[0].fields.address)
+                    $('[name="receiver_contact"]').val(json[0].fields.contact_number)
+                }
+            });
+            return false;
         });
     </script>
 {% endblock %}

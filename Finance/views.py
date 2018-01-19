@@ -30,7 +30,7 @@ def receivable_list(request):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    order_list = ShipmentOrder.objects.filter(status=3, payable__gt=0)[startPos:endPos]
+    order_list = ShipmentOrder.objects.filter(status=3, payable__gt=0.01)[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = ShipmentOrder.objects.count()
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)

@@ -27,7 +27,8 @@
                 <div class="am-g">
                     <div class="am-u-sm-12">
                     <div id="id_divFee" class="note note-info">
-                        <p><span class="label label-danger">注意:</span> 收款记录为重要数据，只能查看，<b>不能修改和删除</b>。</p>
+                        <p><span class="label label-danger">注意:</span> 收款记录为重要数据，只能查看，<b>不能删除</b>。</p>
+                        <p><span class="label label-info">提示:</span> 如需修改，请联系超级管理员。</p>
                     </div>
                             <table class="am-table am-table-striped am-table-hover table-main">
                                 <thead>
@@ -88,7 +89,7 @@
             </div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.btn-check', function () {
             var url_mask = "{% url 'payment_record_detail' order_id=12345 %}".replace(/12345/, this.id.toString());

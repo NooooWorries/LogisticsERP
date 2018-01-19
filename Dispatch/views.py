@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from Dispatch.forms import DriverCreationForm, DispatchRecordCreationForm
 from Dispatch.models import Driver, DispatchRecord
-from ShipmentOrder.models import Goods
+from ShipmentOrder.models import Goods, ShipmentOrder
 from django.db.models import Q
 import barcode
 from barcode.writer import ImageWriter
@@ -524,3 +524,88 @@ def dispatch_order_search_advanced_result(request):
                                                                           'status': status,
                                                                           'allPage': allPage,
                                                                           'curPage': curPage})
+
+
+# 出车单 送达确认
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def arrival_dispatch_order(request):
+    request.session.set_expiry(request.session.get_expiry_age())
+    try:
+        curPage = int(request.GET.get('curPage', '1'))
+        allPage = int(request.GET.get('allPage', '1'))
+        pageType = str(request.GET.get('pageType', ''))
+    except ValueError:
+        curPage = 1
+        allPage = 1
+        pageType = ''
+    # 判断点击了【下一页】还是【上一页】
+    if pageType == 'pageDown':
+        curPage += 1
+    elif pageType == 'pageUp':
+        curPage -= 1
+
+    startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
+    endPos = startPos + settings.ONE_PAGE_OF_DATA
+    order_all = DispatchRecord.objects.filter(Q(status__exact=1) and Q(driver__account__exact=request.user)).count()
+    order = DispatchRecord.objects.filter(Q(status__exact=1) and Q(driver__account__exact=request.user))[startPos:endPos]
+    if curPage == 1 and allPage == 1:  # 标记1
+        allPostCounts = order_all
+        allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
+        remainPost = allPostCounts % settings.ONE_PAGE_OF_DATA
+        if remainPost > 0:
+            allPage += 1
+    return render(request, "dispatch/record/arrival/dispatch-order-arrival.html", {'order': order,
+                                                                                   'allPage': allPage,
+                                                                                   'curPage': curPage})
+
+
+# 出车单 送达 详情
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def arrival_dispatch_order_detail(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    order = get_object_or_404(DispatchRecord, pk=order_id)
+    good = Goods.objects.filter(dispatch=order_id)
+    return render(request, 'dispatch/record/arrival/dispatch-order-arrival-detail.html', {'order': order,
+                                                                                          'good': good})
+
+
+# 出车单 送达 确认
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def arrival_dispatch_order_confirm(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    # 出车单标记送达
+    dispatch_order = get_object_or_404(DispatchRecord, pk=order_id)
+    dispatch_order.status = 2
+    dispatch_order.save()
+
+    # 出车单下所有货物标记为到达
+    dispatch_good = Goods.objects.filter(dispatch=order_id)
+    for item in dispatch_good:
+        item.status = 2
+        item.save()
+
+    # 列出运送订单
+    ids = []
+    for item in dispatch_good:
+        ids.append(item.shipment_order_id)
+    ids = list(set(ids))
+
+    # 检查是否到达
+    for i in range(len(ids)):
+        shipment_order = ids[i]
+        is_finished = True
+        goods = Goods.objects.filter(shipment_order_id=ids[i])
+        for good in goods:
+            if good.status is not 2:
+                is_finished = False
+                break
+        if is_finished:
+            shipment_order.status = 3
+            shipment_order.save()
+
+    return HttpResponse(ids)
+
+

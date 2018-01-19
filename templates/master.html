@@ -39,7 +39,7 @@
 
             <li class="am-dropdown" data-am-dropdown="" data-am-dropdown-toggle="">
                 <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">
-                    <span class="tpl-header-list-user-nick">{{ user.username }}</span><span class="tpl-header-list-user-ico"> <img src="assets/img/user01.png"></span>
+                    <span class="tpl-header-list-user-nick">{{ user.username }}</span><span class="tpl-header-list-user-ico"></span>
                 </a>
                 <ul class="am-dropdown-content">
                     <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
@@ -167,6 +167,10 @@
                             <a href="{% url 'dispatch_order_search_advanced' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>出车记录高级搜索</span>
+                            </a>
+                            <a href="{% url 'arrival_dispatch_order' %}">
+                                <i class="am-icon-angle-right"></i>
+                                <span>确认送达</span>
                             </a>
                         </li>
                     </ul>

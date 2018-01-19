@@ -1,64 +1,64 @@
 {% extends 'master.html' %}
 {% block body %}
     <style>
-       /* Outer */
-.popup {
-    width:100%;
-    height:100%;
-    display:none;
-    position:fixed;
-    top:0px;
-    left:0px;
-    background:rgba(0,0,0,0.75);
-}
+        /* Outer */
+        .popup {
+            width:100%;
+            height:100%;
+            display:none;
+            position:fixed;
+            top:0px;
+            left:0px;
+            background:rgba(0,0,0,0.75);
+        }
 
-/* Inner */
-.popup-inner {
-    max-width:700px;
-    width:90%;
-    padding:40px;
-    position:absolute;
-    top:50%;
-    left:50%;
-    -webkit-transform:translate(-50%, -50%);
-    transform:translate(-50%, -50%);
-    box-shadow:0px 2px 6px rgba(0,0,0,1);
-    border-radius:3px;
-    background:#fff;
-}
+        /* Inner */
+        .popup-inner {
+            max-width:700px;
+            width:90%;
+            padding:40px;
+            position:absolute;
+            top:50%;
+            left:50%;
+            -webkit-transform:translate(-50%, -50%);
+            transform:translate(-50%, -50%);
+            box-shadow:0px 2px 6px rgba(0,0,0,1);
+            border-radius:3px;
+            background:#fff;
+        }
 
-/* Close Button */
-.popup-close {
-    width:30px;
-    height:30px;
-    padding-top:4px;
-    display:inline-block;
-    position:absolute;
-    top:0px;
-    right:0px;
-    transition:ease 0.25s all;
-    -webkit-transform:translate(50%, -50%);
-    transform:translate(50%, -50%);
-    border-radius:1000px;
-    background:rgba(0,0,0,0.8);
-    font-family:Arial, Sans-Serif;
-    font-size:20px;
-    text-align:center;
-    line-height:100%;
-    color:#fff;
-}
+        /* Close Button */
+        .popup-close {
+            width:30px;
+            height:30px;
+            padding-top:4px;
+            display:inline-block;
+            position:absolute;
+            top:0px;
+            right:0px;
+            transition:ease 0.25s all;
+            -webkit-transform:translate(50%, -50%);
+            transform:translate(50%, -50%);
+            border-radius:1000px;
+            background:rgba(0,0,0,0.8);
+            font-family:Arial, Sans-Serif;
+            font-size:20px;
+            text-align:center;
+            line-height:100%;
+            color:#fff;
+        }
 
-.popup-close:hover {
-    -webkit-transform:translate(50%, -50%) rotate(180deg);
-    transform:translate(50%, -50%) rotate(180deg);
-    background:rgba(0,0,0,1);
-    text-decoration:none;
-}
+        .popup-close:hover {
+            -webkit-transform:translate(50%, -50%) rotate(180deg);
+            transform:translate(50%, -50%) rotate(180deg);
+            background:rgba(0,0,0,1);
+            text-decoration:none;
+        }
     </style>
     <div class="tpl-content-wrapper">
-         <div class="tpl-content-page-title">
-             报表
-         </div>
+        <div class="tpl-content-page-title">
+            报表
+        </div>
         <ol class="am-breadcrumb">
             <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
             <li>报表</li>
@@ -110,79 +110,79 @@
     </div>
     {% load static %}
     <script src="{% static 'js/echarts.min.js' %}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
 
         myChart.setOption( {
-                        title:{
-                            text: '出车单数量'
-                        },
-                        tooltip:{
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'cross',
-                                label: {
-                                    backgroundColor: '#6a7985'
-                                }
-                            }
-                            },
-                        legend: {
-                            data:['草稿箱', '已出车', '已送达']
-                        },
-                        toolbox: {
-                            feature: {
-                                saveAsImage: {},
-                                dataView: {},
-                                magicType: {},
-                                dataZoom: {},
-                                restore: {}
-                            }
-                            },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
-                        },
-                        xAxis: [
-                            {
-                                type: 'category',
-                                boundaryGap: false,
-                                data: []
-                            }
-                            ],
-                        yAxis: [
-                            {
-                                type: 'value'
-                            }
-                            ],
-                        series: [
-                            {
-                                name: '草稿箱',
-                                type: 'line',
-                                stack: '总量',
-                                areaStyle: {normal: {}},
-                                data: []
-                            },
-                            {
-                                name: '已出车',
-                                type: 'line',
-                                stack: '总量',
-                                areaStyle: {normal: {}},
-                                data: []
-                            },
-                            {
-                                name: '已送达',
-                                type: 'line',
-                                stack: '总量',
-                                areaStyle: {normal: {}},
-                                data: []
-                            },
+            title:{
+                text: '出车单数量'
+            },
+            tooltip:{
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data:['草稿箱', '已出车', '已送达']
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {},
+                    dataView: {},
+                    magicType: {},
+                    dataZoom: {},
+                    restore: {}
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: []
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '草稿箱',
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {normal: {}},
+                    data: []
+                },
+                {
+                    name: '已出车',
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {normal: {}},
+                    data: []
+                },
+                {
+                    name: '已送达',
+                    type: 'line',
+                    stack: '总量',
+                    areaStyle: {normal: {}},
+                    data: []
+                },
 
-                        ]
-                    });
+            ]
+        });
 
         $('#past-week').click(function () {
             $.ajax({

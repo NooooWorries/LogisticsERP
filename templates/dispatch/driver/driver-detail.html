@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.btn-check', function () {
             var url_mask = "{% url 'customer_detail' customer_id=12345 %}".replace(/12345/, this.id.toString());

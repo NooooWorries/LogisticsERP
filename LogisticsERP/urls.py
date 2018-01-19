@@ -118,6 +118,11 @@ urlpatterns = [
     # dispatch record draft
     url(r'^dispatch/order/draft/$', dispatch_view.draft_dispatch_order, name="draft_dispatch_order"),
 
+    # arrival
+    url(r'^dispatch/order/arrival/$', dispatch_view.arrival_dispatch_order, name="arrival_dispatch_order"),
+    url(r'^dispatch/order/arrival/(?P<order_id>[0-9]+)/$', dispatch_view.arrival_dispatch_order_detail, name="arrival_dispatch_order_detail"),
+    url(r'^dispatch/order/arrival/(?P<order_id>[0-9]+)/confirm/$', dispatch_view.arrival_dispatch_order_confirm, name="arrival_dispatch_order_confirm"),
+
     # search
     url(r'^dispatch/order/search/$', dispatch_view.dispatch_order_search, name="dispatch_order_search"),
     url(r'^dispatch/order/search/advanced/$', dispatch_view.dispatch_order_search_advanced, name="dispatch_order_search_advanced"),

@@ -1,109 +1,109 @@
 {% extends 'master.html' %}
 {% block body %}
     <div class="tpl-content-wrapper">
-            <div class="tpl-content-page-title">
-                管理客户组
-            </div>
-            <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>客户管理</li>
-                <li><a href="{% url 'customer_class' %}">管理客户组</a></li>
-                <li>客户组详情</li>
-                <li>客户组{{ customer_class.id }}</li>
-            </ol>
-            <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 客户组详情
-                    </div>
+        <div class="tpl-content-page-title">
+            管理客户组
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>客户管理</li>
+            <li><a href="{% url 'customer_class' %}">管理客户组</a></li>
+            <li>客户组详情</li>
+            <li>客户组{{ customer_class.id }}</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 客户组详情
                 </div>
-                    <div id="id_divFee" class="note note-info">
-                        <p>ID：{{ customer_class.id }}</p>
-                        <p>用户组：{{ customer_class.class_name}}</p>
-                        <p>描述：{{ customer_class.comments }}</p>
-                    </div>
-                    <h3>该客户组包含了以下客户</h3>
-                <table class="am-table am-table-striped am-table-hover table-main">
-                                <thead>
-                                <tr>
-                                    <th class="table-id">ID</th>
-                                    <th class="table-title">客户类别</th>
-                                    <th class="table-type">客户名</th>
-                                    <th class="table-author am-hide-sm-only">联系人</th>
-                                    <th class="table-date am-hide-sm-only">联系电话</th>
-                                    <th class="table-date am-hide-sm-only">欠款</th>
-                                    <th class="table-set">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for item in customer %}
-                                <tr>
-                                    <td>{{ item.id }}</td>
-                                    <td>
-                                        {% if item.customer_class == none %}
-                                            未分类
-                                        {% else %}
-                                            <a href="{% url 'customer_class_detail'  item.customer_class.id  %}">{{ item.customer_class.class_name }}</a>
-                                        {% endif %}
-                                    </td>
-                                    <td>{{ item.customer_name }}</td>
-                                    <td>{{ item.contact_person }}</td>
-                                    <td>{{ item.contact_number }}</td>
-                                    <td>{{ item.payable }}</td>
-                                    <td>
-                                        <div class="am-btn-toolbar">
-                                            <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <!--分页-->
-                            <nav >
-                                <div class="am-fr">
-                                    <ul class="am-pagination tpl-pagination">
-                                        <li>
-                                        {% if customer.has_previous %}
-                                            <a href="?page={{ customer.previous_page_number }}&query=" onclick="getLink(this)" class="active">&laquo;</a>
-                                        {% endif %}
-                                        {% if not customer.has_previous %}
-                                            <a href="" >&laquo;</a>
-                                        {% endif %}
-                                        </li>
-                                        <li>
-                                            {% for i in customer.paginator.page_range %}
-                                                <li {% if customer.number == i %}class="am-active"{% endif %}>
-                                                    <a href="?page={{ i }}&query=" onclick="getLink(this)">{{ i }}
-                                                    </a>
-                                                </li>
-                                            {% endfor %}
-                                        </li>
-                                        <li>
-                                            {% if customer.has_next %}
-                                                <a href="?page={{ customer.next_page_number }}&query=" onclick="getLink(this)">&raquo;</a>
-                                            {% endif %}
-                                            {% if not customer.has_next %}
-                                                <a href="" >&raquo;</a>
-                                            {% endif %}
-                                        </li>
-                                        <li>
-                                            第{{ customer.number }}页，共{{ customer.paginator.num_pages }}页
-                                        </li>
-                                    </ul>
+            </div>
+            <div id="id_divFee" class="note note-info">
+                <p>ID：{{ customer_class.id }}</p>
+                <p>用户组：{{ customer_class.class_name}}</p>
+                <p>描述：{{ customer_class.comments }}</p>
+            </div>
+            <h3>该客户组包含了以下客户</h3>
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                <tr>
+                    <th class="table-id">ID</th>
+                    <th class="table-title">客户类别</th>
+                    <th class="table-type">客户名</th>
+                    <th class="table-author am-hide-sm-only">联系人</th>
+                    <th class="table-date am-hide-sm-only">联系电话</th>
+                    <th class="table-date am-hide-sm-only">欠款</th>
+                    <th class="table-set">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in customer %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>
+                            {% if item.customer_class == none %}
+                                未分类
+                            {% else %}
+                                <a href="{% url 'customer_class_detail'  item.customer_class.id  %}">{{ item.customer_class.class_name }}</a>
+                            {% endif %}
+                        </td>
+                        <td>{{ item.customer_name }}</td>
+                        <td>{{ item.contact_person }}</td>
+                        <td>{{ item.contact_number }}</td>
+                        <td>{{ item.payable }}</td>
+                        <td>
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
+                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
                                 </div>
-                            </nav>
-                            <!--ending 分页-->
-                            <hr>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!--分页-->
+            <nav >
+                <div class="am-fr">
+                    <ul class="am-pagination tpl-pagination">
+                        <li>
+                            {% if customer.has_previous %}
+                                <a href="?page={{ customer.previous_page_number }}&query=" onclick="getLink(this)" class="active">&laquo;</a>
+                            {% endif %}
+                            {% if not customer.has_previous %}
+                                <a href="" >&laquo;</a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            {% for i in customer.paginator.page_range %}
+                                <li {% if customer.number == i %}class="am-active"{% endif %}>
+                                    <a href="?page={{ i }}&query=" onclick="getLink(this)">{{ i }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </li>
+                        <li>
+                            {% if customer.has_next %}
+                                <a href="?page={{ customer.next_page_number }}&query=" onclick="getLink(this)">&raquo;</a>
+                            {% endif %}
+                            {% if not customer.has_next %}
+                                <a href="" >&raquo;</a>
+                            {% endif %}
+                        </li>
+                        <li>
+                            第{{ customer.number }}页，共{{ customer.paginator.num_pages }}页
+                        </li>
+                    </ul>
                 </div>
+            </nav>
+            <!--ending 分页-->
+            <hr>
+        </div>
 
-            </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
         $(document).on('click', '.btn-check', function () {
             var url_mask = "{% url 'customer_detail' customer_id=12345 %}".replace(/12345/, this.id.toString());
