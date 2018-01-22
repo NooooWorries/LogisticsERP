@@ -7,77 +7,65 @@
         <ol class="am-breadcrumb">
             <li><a href="#" class="am-icon-home">首页</a></li>
         </ol>
-
-
         <div class="tpl-content-scope">
-            <div class="note note-info">
-                <h3>管理流程
-                    <span class="close" data-close="note"></span>
-                </h3>
-
-                <p><span class="label label-info">您的角色:</span>
-                </p>
-            </div>
             <div class="row">
-            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
-                <div class="dashboard-stat blue">
-                    <div class="visual">
-                        <i class="am-icon-wpforms"></i>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                    <div class="dashboard-stat blue">
+                        <div class="visual">
+                            <i class="am-icon-wpforms"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> {{ shipment_order_count }} </div>
+                            <div class="desc"> 前七天订单数量 </div>
+                        </div>
+                        <a class="more" href="{% url 'order_diagram' %}"> 查看更多
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
                     </div>
-                    <div class="details">
-                        <div class="number"> {{ shipment_order_count }} </div>
-                        <div class="desc"> 前七天订单数量 </div>
-                    </div>
-                    <a class="more" href="{% url 'order_diagram' %}"> 查看更多
-                        <i class="m-icon-swapright m-icon-white"></i>
-                    </a>
                 </div>
-            </div>
-            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
-                <div class="dashboard-stat red">
-                    <div class="visual">
-                        <i class="am-icon-truck"></i>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                    <div class="dashboard-stat red">
+                        <div class="visual">
+                            <i class="am-icon-truck"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> {{ dispatch_order_count }} </div>
+                            <div class="desc"> 前七天出车单数量 </div>
+                        </div>
+                        <a class="more" href="{% url 'dispatch_order_diagram' %}"> 查看更多
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
                     </div>
-                    <div class="details">
-                        <div class="number"> {{ dispatch_order_count }} </div>
-                        <div class="desc"> 前七天出车单数量 </div>
-                    </div>
-                    <a class="more" href="{% url 'dispatch_order_diagram' %}"> 查看更多
-                        <i class="m-icon-swapright m-icon-white"></i>
-                    </a>
                 </div>
-            </div>
-            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
-                <div class="dashboard-stat green">
-                    <div class="visual">
-                        <i class="am-icon-bar-chart-o"></i>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                    <div class="dashboard-stat green">
+                        <div class="visual">
+                            <i class="am-icon-bar-chart-o"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> {{ payment_order_count }} </div>
+                            <div class="desc"> 前七天收款单数量 </div>
+                        </div>
+                        <a class="more" href="{% url 'payment_order_diagram' %}"> 查看更多
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
                     </div>
-                    <div class="details">
-                        <div class="number"> {{ payment_order_count }} </div>
-                        <div class="desc"> 前七天收款单数量 </div>
-                    </div>
-                    <a class="more" href="{% url 'payment_order_diagram' %}"> 查看更多
-                        <i class="m-icon-swapright m-icon-white"></i>
-                    </a>
                 </div>
-            </div>
-            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
-                <div class="dashboard-stat purple">
-                    <div class="visual">
-                        <i class="am-icon-money"></i>
+                <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                    <div class="dashboard-stat purple">
+                        <div class="visual">
+                            <i class="am-icon-money"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number"> ¥{{ payment_amount }} </div>
+                            <div class="desc"> 前七天收到款项 </div>
+                        </div>
+                        <a class="more" href="{% url 'payment_order_diagram' %}"> 查看更多
+                            <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
                     </div>
-                    <div class="details">
-                        <div class="number"> ¥{{ payment_amount }} </div>
-                        <div class="desc"> 前七天收到款项 </div>
-                    </div>
-                    <a class="more" href="{% url 'payment_order_diagram' %}"> 查看更多
-                        <i class="m-icon-swapright m-icon-white"></i>
-                    </a>
                 </div>
             </div>
         </div>
-        </div>
-
     </div>
-
 {% endblock %}

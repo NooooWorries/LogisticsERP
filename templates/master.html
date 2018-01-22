@@ -106,32 +106,38 @@
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
                     <ul class="tpl-left-nav-sub-menu" style="">
-                        <li>
+                        {% if request.session.role == 0 or request.session.role == 1 or request.session.role == 2 %}
+                            <li>
                             <a href="{% url 'add_order_stage_one' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>添加订单</span>
                             </a>
+                        {% endif %}
 
+                        {% if request.session.role == 0 or request.session.role == 1 or request.session.role == 2 %}
                             <a href="{% url 'track_order_draft' %}" onclick="clearSearch()">
                                 <i class="am-icon-angle-right"></i>
                                 <span>草稿箱</span>
 
                             </a>
+                        {% endif %}
 
+                        {% if request.session.role == 0 or request.session.role == 2 %}
                             <a href="{% url 'track_order_audit' %}" onclick="clearSearch()">
                                 <i class="am-icon-angle-right"></i>
                                 <span>审核订单</span>
                             </a>
+                        {% endif %}
 
-                            <a href="{% url 'track_order_manager' %}" onclick="clearSearch()">
-                                <i class="am-icon-angle-right"></i>
-                                <span>管理订单</span>
-                            </a>
+                        <a href="{% url 'track_order_manager' %}" onclick="clearSearch()">
+                            <i class="am-icon-angle-right"></i>
+                            <span>管理订单</span>
+                        </a>
 
-                            <a href="{% url 'track_order_search_advanced' %}">
-                                <i class="am-icon-angle-right"></i>
-                                <span>订单高级搜索</span>
-                            </a>
+                        <a href="{% url 'track_order_search_advanced' %}">
+                            <i class="am-icon-angle-right"></i>
+                            <span>订单高级搜索</span>
+                        </a>
                         </li>
                     </ul>
                 </li>
@@ -143,36 +149,44 @@
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
                     <ul class="tpl-left-nav-sub-menu" style="">
-                        <li>
+                        {% if request.session.role == 0 or request.session.role == 3 %}
+                            <li>
                             <a href="{% url 'add_driver' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>添加司机</span>
                             </a>
-                            <a href="{% url 'manage_driver' %}">
-                                <i class="am-icon-angle-right"></i>
-                                <span>管理司机</span>
-                            </a>
+                        {% endif %}
+                        <a href="{% url 'manage_driver' %}">
+                            <i class="am-icon-angle-right"></i>
+                            <span>管理司机</span>
+                        </a>
+                        {% if request.session.role == 0 or request.session.role == 3 %}
                             <a href="{% url 'add_dispatch_order' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>添加出车记录</span>
                             </a>
+                        {% endif %}
+                        {% if request.session.role == 0 or request.session.role == 3 %}
                             <a href="{% url 'draft_dispatch_order' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>草稿箱</span>
                             </a>
-                            <a href="{% url 'manage_dispatch_order' %}">
-                                <i class="am-icon-angle-right"></i>
-                                <span>管理出车记录</span>
-                            </a>
-                            <a href="{% url 'dispatch_order_search_advanced' %}">
-                                <i class="am-icon-angle-right"></i>
-                                <span>出车记录高级搜索</span>
-                            </a>
+                        {% endif %}
+                        <a href="{% url 'manage_dispatch_order' %}">
+                            <i class="am-icon-angle-right"></i>
+                            <span>管理出车记录</span>
+                        </a>
+                        <a href="{% url 'dispatch_order_search_advanced' %}">
+                            <i class="am-icon-angle-right"></i>
+                            <span>出车记录高级搜索</span>
+                        </a>
+                        {% if request.session.role == 0 or request.session.role == 3 %}
                             <a href="{% url 'arrival_dispatch_order' %}">
                                 <i class="am-icon-angle-right"></i>
                                 <span>确认送达</span>
                             </a>
-                        </li>
+                            </li>
+                        {% endif %}
                     </ul>
                 </li>
 
@@ -182,14 +196,16 @@
                         <span>财务</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
                     </a>
-                    <ul class="tpl-left-nav-sub-menu" style="">
-                        <li>
-                            <a href="{% url 'receivable_list' %}">
-                                <i class="am-icon-angle-right"></i>
-                                <span>收款</span>
-                            </a>
-                        </li>
-                    </ul>
+                    {% if request.session.role == 0 or request.session.role == 4 %}
+                        <ul class="tpl-left-nav-sub-menu" style="">
+                            <li>
+                                <a href="{% url 'receivable_list' %}">
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>收款</span>
+                                </a>
+                            </li>
+                        </ul>
+                    {% endif %}
                     <ul class="tpl-left-nav-sub-menu" style="">
                         <li>
                             <a href="{% url 'manage_payment_record' %}">
@@ -207,6 +223,8 @@
                         </li>
                     </ul>
                 </li>
+
+
                 <li class="tpl-left-nav-item">
                     <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
                         <i class="am-icon-database"></i>

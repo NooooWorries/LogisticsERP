@@ -2,28 +2,28 @@
 {% block body %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-                修改订单
-            </div>
+            修改订单
+        </div>
         <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>运送订单</li>
-                <li><a href="{% url 'track_order_manager' %}">管理订单</a></li>
-                <li class="am-active">修改订单</li>
-                <li>订单{{ order }}</li>
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>运送订单</li>
+            <li><a href="{% url 'track_order_manager' %}">管理订单</a></li>
+            <li class="am-active">修改订单</li>
+            <li>订单{{ order }}</li>
         </ol>
         <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 修改订单
-                    </div>
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 修改订单
                 </div>
-                <div class="tpl-block ">
+            </div>
+            <div class="tpl-block ">
 
-                    <div class="am-g tpl-amazeui-form">
-                        <div class="am-u-sm-12 am-u-md-9">
-                            <form class="am-form am-form-horizontal" method="post" id="id_formGood">
-                                <h3>货物</h3>
-                                <div id="id_tableGoods">
+                <div class="am-g tpl-amazeui-form">
+                    <div class="am-u-sm-12 am-u-md-9">
+                        <form class="am-form am-form-horizontal" method="post" id="id_formGood">
+                            <h3>货物</h3>
+                            <div id="id_tableGoods">
                                 <table class="am-table am-table-striped am-table-hover table-main">
                                     <thead>
                                     <tr>
@@ -38,46 +38,46 @@
                                     </thead>
                                     <tbody>
                                     {% for item in good_instance %}
-                                    <tr>
-                                        <td>{{ item.pack_number }}</td>
-                                        <td>{{ item.goods_name }}</td>
-                                        <td>{{ item.amount }}</td>
-                                        <td>{{ item.weight }}</td>
-                                        <td>{{ item.unit_price }}</td>
-                                        <td>{{ item.freight }}</td>
-                                        <td>
-                                            <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td>{{ item.pack_number }}</td>
+                                            <td>{{ item.goods_name }}</td>
+                                            <td>{{ item.amount }}</td>
+                                            <td>{{ item.weight }}</td>
+                                            <td>{{ item.unit_price }}</td>
+                                            <td>{{ item.freight }}</td>
+                                            <td>
+                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                            </td>
+                                        </tr>
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                                </div>
-                                {% for item in good_form %}
-                                    <div class="am-form-group">
+                            </div>
+                            {% for item in good_form %}
+                                <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">{{ item.label }}</label>
                                     <div class="am-u-sm-9">
                                         {{ item }}
                                         <small>{{ item.errors }}</small>
                                     </div>
                                 </div>
-                                {% endfor %}
-                                <div class="am-form-group">
-                                    <div class="am-u-sm-9 am-u-sm-push-3">
-                                        <button type="submit" class="am-btn am-btn-primary" id="id_addGoods" name="add_goods">添加货物</button>
-                                    </div>
+                            {% endfor %}
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="submit" class="am-btn am-btn-primary" id="id_addGoods" name="add_goods">添加货物</button>
                                 </div>
-                            </form>
-                            <a href="{% url 'track_order_modify_2' order_id=order %}"> <button class="am-btn am-btn-primary">下一步</button></a>
-                        </div>
+                            </div>
+                        </form>
+                        <a href="{% url 'track_order_modify_2' order_id=order %}"> <button class="am-btn am-btn-primary">下一步</button></a>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
-    function refresh(data){
-        var json = jQuery.parseJSON(data);
+        function refresh(data){
+            var json = jQuery.parseJSON(data);
             var content = "<table class=\"am-table am-table-striped am-table-hover table-main\" >\n" +
                 "                                    <thead>\n" +
                 "                                        <tr>\n" +
@@ -94,49 +94,49 @@
 
             for (var i = 0; i < json.length; i++) {
                 content += "<tr>\n" +
-                        "<td>" + json[i].fields.pack_number + "</td>\n" +
-                        "<td>" + json[i].fields.goods_name + "</td>\n" +
-                        "<td>" + json[i].fields.amount + "</td>\n" +
-                        "<td>" + json[i].fields.weight + "</td>\n" +
-                        "<td>" + json[i].fields.unit_price + "</td>\n" +
-                        "<td>" + json[i].fields.freight + "</td>\n" +
-                        "<td>"
-                        + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
-                        + "</td>";
+                    "<td>" + json[i].fields.pack_number + "</td>\n" +
+                    "<td>" + json[i].fields.goods_name + "</td>\n" +
+                    "<td>" + json[i].fields.amount + "</td>\n" +
+                    "<td>" + json[i].fields.weight + "</td>\n" +
+                    "<td>" + json[i].fields.unit_price + "</td>\n" +
+                    "<td>" + json[i].fields.freight + "</td>\n" +
+                    "<td>"
+                    + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
+                    + "</td>";
             }
 
             content +="</tbody></table>";
             $('#id_tableGoods').html(content);
-    }
-    $(document).on('click', '.btn_delete', function () {
-        var url_mask = "{% url 'delete_goods_manage' good_id=12345 %}".replace(/12345/, this.id.toString());
-        $.ajax({
-            cache: false,
-            type: "GET",
-            dataType: "json",
-            url: url_mask,
-            async: true,
-            success: function(data) {
-                refresh(data);
-            }
-        });
-        return false;
-    });
-
-    $('#id_addGoods').click(function () {
-    $.ajax({
-        cache: false,
-        type: "POST",
-        dataType: "json",
-        url: "{% url 'add_goods_manage' %}",
-        data: $('#id_formGood').serialize(),
-        async: true,
-        success: function(data) {
-            refresh(data);
         }
+        $(document).on('click', '.btn_delete', function () {
+            var url_mask = "{% url 'delete_goods_manage' good_id=12345 %}".replace(/12345/, this.id.toString());
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: url_mask,
+                async: true,
+                success: function(data) {
+                    refresh(data);
+                }
+            });
+            return false;
         });
-        return false;
-    });
+
+        $('#id_addGoods').click(function () {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                url: "{% url 'add_goods_manage' %}",
+                data: $('#id_formGood').serialize(),
+                async: true,
+                success: function(data) {
+                    refresh(data);
+                }
+            });
+            return false;
+        });
     </script>
 
 {% endblock %}

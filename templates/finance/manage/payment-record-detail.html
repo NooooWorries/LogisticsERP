@@ -1,33 +1,33 @@
 {% extends 'master.html' %}
 {% block body %}
     <div class="tpl-content-wrapper">
-            <div class="tpl-content-page-title">
-                财务
-            </div>
-            <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>财务</li>
-                <li><a href="{% url 'customer' %}">管理收款记录</a></li>
-                <li>收款记录详情：{{ order.id }}</li>
-            </ol>
-            <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 收款记录详情
-                    </div>
+        <div class="tpl-content-page-title">
+            财务
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>财务</li>
+            <li><a href="{% url 'customer' %}">管理收款记录</a></li>
+            <li>收款记录详情：{{ order.id }}</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 收款记录详情
                 </div>
-                <div class="tpl-block ">
-                    <div id="id_divInfo" class="note note-info">
-                        <h2>收款记录详情</h2>
-                        <p>收款记录ID：{{ order.id }}</p>
-                        <p>订单：<a href="{% url 'track_order_detail' order.shipment_order.id %}">{{ order.shipment_order.id }}</a></p>
-                        <p>客户（收货人）：{{ order.shipment_order.receiver }}</p>
-                        <p>收款时间：{{ order.payment_date }}</p>
-                        <p>收款金额：{{ order.amount }}</p>
-                        <p>经办：{{ order.handle.username }}</p>
-                        <p>备注：{{ order.comments }}</p>
-                    </div>
+            </div>
+            <div class="tpl-block ">
+                <div id="id_divInfo" class="note note-info">
+                    <h2>收款记录详情</h2>
+                    <p>收款记录ID：{{ order.id }}</p>
+                    <p>订单：<a href="{% url 'track_order_detail' order.shipment_order.id %}">{{ order.shipment_order.id }}</a></p>
+                    <p>客户（收货人）：{{ order.shipment_order.receiver }}</p>
+                    <p>收款时间：{{ order.payment_date }}</p>
+                    <p>收款金额：{{ order.amount }}</p>
+                    <p>经办：{{ order.handle.username }}</p>
+                    <p>备注：{{ order.comments }}</p>
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}

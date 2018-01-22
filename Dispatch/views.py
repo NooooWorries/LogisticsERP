@@ -12,7 +12,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-from LogisticsERP import settings
+from LogisticsERP import settings, utils
 import os
 from xhtml2pdf.default import DEFAULT_FONT
 import datetime
@@ -23,6 +23,9 @@ import datetime
 @login_required(login_url='/error/not-logged-in/')
 def add_driver(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     if request.method == 'POST':
         form = DriverCreationForm(request.POST)
         if form.is_valid():
@@ -127,6 +130,9 @@ def driver_detail(request, driver_id):
 @login_required(login_url='/error/not-logged-in/')
 def driver_modify(request, driver_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     driver_instance = get_object_or_404(Driver, pk=driver_id)
     driver_form = DriverCreationForm(request.POST or None, instance=driver_instance)
     if driver_form.is_valid():
@@ -140,6 +146,9 @@ def driver_modify(request, driver_id):
 @login_required(login_url='/error/not-logged-in/')
 def add_dispatch_order(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     if request.method == 'POST':
         form = DispatchRecordCreationForm(request.POST)
         if form.is_valid():
@@ -155,6 +164,9 @@ def add_dispatch_order(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_dispatch_order_choose_good(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(DispatchRecord, pk=order_id)
     try:
         curPage = int(request.GET.get('curPage', '1'))
@@ -190,6 +202,9 @@ def add_dispatch_order_choose_good(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_select_good(request, order_id, good_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     good = get_object_or_404(Goods, pk=good_id)
     order = get_object_or_404(DispatchRecord, pk=order_id)
     good.dispatch = order
@@ -202,6 +217,9 @@ def ajax_select_good(request, order_id, good_id):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_select_good_cancel(request, good_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     good = get_object_or_404(Goods, pk=good_id)
     good.dispatch = None
     good.save()
@@ -213,6 +231,9 @@ def ajax_select_good_cancel(request, good_id):
 @login_required(login_url='/error/not-logged-in/')
 def add_dispatch_order_summary(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(DispatchRecord, pk=order_id)
     try:
         curPage = int(request.GET.get('curPage', '1'))
@@ -248,6 +269,9 @@ def add_dispatch_order_summary(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def generate_PDF(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(DispatchRecord, pk=order_id)
     order.status = 1
     order.save()
@@ -277,6 +301,9 @@ def generate_PDF(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def driver_delete(request, driver_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     driver = get_object_or_404(Driver, pk=driver_id)
     dispatch_count = DispatchRecord.objects.filter(driver_id=driver.id).count()
     if dispatch_count <= 0:
@@ -374,6 +401,9 @@ def dispatch_order_detail(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def dispatch_order_delete(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(DispatchRecord, pk=order_id)
     if order.status == 0:
         order.delete()
@@ -385,6 +415,9 @@ def dispatch_order_delete(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def draft_dispatch_order(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -418,6 +451,9 @@ def draft_dispatch_order(request):
 @login_required(login_url='/error/not-logged-in/')
 def dispatch_order_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     order_instance = get_object_or_404(DispatchRecord, pk=order_id)
     form = DispatchRecordCreationForm(request.POST or None, instance=order_instance)
     try:
@@ -531,6 +567,9 @@ def dispatch_order_search_advanced_result(request):
 @login_required(login_url='/error/not-logged-in/')
 def arrival_dispatch_order(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -565,6 +604,9 @@ def arrival_dispatch_order(request):
 @login_required(login_url='/error/not-logged-in/')
 def arrival_dispatch_order_detail(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(DispatchRecord, pk=order_id)
     good = Goods.objects.filter(dispatch=order_id)
     return render(request, 'dispatch/record/arrival/dispatch-order-arrival-detail.html', {'order': order,
@@ -576,6 +618,9 @@ def arrival_dispatch_order_detail(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def arrival_dispatch_order_confirm(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 3:
+        return render(request, 'error/permission.html')
     # 出车单标记送达
     dispatch_order = get_object_or_404(DispatchRecord, pk=order_id)
     dispatch_order.status = 2

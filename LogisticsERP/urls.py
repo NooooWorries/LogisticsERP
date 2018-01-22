@@ -179,6 +179,8 @@ urlpatterns = [
     # manage
     url(r'^finance/manage/$', finance_view.manage_payment_record, name="manage_payment_record"),
     url(r'^finance/manage/(?P<order_id>[0-9]+)/detail$', finance_view.payment_record_detail, name="payment_record_detail"),
+    url(r'^finance/manage/(?P<order_id>[0-9]+)/modify$', finance_view.payment_record_modify,
+        name="payment_record_modify"),
 
     # search
     url(r'^finance/search/$', finance_view.payment_order_search, name="payment_order_search"),

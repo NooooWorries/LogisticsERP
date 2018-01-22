@@ -5,7 +5,7 @@ from ShipmentOrder.models import ShipmentOrder
 from Finance.models import PaymentOrder
 from Finance.forms import PaymentOrderCreationForm
 from django.db.models import Q
-from LogisticsERP import settings
+from LogisticsERP import settings, utils
 from decimal import Decimal
 import datetime
 
@@ -15,6 +15,9 @@ import datetime
 @login_required(login_url='/error/not-logged-in/')
 def receivable_list(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 4:
+        return render(request, 'error/permission.html')
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -48,6 +51,10 @@ def receivable_list(request):
 @login_required(login_url='/error/not-logged-in/')
 def make_payment(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 4:
+        return render(request, 'error/permission.html')
+
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     order.payable = order.totalPrice - order.paid_price
     if request.method == "POST":
@@ -64,7 +71,7 @@ def make_payment(request, order_id):
     else:
         form = PaymentOrderCreationForm()
     return render(request, "finance/add/form-makepayment.html", {'order': order,
-                                                             'form': form})
+                                                                 'form': form})
 
 
 # 管理付款单
@@ -109,6 +116,26 @@ def payment_record_detail(request, order_id):
     return render(request, 'finance/manage/payment-record-detail.html', {'order': order})
 
 
+# 付款单修改
+@csrf_exempt
+@login_required(login_url='/error/not-logged-in/')
+def payment_record_modify(request, order_id):
+    request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 4:
+        return render(request, 'error/permission.html')
+    request.session['order_manage'] = order_id
+    order_instance = get_object_or_404(PaymentOrder, id=order_id)
+    order_form = PaymentOrderCreationForm(request.POST or None, instance=order_instance)
+
+    if order_form.is_valid():
+        order_form.save(shipment_order=order_instance.shipment_order, handle=request.user)
+        return render(request, "finance/manage/payment-order-modify-complete.html")
+    return render(request, "finance/manage/payment-record-modify.html", {'form': order_form,
+                                                                         'order': order_id})
+
+
+
 # 管理付款单 付款单搜索
 @csrf_exempt
 @login_required(login_url='/error/not-logged-in/')
@@ -131,32 +158,32 @@ def payment_order_search(request):
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
     all_payment_order = PaymentOrder.objects.filter(
-                Q(shipment_order__comments__icontains=query) |
-                Q(shipment_order__receiver__icontains=query) |
-                Q(shipment_order__sender__icontains=query) |
-                Q(shipment_order__from_address__icontains=query) |
-                Q(shipment_order__to_address__icontains=query) |
-                Q(shipment_order__market__icontains=query) |
-                Q(shipment_order__handle__username__icontains=query) |
-                Q(shipment_order__sender_contact__icontains=query) |
-                Q(shipment_order__receiver_contact__icontains=query) |
-                Q(shipment_order__mode__icontains=query) |
-                Q(handle__username__icontains=query) |
-                Q(comments__icontains=query)
-        ).count()
+        Q(shipment_order__comments__icontains=query) |
+        Q(shipment_order__receiver__icontains=query) |
+        Q(shipment_order__sender__icontains=query) |
+        Q(shipment_order__from_address__icontains=query) |
+        Q(shipment_order__to_address__icontains=query) |
+        Q(shipment_order__market__icontains=query) |
+        Q(shipment_order__handle__username__icontains=query) |
+        Q(shipment_order__sender_contact__icontains=query) |
+        Q(shipment_order__receiver_contact__icontains=query) |
+        Q(shipment_order__mode__icontains=query) |
+        Q(handle__username__icontains=query) |
+        Q(comments__icontains=query)
+    ).count()
     payment_order = PaymentOrder.objects.filter(
-                Q(shipment_order__comments__icontains=query) |
-                Q(shipment_order__receiver__icontains=query) |
-                Q(shipment_order__sender__icontains=query) |
-                Q(shipment_order__from_address__icontains=query) |
-                Q(shipment_order__to_address__icontains=query) |
-                Q(shipment_order__market__icontains=query) |
-                Q(shipment_order__handle__username__icontains=query) |
-                Q(shipment_order__sender_contact__icontains=query) |
-                Q(shipment_order__receiver_contact__icontains=query) |
-                Q(shipment_order__mode__icontains=query) |
-                Q(handle__username__icontains=query) |
-                Q(comments__icontains=query))[startPos:endPos]
+        Q(shipment_order__comments__icontains=query) |
+        Q(shipment_order__receiver__icontains=query) |
+        Q(shipment_order__sender__icontains=query) |
+        Q(shipment_order__from_address__icontains=query) |
+        Q(shipment_order__to_address__icontains=query) |
+        Q(shipment_order__market__icontains=query) |
+        Q(shipment_order__handle__username__icontains=query) |
+        Q(shipment_order__sender_contact__icontains=query) |
+        Q(shipment_order__receiver_contact__icontains=query) |
+        Q(shipment_order__mode__icontains=query) |
+        Q(handle__username__icontains=query) |
+        Q(comments__icontains=query))[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_payment_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -207,7 +234,7 @@ def payment_order_search_advanced_result(request):
         Q(comments__icontains=keyword),
         Q(payment_date__range=(start_date, end_date)),
         Q(amount__gte=payment_amount)
-        )
+    )
     result_count = result.count()
     try:
         curPage = int(request.GET.get('curPage', '1'))

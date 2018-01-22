@@ -1,87 +1,87 @@
 {% extends 'master.html' %}
 {% block body %}
     <div class="tpl-content-wrapper">
-            <div class="tpl-content-page-title">
-                添加订单
-            </div>
-             <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>运送订单</li>
-                <li>添加订单</li>
-            </ol>
-            <div class="tpl-portlet-components">
-                <div class="portlet-title">
-                    <div class="caption font-green bold">
-                        <span class="am-icon-code"></span> 添加订单 第二步：货物详情
-                    </div>
+        <div class="tpl-content-page-title">
+            添加订单
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>运送订单</li>
+            <li>添加订单</li>
+        </ol>
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    <span class="am-icon-code"></span> 添加订单 第二步：货物详情
                 </div>
-                <div class="tpl-block ">
+            </div>
+            <div class="tpl-block ">
 
-                    <div class="am-g tpl-amazeui-form">
-                        <div class="note note-info">
-                                <h3>订单已经生成
-                                    <span class="close" data-close="note"></span>
-                                </h3>
-                                <p>订单ID：{{ order.id }}</p>
-                                <p>创建时间：{{ order.create_date }}</p>
-                                <p>发件人：{{ order.sender }}</p>
-                                <p>发件地址：{{ order.from_address }}</p>
-                                <p>收件人：{{ order.receiver }}</p>
-                                <p>收件地址：{{ order.to_address }}</p>
-                                <p><span class="label label-danger">提示:</span> 在订单提交完成前，您可以随时在草稿箱中修改您的订单信息
-                                </p>
-                        </div>
-                            <div id="id_tableGoods">
-                                <table class="am-table am-table-striped am-table-hover table-main" >
-                                    <thead>
-                                        <tr>
-                                            <th class="table-title">包裹序号</th>
-                                            <th class="table-author am-hide-sm-only">货物名称</th>
-                                            <th class="table-type">数量</th>
-                                            <th class="table-date am-hide-sm-only">重量</th>
-                                            <th class="table-set">运费单价</th>
-                                            <th class="table-set">总运费</th>
-                                            <th class="table-set">操作</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                <div class="am-g tpl-amazeui-form">
+                    <div class="note note-info">
+                        <h3>订单已经生成
+                            <span class="close" data-close="note"></span>
+                        </h3>
+                        <p>订单ID：{{ order.id }}</p>
+                        <p>创建时间：{{ order.create_date }}</p>
+                        <p>发件人：{{ order.sender }}</p>
+                        <p>发件地址：{{ order.from_address }}</p>
+                        <p>收件人：{{ order.receiver }}</p>
+                        <p>收件地址：{{ order.to_address }}</p>
+                        <p><span class="label label-danger">提示:</span> 在订单提交完成前，您可以随时在草稿箱中修改您的订单信息
+                        </p>
+                    </div>
+                    <div id="id_tableGoods">
+                        <table class="am-table am-table-striped am-table-hover table-main" >
+                            <thead>
+                            <tr>
+                                <th class="table-title">包裹序号</th>
+                                <th class="table-author am-hide-sm-only">货物名称</th>
+                                <th class="table-type">数量</th>
+                                <th class="table-date am-hide-sm-only">重量</th>
+                                <th class="table-set">运费单价</th>
+                                <th class="table-set">总运费</th>
+                                <th class="table-set">操作</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
 
-                        {% csrf_token %}
-                        <form class="am-form am-form-horizontal" method="post" id="id_formGood">
-                            <div class="am-u-sm-12 am-u-md-9">
-                                {% for item in form %}
+                    {% csrf_token %}
+                    <form class="am-form am-form-horizontal" method="post" id="id_formGood">
+                        <div class="am-u-sm-12 am-u-md-9">
+                            {% for item in form %}
                                 <div class="am-form-group">
                                     <label for="user-name" class="am-u-sm-3 am-form-label">{{ item.label }}</label>
                                     <div class="am-u-sm-9">
                                         {{ item }}
                                     </div>
                                 </div>
-                                {% endfor %}
+                            {% endfor %}
 
-                                <div class="am-form-group">
-                                    <div class="am-u-sm-9 am-u-sm-push-3">
-                                        <button type="submit" class="am-btn am-btn-primary" id="id_addGoods">添加货物</button>
-                                    </div>
+                            <div class="am-form-group">
+                                <div class="am-u-sm-9 am-u-sm-push-3">
+                                    <button type="submit" class="am-btn am-btn-primary" id="id_addGoods">添加货物</button>
                                 </div>
+                            </div>
 
 
-                            </div>
-                        </form>
-                        <div class="am-form-group ">
-                            <div class="am-u-sm-12 am-u-md-9">
-                                <button class="am-btn am-btn-primary" onclick="location.href='{% url 'add_order_stage_three_redirect' %}'">下一步</button>
-                            </div>
                         </div>
+                    </form>
+                    <div class="am-form-group ">
+                        <div class="am-u-sm-12 am-u-md-9">
+                            <button class="am-btn am-btn-primary" onclick="location.href='{% url 'add_order_stage_three_redirect' %}'">下一步</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script>
-    function refresh(data){
-        var json = jQuery.parseJSON(data);
+        function refresh(data){
+            var json = jQuery.parseJSON(data);
             var content = "<table class=\"am-table am-table-striped am-table-hover table-main\" >\n" +
                 "                                    <thead>\n" +
                 "                                        <tr>\n" +
@@ -98,48 +98,48 @@
 
             for (var i = 0; i < json.length; i++) {
                 content += "<tr>\n" +
-                        "<td>" + json[i].fields.pack_number + "</td>\n" +
-                        "<td>" + json[i].fields.goods_name + "</td>\n" +
-                        "<td>" + json[i].fields.amount + "</td>\n" +
-                        "<td>" + json[i].fields.weight + "</td>\n" +
-                        "<td>" + json[i].fields.unit_price + "</td>\n" +
-                        "<td>" + json[i].fields.freight + "</td>\n" +
-                        "<td>"
-                        + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
-                        + "</td>";
+                    "<td>" + json[i].fields.pack_number + "</td>\n" +
+                    "<td>" + json[i].fields.goods_name + "</td>\n" +
+                    "<td>" + json[i].fields.amount + "</td>\n" +
+                    "<td>" + json[i].fields.weight + "</td>\n" +
+                    "<td>" + json[i].fields.unit_price + "</td>\n" +
+                    "<td>" + json[i].fields.freight + "</td>\n" +
+                    "<td>"
+                    + "<button class=\"am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn_delete\" id = \""+ json[i].pk + "\" ><span class=\"am-icon-trash-o\"></span> 删除</button>"
+                    + "</td>";
             }
 
             content +="</tbody></table>";
             $('#id_tableGoods').html(content);
-    }
-    $('#id_addGoods').click(function () {
-    $.ajax({
-        cache: false,
-        type: "POST",
-        dataType: "json",
-        url: "{% url 'add_goods' %}",
-        data: $('#id_formGood').serialize(),
-        async: true,
-        success: function(data) {
-            refresh(data);
         }
+        $('#id_addGoods').click(function () {
+            $.ajax({
+                cache: false,
+                type: "POST",
+                dataType: "json",
+                url: "{% url 'add_goods' %}",
+                data: $('#id_formGood').serialize(),
+                async: true,
+                success: function(data) {
+                    refresh(data);
+                }
+            });
+            return false;
         });
-        return false;
-    });
 
-   $(document).on('click', '.btn_delete', function () {
-        var url_mask = "{% url 'delete_goods' good_id=12345 %}".replace(/12345/, this.id.toString());
-        $.ajax({
-            cache: false,
-            type: "GET",
-            dataType: "json",
-            url: url_mask,
-            async: true,
-            success: function(data) {
-                refresh(data);
-            }
+        $(document).on('click', '.btn_delete', function () {
+            var url_mask = "{% url 'delete_goods' good_id=12345 %}".replace(/12345/, this.id.toString());
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: url_mask,
+                async: true,
+                success: function(data) {
+                    refresh(data);
+                }
+            });
+            return false;
         });
-        return false;
-    });
     </script>
 {% endblock %}

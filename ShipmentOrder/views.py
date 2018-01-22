@@ -14,7 +14,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-from LogisticsERP import settings
+from LogisticsERP import settings, utils
 import os
 from xhtml2pdf.default import DEFAULT_FONT
 from barcode.writer import ImageWriter
@@ -26,6 +26,9 @@ from ShipmentOrder.utils import calculate_freight, calculate_density, rearrange_
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_one(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if request.method == 'POST':
         form = OrderCreationOneForm(request.POST)
         if form.is_valid():
@@ -45,6 +48,9 @@ def add_order_stage_one(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_select_customer(request, customer_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     customer_instance = Customer.objects.filter(pk=customer_id)
     data = serializers.serialize('json', customer_instance)
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -55,6 +61,9 @@ def add_order_select_customer(request, customer_id):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_two(request, order):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     form = OrderCreationTwoForm()
@@ -66,6 +75,9 @@ def add_order_stage_two(request, order):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_add_goods(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     form = OrderCreationTwoForm(request.POST)
@@ -100,6 +112,9 @@ def ajax_add_goods(request):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_delete_goods(request, good_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     order = request.session['order']
@@ -122,6 +137,9 @@ def ajax_delete_goods(request, good_id):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_stage_three_redirect(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     order = request.session['order']
@@ -154,6 +172,9 @@ def add_order_stage_three_redirect(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_summary(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if "order" not in request.session:
         return render(request, 'error/redirect_error.html')
     order = request.session['order']
@@ -167,6 +188,9 @@ def add_order_summary(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_order_audit(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     if "order" not in request.session:
         form_create = OrderCreationOneForm()
         return render(request, "order/add/form-addorder-1.html", {'form': form_create})
@@ -230,6 +254,9 @@ def track_order_detail(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     goods_form = OrderCreationTwoForm(request.POST or None)
@@ -244,6 +271,9 @@ def track_order_modify(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_modify_2(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
@@ -272,6 +302,9 @@ def track_order_modify_2(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_delete_goods_manage(request, good_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     goods_object = Goods.objects.get(id=good_id)
     goods_object.delete()
     good = Goods.objects.filter(shipment_order_id_id=request.session['order_manage'])
@@ -291,6 +324,9 @@ def ajax_delete_goods_manage(request, good_id):
 @login_required(login_url='/error/not-logged-in/')
 def ajax_add_goods_manage(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     goods_form = OrderCreationTwoForm(request.POST)
     order = request.session['order_manage']
     if goods_form.is_valid():
@@ -322,6 +358,9 @@ def ajax_add_goods_manage(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_confirm_delete(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     order_instance = ShipmentOrder.objects.get(pk=order_id)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     return render(request, "order/manage/trackorder-delete-confirm.html", {'order': order_instance, 'good': goods_instance})
@@ -332,6 +371,9 @@ def track_order_confirm_delete(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_delete(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     order_object = get_object_or_404(ShipmentOrder, pk=order_id)
     if order_object.handle == request.user and order_object.status == 0:
         request.session['draft'] = request.session['draft'] - 1
@@ -472,6 +514,9 @@ def track_order_search_advanced_result(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -505,6 +550,9 @@ def track_order_draft(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     query = request.GET.get('query')
     try:
         curPage = int(request.GET.get('curPage', '1'))
@@ -557,6 +605,9 @@ def track_order_draft_search(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -588,6 +639,9 @@ def track_order_draft_modify(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_submit_audit(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     order_instance = ShipmentOrder.objects.get(pk=order_id)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     if goods_instance.count() >= 1:
@@ -605,6 +659,9 @@ def track_order_submit_audit(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 2:
+        return render(request, 'error/permission.html')
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -638,6 +695,9 @@ def track_order_audit(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 2:
+        return render(request, 'error/permission.html')
     query = request.GET.get('query')
     try:
         curPage = int(request.GET.get('curPage', '1'))
@@ -689,6 +749,9 @@ def track_order_audit_search(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 2:
+        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     goods_form = OrderCreationTwoForm(request.POST or None)
@@ -701,6 +764,9 @@ def track_order_audit_modify(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_modify_2(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 2:
+        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -727,6 +793,9 @@ def track_order_audit_modify_2(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def generate_PDF(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 2:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     good = Goods.objects.filter(shipment_order_id_id=order_id)
     ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
@@ -747,6 +816,9 @@ def generate_PDF(request, order_id):
 # 完成审核 出单
 def track_order_audit_finalize(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 2:
+        return render(request, 'error/permission.html')
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     order.status = 2
     order.save()

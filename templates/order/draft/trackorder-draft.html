@@ -2,45 +2,45 @@
 {% block body %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-                草稿箱
+            草稿箱
         </div>
         <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>运送订单</li>
-                <li><a href="{% url 'track_order_draft' %}">草稿箱</a></li>
-            </ol>
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>运送订单</li>
+            <li><a href="{% url 'track_order_draft' %}">草稿箱</a></li>
+        </ol>
         <div class="tpl-portlet-components">
             <div class="portlet-title">
                 <div class="caption font-green bold">
                     <span class="am-icon-code"></span> 草稿箱
                 </div>
                 <div class="tpl-portlet-input tpl-fz-ml">
-                <form action="/order/track/draft/search/">
-                    <div class="portlet-input input-small input-inline input-icon">
-                        <i class="am-icon-search"></i>
-                        <input type="text" id="id_search"name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">
-                    </div>
-                </form>
+                    <form action="/order/track/draft/search/">
+                        <div class="portlet-input input-small input-inline input-icon">
+                            <i class="am-icon-search"></i>
+                            <input type="text" id="id_search"name="query" class="form-control form-control-solid" placeholder="搜索..." onkeyup="saveValue(this)">
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="tpl-block">
                 <div class="am-g">
                     <div class="am-u-sm-12">
-                            <table class="am-table am-table-striped am-table-hover table-main">
-                                <thead>
-                                <tr>
-                                    <th class="table-id">ID</th>
-                                    <th class="table-title">发件人</th>
-                                    <th class="table-type">收件人</th>
-                                    <th class="table-author am-hide-sm-only">收件地址</th>
-                                    <th class="table-date am-hide-sm-only">创建日期</th>
-                                    <th class="table-date am-hide-sm-only">经办</th>
-                                    <th class="table-date am-hide-sm-only">状态</th>
-                                    <th class="table-set">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for item in order %}
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                            <tr>
+                                <th class="table-id">ID</th>
+                                <th class="table-title">发件人</th>
+                                <th class="table-type">收件人</th>
+                                <th class="table-author am-hide-sm-only">收件地址</th>
+                                <th class="table-date am-hide-sm-only">创建日期</th>
+                                <th class="table-date am-hide-sm-only">经办</th>
+                                <th class="table-date am-hide-sm-only">状态</th>
+                                <th class="table-set">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in order %}
                                 <tr>
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.sender }}</td>
@@ -71,31 +71,31 @@
                                         </div>
                                     </td>
                                 </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <!--分页-->
-                            <ul class="am-pagination am-pagination-centered">
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <!--分页-->
+                        <ul class="am-pagination am-pagination-centered">
                             {% if allPage != 0 %}
-                            <!-- 如果当前是第一页，就不显示【上一页】链接 -->
-                            {% ifnotequal curPage 1 %}
-                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&query=" onclick="getLink(this)">
-                                上一页
-                            </a></li>
-                            {% endifnotequal %}
-                            第{{ curPage }}/{{ allPage }}页
-                            <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
-                            {% ifnotequal curPage allPage %}
-                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&query=" onclick="getLink(this)">
-                                下一页
-                            </a></li>
-                            {% endifnotequal %}
-                            <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
-                            <li><a onclick="pageRedirect()">Go</a></li>
+                                <!-- 如果当前是第一页，就不显示【上一页】链接 -->
+                                {% ifnotequal curPage 1 %}
+                                    <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&query=" onclick="getLink(this)">
+                                        上一页
+                                    </a></li>
+                                {% endifnotequal %}
+                                第{{ curPage }}/{{ allPage }}页
+                                <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
+                                {% ifnotequal curPage allPage %}
+                                    <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&query=" onclick="getLink(this)">
+                                        下一页
+                                    </a></li>
+                                {% endifnotequal %}
+                                <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
+                                <li><a onclick="pageRedirect()">Go</a></li>
                             {% endif %}
-                            </ul>
-                            <!--ending 分页-->
-                            <hr>
+                        </ul>
+                        <!--ending 分页-->
+                        <hr>
                     </div>
                 </div>
             </div>
@@ -130,9 +130,9 @@
             var max = {{ allPage }}
             var page = document.getElementById("btn-redirect").value;
             var url_mask = "{% url 'track_order_draft_search' %}" +
-                           "?curPage=0" +
-                           "&allPage=" + max.toString() +
-                           "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
+                "?curPage=0" +
+                "&allPage=" + max.toString() +
+                "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
             console.log(url_mask);
             if (page == ""){
                 return;
@@ -148,16 +148,16 @@
             }
             else if(page == max){
                 url_mask = "{% url 'track_order_draft_search' %}" +
-                           "?curPage=" + (max - 1).toString() +
-                           "&allPage=" + max.toString() +
-                           "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
+                    "?curPage=" + (max - 1).toString() +
+                    "&allPage=" + max.toString() +
+                    "&&pageType=pageDown&&query=" + localStorage.getItem("txtValue");
 
             }
             else{
                 url_mask = "{% url 'track_order_draft_search' %}" +
-                           "?curPage=" + (page - 1).toString() +
-                           "&allPage=" + max.toString() +
-                           "&&pageType=pageDown&&query=" + + localStorage.getItem("txtValue");
+                    "?curPage=" + (page - 1).toString() +
+                    "&allPage=" + max.toString() +
+                    "&&pageType=pageDown&&query=" + + localStorage.getItem("txtValue");
             }
             window.location.replace(url_mask);
         }

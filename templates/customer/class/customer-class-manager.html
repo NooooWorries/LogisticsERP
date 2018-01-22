@@ -44,9 +44,13 @@
                                     <td>
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                {% if request.session.role == 0 or request.session.role == 1 or request.session.role == 2 %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                {% endif %}
                                                 <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% if request.session.role == 0 or request.session.role == 1 or request.session.role == 2 %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </td>

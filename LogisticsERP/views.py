@@ -6,6 +6,7 @@ from ShipmentOrder.models import ShipmentOrder
 from Dispatch.models import DispatchRecord
 from Finance.models import PaymentOrder
 from django.db.models import Q
+from LogisticsERP import utils
 import datetime
 
 
@@ -25,12 +26,13 @@ def index(request):
     payment_amount = 0
     for item in payment_order_list:
         payment_amount = payment_amount + item.amount
-
-
+    # 角色
+    role = utils.get_user_type(request)
     return render(request, 'index.html', {'shipment_order_count': shipment_order_count,
                                           'dispatch_order_count': dispatch_order_count,
                                           'payment_order_count': payment_order_count,
-                                          'payment_amount': round(payment_amount, 2)})
+                                          'payment_amount': round(payment_amount, 2),
+                                          'role': role})
 
 
 def error_404(request):

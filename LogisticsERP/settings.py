@@ -63,6 +63,13 @@ TEMPLATES = [
     },
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
 WSGI_APPLICATION = 'LogisticsERP.wsgi.application'
 
 
@@ -80,6 +87,8 @@ DATABASES = {
         'ssl': {'ca': os.path.join(os.path.dirname(__file__), 'rds', 'mysql-ssl-ca-cert.pem')}
     }
 }
+
+
 
 
 # Password validation

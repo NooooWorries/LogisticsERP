@@ -2,14 +2,14 @@
 {% block body %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">
-                运单高级搜索结果
+            运单高级搜索结果
         </div>
         <ol class="am-breadcrumb">
-                <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
-                <li>运送订单</li>
-                <li>高级搜索</li>
-                <li>搜索结果</li>
-            </ol>
+            <li><a href="{% url 'load_index' %}" class="am-icon-home">首页</a></li>
+            <li>运送订单</li>
+            <li>高级搜索</li>
+            <li>搜索结果</li>
+        </ol>
         <div class="tpl-portlet-components">
             <div class="portlet-title">
                 <div class="caption font-green bold">
@@ -18,44 +18,44 @@
             </div>
             <div class="tpl-block">
                 <div id="id_divInfo" class="note note-info">
-                        <h2>过滤条件</h2>
-                        {% if keyword == "" %}
-                            <p>关键字为空</p>
-                        {% endif %}
-                        {% if keyword != "" %}
-                            <p>关键字：{{ keyword }}</p>
-                        {% endif %}
-                        <p>创建日期区间：从 {{ start_date }} 到 {{ end_date }}</p>
-                        {% if status == 0 %}
-                            <p>状态：未提交</p>
-                        {% endif %}
-                        {% if status == 1 %}
-                            <p>状态：待审核</p>
-                        {% endif %}
-                        {% if status == 2 %}
-                            <p>状态：审核通过</p>
-                        {% endif %}
-                        {% if status == 3 %}
-                            <p>状态：送达</p>
-                        {% endif %}
+                    <h2>过滤条件</h2>
+                    {% if keyword == "" %}
+                        <p>关键字为空</p>
+                    {% endif %}
+                    {% if keyword != "" %}
+                        <p>关键字：{{ keyword }}</p>
+                    {% endif %}
+                    <p>创建日期区间：从 {{ start_date }} 到 {{ end_date }}</p>
+                    {% if status == 0 %}
+                        <p>状态：未提交</p>
+                    {% endif %}
+                    {% if status == 1 %}
+                        <p>状态：待审核</p>
+                    {% endif %}
+                    {% if status == 2 %}
+                        <p>状态：审核通过</p>
+                    {% endif %}
+                    {% if status == 3 %}
+                        <p>状态：送达</p>
+                    {% endif %}
                 </div>
                 <div class="am-g">
                     <div class="am-u-sm-12">
-                            <table class="am-table am-table-striped am-table-hover table-main">
-                                <thead>
-                                <tr>
-                                    <th class="table-id">ID</th>
-                                    <th class="table-title">发件人</th>
-                                    <th class="table-type">收件人</th>
-                                    <th class="table-author am-hide-sm-only">收件地址</th>
-                                    <th class="table-date am-hide-sm-only">创建日期</th>
-                                    <th class="table-date am-hide-sm-only">经办</th>
-                                    <th class="table-date am-hide-sm-only">状态</th>
-                                    <th class="table-set">操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for item in order %}
+                        <table class="am-table am-table-striped am-table-hover table-main">
+                            <thead>
+                            <tr>
+                                <th class="table-id">ID</th>
+                                <th class="table-title">发件人</th>
+                                <th class="table-type">收件人</th>
+                                <th class="table-author am-hide-sm-only">收件地址</th>
+                                <th class="table-date am-hide-sm-only">创建日期</th>
+                                <th class="table-date am-hide-sm-only">经办</th>
+                                <th class="table-date am-hide-sm-only">状态</th>
+                                <th class="table-set">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in order %}
                                 <tr>
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.sender }}</td>
@@ -80,38 +80,47 @@
                                     <td>
                                         <div class="am-btn-toolbar">
                                             <div class="am-btn-group am-btn-group-xs">
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                {% if request.session.role == 0 or request.session.role == 1 or request.session.role == 2 %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-secondary btn-modify" id="{{ item.id }}"><span class="am-icon-pencil-square-o"></span> 编辑</button>
+                                                {% endif %}
                                                 <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only btn-check" id="{{ item.id }}"><span class="am-icon-copy"></span> 查看</button>
-                                                <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% if request.session.role == 0 or request.session.role == 1 or request.session.role == 2 %}
+                                                    <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only btn-delete" id="{{ item.id }}"><span class="am-icon-trash-o"></span> 删除</button>
+                                                {% endif %}
+                                                {% if request.session.role == 0 or request.session.role == 2 %}
+                                                    {% if item.status == 2 or item.status == 3 %}
+                                                        <button class="am-btn am-btn-default am-btn-xs am-text-warning btn-print" id="{{ item.id }}"><span class="am-icon-print"></span> 打印订单</button>
+                                                    {% endif %}
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <!--分页-->
-                            <ul class="am-pagination am-pagination-centered">
-                    {% if allPage != 0 %}
-                            <!-- 如果当前是第一页，就不显示【上一页】链接 -->
-                            {% ifnotequal curPage 1 %}
-                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&keyword={{ keyword }}&&start_date={{ start_date }}&&end_date={{ end_date }}&&status={{ status }}">
-                                上一页
-                            </a></li>
-                            {% endifnotequal %}
-                            第{{ curPage }}/{{ allPage }}页
-                            <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
-                            {% ifnotequal curPage allPage %}
-                            <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&keyword={{ keyword }}&&start_date={{ start_date }}&&end_date={{ end_date }}&&status={{ status }}">
-                                下一页
-                            </a></li>
-                            {% endifnotequal %}
-                            <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
-                            <li><a onclick="pageRedirect()">Go</a></li>
-                    {% endif %}
-                    </ul>
-                            <!--ending 分页-->
-                            <hr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <!--分页-->
+                        <ul class="am-pagination am-pagination-centered">
+                            {% if allPage != 0 %}
+                                <!-- 如果当前是第一页，就不显示【上一页】链接 -->
+                                {% ifnotequal curPage 1 %}
+                                    <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageUp&&keyword={{ keyword }}&&start_date={{ start_date }}&&end_date={{ end_date }}&&status={{ status }}">
+                                        上一页
+                                    </a></li>
+                                {% endifnotequal %}
+                                第{{ curPage }}/{{ allPage }}页
+                                <!-- 如果当前是最后一页，就不显示【下一页】链接 -->
+                                {% ifnotequal curPage allPage %}
+                                    <li><a href="?curPage={{ curPage }}&&allPage={{ allPage }}&&pageType=pageDown&&keyword={{ keyword }}&&start_date={{ start_date }}&&end_date={{ end_date }}&&status={{ status }}">
+                                        下一页
+                                    </a></li>
+                                {% endifnotequal %}
+                                <li><input type="number" id="btn-redirect" class="am-form-field" placeholder="页码" style="width: 50px"/></li>
+                                <li><a onclick="pageRedirect()">Go</a></li>
+                            {% endif %}
+                        </ul>
+                        <!--ending 分页-->
+                        <hr>
                     </div>
                 </div>
             </div>
@@ -135,12 +144,12 @@
             var max = {{ allPage }}
             var page = $('#btn-redirect').val();
             var url_mask = "{% url 'track_order_search_advanced_result' %}" +
-                           "?curPage=0" +
-                           "&allPage=" + max.toString() +
-                           "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
-                           "&&start_date=" + "{{ start_date }}"  +
-                           "&&end_date=" + "{{ end_date }}" +
-                           "&&status=" + "{{ status }}" ;
+                "?curPage=0" +
+                "&allPage=" + max.toString() +
+                "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
+                "&&start_date=" + "{{ start_date }}"  +
+                "&&end_date=" + "{{ end_date }}" +
+                "&&status=" + "{{ status }}" ;
             if (page == ""){
                 return;
             }
@@ -155,21 +164,21 @@
             }
             else if(page == max){
                 url_mask = "{% url 'track_order_search_advanced_result' %}" +
-                           "?curPage=" + (max - 1).toString() +
-                           "&allPage=" + max.toString() +
-                           "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
-                           "&&start_date=" + "{{ start_date }}"  +
-                           "&&end_date=" + "{{ end_date }}" +
-                           "&&status=" + "{{ status }}" ;
+                    "?curPage=" + (max - 1).toString() +
+                    "&allPage=" + max.toString() +
+                    "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
+                    "&&start_date=" + "{{ start_date }}"  +
+                    "&&end_date=" + "{{ end_date }}" +
+                    "&&status=" + "{{ status }}" ;
             }
             else{
                 url_mask = "{% url 'track_order_search_advanced_result' %}" +
-                           "?curPage=" + (page - 1).toString() +
-                           "&allPage=" + max.toString() +
-                           "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
-                           "&&start_date=" + "{{ start_date }}"  +
-                           "&&end_date=" + "{{ end_date }}" +
-                           "&&status=" + "{{ status }}";
+                    "?curPage=" + (page - 1).toString() +
+                    "&allPage=" + max.toString() +
+                    "&&pageType=pageDown&&keyword=" + "{{ keyword }}" +
+                    "&&start_date=" + "{{ start_date }}"  +
+                    "&&end_date=" + "{{ end_date }}" +
+                    "&&status=" + "{{ status }}";
             }
             window.location.replace(url_mask);
             return;

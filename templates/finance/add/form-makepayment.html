@@ -1,7 +1,7 @@
 {% extends 'master.html' %}
 {% block body %}
     <div class="tpl-content-wrapper">
-       <div class="tpl-content-page-title">
+        <div class="tpl-content-page-title">
             财务
         </div>
         <ol class="am-breadcrumb">
@@ -19,26 +19,26 @@
             <div class="tpl-block ">
                 <div class="am-g tpl-amazeui-form">
                     <div class="am-u-sm-12 am-u-md-9">
-                    <div id="id_divInfo" class="note note-info">
-                        <h2>订单详情</h2>
-                        <p>订单ID：{{ order.id }}</p>
-                        <p>发件人：{{ order.sender }}</p>
-                        <p>发件地址：{{ order.from_address }}</p>
-                        <p>发件人联系电话：{{ order.sender_contact }}</p>
-                        <p>收货人：{{ order.receiver }}</p>
-                        <p>收货地址：{{ order.to_address }}</p>
-                        <p>收货人联系电话：{{ order.receiver_contact }}</p>
-                        <p>生成日期：{{ order.create_date }}</p>
-                        <p>体积 ：{{ order.volume }} 立方</p>
-                        <p>密度 ：{{ order.density }} 吨/立方</p>
-                    </div>
-                    <div id="id_divInfo" class="note note-info">
-                        <h2>款项</h2>
-                        <p>总价：{{ order.totalPrice }}</p>
-                        <p>已付金额：{{ order.paid_price }}</p>
-                        <p class="am-text-danger">应付金额：{{ order.payable }}</p>
+                        <div id="id_divInfo" class="note note-info">
+                            <h2>订单详情</h2>
+                            <p>订单ID：{{ order.id }}</p>
+                            <p>发件人：{{ order.sender }}</p>
+                            <p>发件地址：{{ order.from_address }}</p>
+                            <p>发件人联系电话：{{ order.sender_contact }}</p>
+                            <p>收货人：{{ order.receiver }}</p>
+                            <p>收货地址：{{ order.to_address }}</p>
+                            <p>收货人联系电话：{{ order.receiver_contact }}</p>
+                            <p>生成日期：{{ order.create_date }}</p>
+                            <p>体积 ：{{ order.volume }} 立方</p>
+                            <p>密度 ：{{ order.density }} 吨/立方</p>
+                        </div>
+                        <div id="id_divInfo" class="note note-info">
+                            <h2>款项</h2>
+                            <p>总价：{{ order.totalPrice }}</p>
+                            <p>已付金额：{{ order.paid_price }}</p>
+                            <p class="am-text-danger">应付金额：{{ order.payable }}</p>
 
-                    </div>
+                        </div>
                         {% csrf_token %}
                         <form class="am-form am-form-horizontal" method="post">
                             {% for item in form %}

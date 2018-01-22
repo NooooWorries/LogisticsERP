@@ -6,7 +6,7 @@ from Customers.forms import CustomerClassCreationForm, CustomerCreationForm
 from Customers.models import CustomerClass, Customer
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from LogisticsERP import settings
+from LogisticsERP import settings, utils
 
 
 # 添加客户组
@@ -78,11 +78,11 @@ def customer_class_search(request):
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
     all_customer_class = CustomerClass.objects.filter(
-                Q(class_name__icontains=query) |
-                Q(comments__icontains=query)).count()
+        Q(class_name__icontains=query) |
+        Q(comments__icontains=query)).count()
     customer_class = CustomerClass.objects.filter(
-            Q(class_name__icontains=query) |
-            Q(comments__icontains=query))[startPos:endPos]
+        Q(class_name__icontains=query) |
+        Q(comments__icontains=query))[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_customer_class
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -118,6 +118,9 @@ def customer_class_detail(request, class_id):
 @login_required(login_url='/error/not-logged-in/')
 def customer_class_modify(request, class_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     request.session['order_manage'] = class_id
     class_instance = get_object_or_404(CustomerClass, id=class_id)
     class_form = CustomerClassCreationForm(request.POST or None, instance=class_instance)
@@ -134,10 +137,13 @@ def customer_class_modify(request, class_id):
 @login_required(login_url='/error/not-logged-in/')
 def customer_class_confirm_delete(request, class_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     customer_class_instance = get_object_or_404(CustomerClass, pk=class_id)
     customer_count = Customer.objects.filter(customer_class_id=class_id).count()
     return render(request, "customer/class/customer-class-delete-confirm.html", {'customer_class': customer_class_instance,
-                                                                          'customer_count': customer_count})
+                                                                                 'customer_count': customer_count})
 
 
 # 管理客户组 客户组
@@ -253,6 +259,9 @@ def customer_search(request):
 @login_required(login_url='/error/not-logged-in/')
 def customer_modify(request, customer_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     request.session['order_manage'] = customer_id
     customer_instance = get_object_or_404(Customer, id=customer_id)
     customer_form = CustomerCreationForm(request.POST or None, instance=customer_instance)
@@ -277,6 +286,9 @@ def customer_detail(request, customer_id):
 @login_required(login_url='/error/not-logged-in/')
 def customer_confirm_delete(request, customer_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     customer_instance = get_object_or_404(Customer, pk=customer_id)
     return render(request, "customer/user/customer-delete-confirm.html", {'customer': customer_instance})
 
@@ -286,6 +298,9 @@ def customer_confirm_delete(request, customer_id):
 @login_required(login_url='/error/not-logged-in/')
 def customer_delete(request, customer_id):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 1 and role != 1 and role != 2:
+        return render(request, 'error/permission.html')
     customer_object = get_object_or_404(Customer, pk=customer_id)
     customer_object.delete()
     return render(request, "customer/user/customer-delete-complete.html")

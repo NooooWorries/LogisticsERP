@@ -103,8 +103,8 @@
                 $('#my-confirm').modal({
                     relatedTarget: this,
                     onConfirm: function(options) {
-                         var url_mask = "{% url 'arrival_dispatch_order_confirm' order_id=order.id %}";
-                         window.location.replace(url_mask);
+                        var url_mask = "{% url 'arrival_dispatch_order_confirm' order_id=order.id %}";
+                        window.location.replace(url_mask);
                     },
                 });
             });
