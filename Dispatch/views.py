@@ -120,7 +120,7 @@ def driver_search(request):
 def driver_detail(request, driver_id):
     request.session.set_expiry(request.session.get_expiry_age())
     driver_instance = get_object_or_404(Driver, pk=driver_id)
-    order = DispatchRecord.objects.filter(driver=driver_id)
+    order = DispatchRecord.objects.filter(driver=driver_id).order_by("-dispatch_date")
     return render(request, "dispatch/driver/driver-detail.html", {'driver': driver_instance,
                                                                   'order': order})
 
@@ -279,14 +279,14 @@ def generate_PDF(request, order_id):
     for item in good:
         good_ean = barcode.get("Code39", str(item.id), writer=ImageWriter())
         good_ean.default_writer_options['write_text'] = False
-        good_barcode = good_ean.save("OrderPDF/barcode/gd_" + str(item.id))
+        good_barcode = good_ean.save(os.path.join(settings.BASE_DIR, "OrderPDF/barcode/gd_" + str(item.id)))
         item.barcode = good_barcode
     ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
     ean.default_writer_options['write_text'] = False
     barcode_img = ean.save("OrderPDF/barcode/" + str(order_id))
     data = {'order': order, 'good': good, 'today': datetime.datetime.now().strftime("%Y-%m-%d"), 'barcode': barcode_img}
     html = get_template('dispatch/pdf.html').render(data)
-    file = open("OrderPDF/documents/" + str(order_id) + ".pdf", "w+b")
+    file = open(os.path.join(settings.BASE_DIR, "OrderPDF/documents/" + str(order_id) + ".pdf"), "w+b")
     pdfmetrics.registerFont(TTFont("yh", os.path.join(settings.DOMAIN_NAME, 'static/fonts/fzlt.ttf')))
     DEFAULT_FONT['helvetica'] = 'yh'
     pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8', )
@@ -331,7 +331,7 @@ def manage_dispatch_order(request):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    order = DispatchRecord.objects.all()[startPos:endPos]
+    order = DispatchRecord.objects.all().order_by("-dispatch_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = DispatchRecord.objects.count()
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -373,7 +373,7 @@ def dispatch_order_search(request):
                                           Q(vehicle_number__icontains=query) |
                                           Q(origin__icontains=query) |
                                           Q(destination__icontains=query) |
-                                          Q(comments__icontains=query))[startPos:endPos]
+                                          Q(comments__icontains=query)).order_by("-dispatch_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -434,7 +434,7 @@ def draft_dispatch_order(request):
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
     order_all = DispatchRecord.objects.filter(status__exact=0).count()
-    order = DispatchRecord.objects.filter(status__exact=0)[startPos:endPos]
+    order = DispatchRecord.objects.filter(status__exact=0).order_by("-dispatch_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = order_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -518,7 +518,7 @@ def dispatch_order_search_advanced_result(request):
             Q(comments__icontains=keyword),
             Q(dispatch_date__range=(start_date, end_date)),
             Q(status__exact=status)
-        )
+        ).order_by("-dispatch_date")
         result_count = result.count()
     else:
         result = DispatchRecord.objects.filter(
@@ -528,7 +528,7 @@ def dispatch_order_search_advanced_result(request):
             Q(destination__icontains=keyword) |
             Q(comments__icontains=keyword),
             Q(dispatch_date__range=(start_date, end_date))
-        )
+        ).order_by("-dispatch_date")
         result_count = result.count()
 
     try:
@@ -587,7 +587,7 @@ def arrival_dispatch_order(request):
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
     order_all = DispatchRecord.objects.filter(Q(status__exact=1) and Q(driver__account__exact=request.user)).count()
-    order = DispatchRecord.objects.filter(Q(status__exact=1) and Q(driver__account__exact=request.user))[startPos:endPos]
+    order = DispatchRecord.objects.filter(Q(status__exact=1) and Q(driver__account__exact=request.user)).order_by("-dispatch_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = order_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)

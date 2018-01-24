@@ -227,7 +227,7 @@ def track_order_manager(request):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    order_list = ShipmentOrder.objects.all()[startPos:endPos]
+    order_list = ShipmentOrder.objects.all().order_by("-create_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = ShipmentOrder.objects.count()
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -420,7 +420,7 @@ def track_order_search(request):
         Q(to_address__icontains=query)|
         Q(receiver_contact__icontains=query)|
         Q(mode__icontains=query)|
-        Q(comments__icontains=query))[startPos:endPos]
+        Q(comments__icontains=query)).order_by("-create_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -464,7 +464,7 @@ def track_order_search_advanced_result(request):
              Q(mode__icontains=keyword) |
              Q(comments__icontains=keyword),
              Q(create_date__range=(start_date, end_date)),
-             Q(status__exact=status))
+             Q(status__exact=status)).order_by("-create_date")
         result_count = result.count()
     else:
         result = ShipmentOrder.objects.filter(
@@ -476,7 +476,7 @@ def track_order_search_advanced_result(request):
             Q(receiver_contact__icontains=keyword) |
             Q(mode__icontains=keyword) |
             Q(comments__icontains=keyword),
-            Q(create_date__range=(start_date, end_date)))
+            Q(create_date__range=(start_date, end_date))).order_by("-create_date")
         result_count = result.count()
 
     try:
@@ -534,7 +534,7 @@ def track_order_draft(request):
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
     order_all = ShipmentOrder.objects.filter(handle=request.user, status=0).count()
-    order = ShipmentOrder.objects.filter(handle=request.user, status=0)[startPos: endPos]
+    order = ShipmentOrder.objects.filter(handle=request.user, status=0).order_by("-create_date")[startPos: endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = order_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -584,7 +584,7 @@ def track_order_draft_search(request):
         Q(to_address__icontains=query)|
         Q(receiver_contact__icontains=query)|
         Q(mode__icontains=query)|
-        Q(comments__icontains=query), Q(status__exact=0), Q(handle__exact=request.user.id))
+        Q(comments__icontains=query), Q(status__exact=0), Q(handle__exact=request.user.id)).order_by("-create_date")
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -667,7 +667,7 @@ def track_order_audit(request):
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
     order_all = ShipmentOrder.objects.filter(status=1).count()
-    order = ShipmentOrder.objects.filter(status=1)[startPos:endPos]
+    order = ShipmentOrder.objects.filter(status=1).order_by("-create_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = order_all
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -717,7 +717,7 @@ def track_order_audit_search(request):
         Q(to_address__icontains=query)|
         Q(receiver_contact__icontains=query)|
         Q(mode__icontains=query)|
-        Q(comments__icontains=query), Q(status__exact=1))[startPos:endPos]
+        Q(comments__icontains=query), Q(status__exact=1)).order_by("-create_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -777,10 +777,10 @@ def generate_PDF(request, order_id):
     good = Goods.objects.filter(shipment_order_id_id=order_id)
     ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
     ean.default_writer_options['write_text'] = False
-    barcode_img = ean.save("OrderPDF/barcode/" + str(order_id))
+    barcode_img = ean.save(os.path.join(settings.BASE_DIR, "OrderPDF/barcode/" + str(order_id)))
     data = {'order': order, 'good': good, 'today': datetime.datetime.now().strftime("%Y-%m-%d"), 'barcode': barcode_img}
     html = get_template('order/pdf.html').render(data)
-    file = open("OrderPDF/documents/" + str(order_id) + ".pdf", "w+b")
+    file = open(os.path.join(settings.BASE_DIR, "OrderPDF/documents/" + str(order_id) + ".pdf"), "w+b")
     pdfmetrics.registerFont(TTFont("yh", os.path.join(settings.DOMAIN_NAME, 'static/fonts/fzlt.ttf')))
     DEFAULT_FONT['helvetica'] = 'yh'
     pisa.CreatePDF(html.encode('utf-8'), dest=file, encoding='utf-8', )

@@ -33,7 +33,7 @@ def receivable_list(request):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    order_list = ShipmentOrder.objects.filter(status=3, payable__gt=0.01)[startPos:endPos]
+    order_list = ShipmentOrder.objects.filter(status=3, payable__gt=0.01).order_by("-create_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = ShipmentOrder.objects.count()
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -94,7 +94,7 @@ def manage_payment_record(request):
         curPage -= 1
     startPos = (curPage - 1) * settings.ONE_PAGE_OF_DATA
     endPos = startPos + settings.ONE_PAGE_OF_DATA
-    order_list = PaymentOrder.objects.all()[startPos:endPos]
+    order_list = PaymentOrder.objects.all().order_by("-payment_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = PaymentOrder.objects.count()
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -183,7 +183,7 @@ def payment_order_search(request):
         Q(shipment_order__receiver_contact__icontains=query) |
         Q(shipment_order__mode__icontains=query) |
         Q(handle__username__icontains=query) |
-        Q(comments__icontains=query))[startPos:endPos]
+        Q(comments__icontains=query)).order_by("-payment_date")[startPos:endPos]
     if curPage == 1 and allPage == 1:  # 标记1
         allPostCounts = all_payment_order
         allPage = int(allPostCounts / settings.ONE_PAGE_OF_DATA)
@@ -234,7 +234,7 @@ def payment_order_search_advanced_result(request):
         Q(comments__icontains=keyword),
         Q(payment_date__range=(start_date, end_date)),
         Q(amount__gte=payment_amount)
-    )
+    ).order_by("-payment_date")
     result_count = result.count()
     try:
         curPage = int(request.GET.get('curPage', '1'))

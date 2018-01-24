@@ -137,12 +137,14 @@ LOGIN_REDIRECT_URL = '/index/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # 域名
-DOMAIN_NAME = 'http://127.0.0.1:8000/'
+DOMAIN_NAME = 'http://0.0.0.0:8000/'
 
 # 会话过期时间（秒）
 SESSION_COOKIE_AGE = 3600
 
 # 每个页面显示条目数量
 ONE_PAGE_OF_DATA = 10
+
+
 
 
