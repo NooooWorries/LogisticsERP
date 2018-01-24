@@ -19,6 +19,7 @@ import os
 from xhtml2pdf.default import DEFAULT_FONT
 from barcode.writer import ImageWriter
 from ShipmentOrder.utils import calculate_freight, calculate_density, rearrange_pack_number
+from django.contrib.staticfiles.templatetags.staticfiles import static
 
 
 # 添加订单 第一步 基本信息
@@ -550,9 +551,6 @@ def track_order_draft(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 1 and role != 2:
-        return render(request, 'error/permission.html')
     query = request.GET.get('query')
     try:
         curPage = int(request.GET.get('curPage', '1'))
@@ -605,9 +603,6 @@ def track_order_draft_search(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_draft_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 1 and role != 2:
-        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -639,9 +634,6 @@ def track_order_draft_modify(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_submit_audit(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 1 and role != 2:
-        return render(request, 'error/permission.html')
     order_instance = ShipmentOrder.objects.get(pk=order_id)
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     if goods_instance.count() >= 1:
@@ -659,9 +651,6 @@ def track_order_submit_audit(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 2:
-        return render(request, 'error/permission.html')
     try:
         curPage = int(request.GET.get('curPage', '1'))
         allPage = int(request.GET.get('allPage', '1'))
@@ -695,9 +684,6 @@ def track_order_audit(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_search(request):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 2:
-        return render(request, 'error/permission.html')
     query = request.GET.get('query')
     try:
         curPage = int(request.GET.get('curPage', '1'))
@@ -749,9 +735,6 @@ def track_order_audit_search(request):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_modify(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 2:
-        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     goods_instance = Goods.objects.filter(shipment_order_id_id=order_id)
     goods_form = OrderCreationTwoForm(request.POST or None)
@@ -764,9 +747,6 @@ def track_order_audit_modify(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def track_order_audit_modify_2(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 2:
-        return render(request, 'error/permission.html')
     request.session['order_manage'] = order_id
     order_instance = get_object_or_404(ShipmentOrder, id=order_id)
     order_form = OrderModityForm(request.POST or None, instance=order_instance)
@@ -793,9 +773,6 @@ def track_order_audit_modify_2(request, order_id):
 @login_required(login_url='/error/not-logged-in/')
 def generate_PDF(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 2:
-        return render(request, 'error/permission.html')
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     good = Goods.objects.filter(shipment_order_id_id=order_id)
     ean = barcode.get("Code39", str(order_id), writer=ImageWriter())
@@ -816,9 +793,6 @@ def generate_PDF(request, order_id):
 # 完成审核 出单
 def track_order_audit_finalize(request, order_id):
     request.session.set_expiry(request.session.get_expiry_age())
-    role = utils.get_user_type(request)
-    if role != 0 and role != 2:
-        return render(request, 'error/permission.html')
     order = get_object_or_404(ShipmentOrder, pk=order_id)
     order.status = 2
     order.save()

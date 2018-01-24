@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.shortcuts import render, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from Account.forms import UserCreationForm, UserProfileCreationForm
+from LogisticsERP import settings, utils
 
 
 def display_login(request):
@@ -13,6 +14,9 @@ def display_login(request):
 @login_required(login_url='/error/not-logged-in/')
 def add_account(request):
     request.session.set_expiry(request.session.get_expiry_age())
+    role = utils.get_user_type(request)
+    if role != 0:
+        return render(request, 'error/permission.html')
     if request.method == 'POST':
         form_user = UserCreationForm(request.POST)
         form_profile = UserProfileCreationForm(request.POST)

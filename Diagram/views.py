@@ -165,7 +165,8 @@ def ajax_order_customize(request):
     end_date = request.GET.get('end_date')
     if start_date is "": start_date = ShipmentOrder.objects.all().order_by('create_date')[0].create_date.strftime("%Y-%m-%d")
     if end_date is "": end_date = datetime.datetime.now().strftime("%Y-%m-%d")
-
+    start = start_date
+    end = end_date
     # 时间段生成
     start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
     end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
@@ -173,8 +174,6 @@ def ajax_order_customize(request):
 
     if interval <= 14:
         time = [None] * (interval + 1)
-        start = time[0]
-        end = time[interval-1]
         for i in range(interval + 1):
             time[i] = (end_date - datetime.timedelta(days=interval - i)).strftime("%Y-%m-%d")
             # 过滤数据与生成
@@ -205,6 +204,9 @@ def ajax_order_customize(request):
         time = [None] * num_of_object
         time_start = [None] * num_of_object
         time_end = [None] * num_of_object
+
+        start = time_start[0]
+        end = time_end[len(time_end) - 1]
 
         for i in range(gap):
             time_start[i] = (start_date + datetime.timedelta(days=7 * i)).strftime("%Y-%m-%d")
@@ -242,8 +244,7 @@ def ajax_order_customize(request):
                 Q(create_date__range=(time_start[i], time_end[i])) &
                 Q(status__exact=3)
             ).count()
-        start = time_start[0]
-        end = time_end[len(time_end)-1]
+
     else:
         time = pd.date_range(start_date, end_date, freq='1M')
         time = time.union([time[-1] + 1])
@@ -368,8 +369,8 @@ def ajax_dispatch_order_monthly(request):
         'draft': draft,
         'dispatched': dispatched,
         'finished': finished,
-        'start': time[0],
-        'end': time[3]
+        'start': time_start[0],
+        'end': time_end[3]
     })
     return HttpResponse(data, content_type='application/json')
 
@@ -423,6 +424,8 @@ def ajax_dispatch_order_customize(request):
     end_date = request.GET.get('end_date')
     if start_date is "": start_date = DispatchRecord.objects.all().order_by('dispatch_date')[0].dispatch_date.strftime("%Y-%m-%d")
     if end_date is "": end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    start = start_date
+    end = end_date
 
     # 时间段生成
     start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
@@ -597,8 +600,8 @@ def ajax_payment_order_monthly(request):
         'time': time,
         'amount': amount,
         'count': count,
-        'start': time[0],
-        'end': time[3]
+        'start': time_start[0],
+        'end': time_end[3]
     })
     return HttpResponse(data, content_type='application/json')
 
@@ -646,6 +649,8 @@ def ajax_payment_order_customize(request):
     end_date = request.GET.get('end_date')
     if start_date is "": start_date = DispatchRecord.objects.all().order_by('dispatch_date')[0].dispatch_date.strftime("%Y-%m-%d")
     if end_date is "": end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    start = start_date
+    end = end_date
 
     # 时间段生成
     start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
@@ -654,8 +659,6 @@ def ajax_payment_order_customize(request):
 
     if interval <= 14:
         time = [None] * (interval + 1)
-        start = time[0]
-        end = time[interval-1]
         for i in range(interval + 1):
             time[i] = (end_date - datetime.timedelta(days=interval - i)).strftime("%Y-%m-%d")
             # 过滤数据与生成

@@ -55,32 +55,17 @@
     <br />
     <p class="level-2-title">货物信息</p>
     <div id="goodInformation" class="information">
-        <table id="goodTable" border="0.5">
-            <tr>
-                <th class="table-title">包裹条码</th>
-                <th>ID</th>
-                <th class="table-author am-hide-sm-only">货物名称</th>
-                <th class="table-date am-hide-sm-only">重量</th>
-                <th class="table-set">所属订单</th>
-                <th class="table-set">收件人</th>
-                <th class="table-set">发出地址</th>
-                <th class="table-set">到达地址</th>
-            </tr>
-
-            {% for item in good %}
-                <tr>
-                    <td><img class="goodbarImage" src="{{ item.barcode }}" /></td>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.goods_name }}</td>
-                    <td>{{ item.weight }}</td>
-                    <td>{{ item.shipment_order_id.id }}</td>
-                    <td>{{ item.shipment_order_id.receiver }}</td>
-                    <td>{{ item.shipment_order_id.from_address }}</td>
-                    <td>{{ item.shipment_order_id.to_address }}</td>
-                </tr>
-            {% endfor %}
-
-        </table>
+        {% for item in good %}
+            <p><img class="goodbarImage" src="{{ item.barcode }}" /></p>
+            <p>ID: {{ item.id }}</p>
+            <p>货物名称：{{ item.goods_name }}</p>
+            <p>重量：{{ item.weight }}</p>
+            <p>所属订单：{{ item.shipment_order_id.id }}</p>
+            <p>收件人：{{ item.shipment_order_id.receiver }}</p>
+            <p>发出地址：{{ item.shipment_order_id.from_address }}</p>
+            <p>到达地址：{{ item.shipment_order_id.to_address }}</p>
+            <p>----------------------------------------</p>
+        {% endfor %}
     </div>
 
     <br />

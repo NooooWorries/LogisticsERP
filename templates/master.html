@@ -42,9 +42,8 @@
                     <span class="tpl-header-list-user-nick">{{ user.username }}</span><span class="tpl-header-list-user-ico"></span>
                 </a>
                 <ul class="am-dropdown-content">
-                    <li><a href="#"><span class="am-icon-bell-o"></span> 资料</a></li>
-                    <li><a href="#"><span class="am-icon-cog"></span> 设置</a></li>
-                    <li><a href="#"><span class="am-icon-power-off"></span> 退出</a></li>
+                    <li><a href="#"><span class="am-icon-bell-o"></span> 您的角色：{{ request.session.role_text }}</a></li>
+                    <li><a href="{% url 'logout' %}"><span class="am-icon-power-off"></span> 退出</a></li>
                 </ul>
             </li>
             <li><a onclick="location.href='{% url 'logout' %}'" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>
@@ -295,21 +294,25 @@
                         </li>
                     </ul>
                 </li>
-                <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
-                        <i class="am-icon-dashboard"></i>
-                        <span>系统设置与管理</span>
-                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
-                    </a>
-                    <ul class="tpl-left-nav-sub-menu" style="">
-                        <li>
-                            <a href="{% url 'add_account' %}">
-                                <i class="am-icon-angle-right"></i>
-                                <span>添加账户</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                {% if request.session.role == 0 %}
+                    <li class="tpl-left-nav-item">
+                        <a href="javascript:;" class="nav-link tpl-left-nav-link-list">
+                            <i class="am-icon-dashboard"></i>
+                            <span>系统设置与管理</span>
+                            <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right tpl-left-nav-more-ico-rotate"></i>
+                        </a>
+                        <ul class="tpl-left-nav-sub-menu" style="">
+
+                            <li>
+                                <a href="{% url 'add_account' %}">
+                                    <i class="am-icon-angle-right"></i>
+                                    <span>添加账户</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                {% endif %}
 
                 <li class="tpl-left-nav-item">
                     <a onclick="location.href='{% url 'logout' %}'" class="nav-link tpl-left-nav-link-list">

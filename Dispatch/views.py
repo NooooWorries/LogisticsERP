@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from Dispatch.forms import DriverCreationForm, DispatchRecordCreationForm
 from Dispatch.models import Driver, DispatchRecord
-from ShipmentOrder.models import Goods, ShipmentOrder
+from ShipmentOrder.models import Goods
 from django.db.models import Q
 import barcode
 from barcode.writer import ImageWriter

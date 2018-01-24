@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # INDEX PAGE
+    url(r"^$", main_view.index, name="index"),
     url(r'^index/$', main_view.index, name="load_index"),
 
     # ACCOUNT PAGES
